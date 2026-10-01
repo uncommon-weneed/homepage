@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교회 홈페이지</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8f9fa; color: #333; }
+        header { background-color: #003366; color: white; padding: 20px; text-align: center; }
+        nav { background-color: #002244; display: flex; justify-content: center; gap: 20px; padding: 12px; }
+        nav a { color: white; text-decoration: none; font-weight: bold; }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 15px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 25px; }
+        .hidden { display: none; }
+        input, textarea, button { width: 100%; padding: 10px; margin-top: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background-color: #003366; color: white; border: none; font-weight: bold; cursor: pointer; }
+        .post-item { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .post-item img { max-width: 100%; max-height: 400px; margin-top: 10px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>교회 홈페이지</h1>
+        <p>환영합니다. 하나님의 은혜가 함께하시길 바랍니다.</p>
+    </header>
+
+    <nav>
+        <a href="#notice">교회 안내</a>
+        <a href="#board">공지/게시판</a>
+        <a href="#auth" id="navAuthLink">로그인</a>
+    </nav>
+
+    <div class="container">
+        <!-- 교회 안내 섹션 -->
+        <section class="card" id="notice">
+            <h2> 예배 안내</h2>
+            <p style="margin-top: 10px; line-height: 1.6;">
+                • <b>주일 대예배:</b> 매주 주일 오전 11:00 (대성전)<br>
+                • <b>수요 기도회:</b> 매주 수요일 오후 7:30 (비전홀)<br>
+                • <b>새벽 기도회:</b> 월~금 오전 5:30 (소성전)
+            </p>
+        </section>
+
+        <!-- 회원가입 & 로그인 영역 -->
+        <section class="card" id="auth">
+            <div id="authForms">
+                <h3 id="authTitle">로그인</h3>
+                <input type="text" id="username" placeholder="아이디">
+                <input type="password" id="password" placeholder="비밀번호">
+                <button onclick="handleLogin()">로그인</button>
+                <button onclick="handleSignup()" style="background-color: #28a745;">회원가입</button>
+            </div>
+            <div id="userInfo" class="hidden">
+                <p><b id="userDisplay"></b>님 환영합니다.</p>
+                <button onclick="handleLogout()" style="background-color: #6c757d;">로그아웃</button>
+            </div>
+        </section>
+
+        <!-- 게시물 작성 (로그인 시 노출) -->
+        <section class="card hidden" id="writeSection">
+            <h3>새 소식 / 공지 작성</h3>
+            <form id="postForm">
+                <textarea id="postContent" rows="4" placeholder="내용을 입력하세요..." required></textarea>
+                <input type="file" id="postImage" accept="image/*">
+                <button type="submit">게시글 등록</button>
+            </form>
+        </section>
+
+        <!-- 게시판 목록 -->
+        <section class="card" id="board">
+            <h2>교회 소식 게시판</h2>
+            <div id="postsList" style="margin-top: 15px;"></div>
+        </section>
+    </div>
+
+    <script>
+        let currentUser = localStorage.getItem('currentUser');
+
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('authForms').classList.add('hidden');
+                document.getElementById('userInfo').classList.remove('hidden');
+                document.getElementById('writeSection').classList.remove('hidden');
+                document.getElementById('userDisplay').innerText = currentUser;
+            } else {
+                document.getElementById('authForms').classList.remove('hidden');
+                document.getElementById('userInfo').classList.add('hidden');
+                document.getElementById('writeSection').classList.add('hidden');
+            }
+            loadPosts();
+        }
+
+        async function handleSignup() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const res = await fetch('/api/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
+            const data = await res.json();
+            alert(res.ok ? '회원가입이 완료되었습니다.' : data.error);
+        }
+
+        async function handleLogin() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                currentUser = data.username;
+                localStorage.setItem('currentUser', currentUser);
+                updateUI();
+            } else {
+                alert(data.error);
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            updateUI();
+        }
+
+        document.getElementById('postForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const content = document.getElementById('postContent').value;
+            const image = document.getElementById('postImage').files[0];
+
+            const formData = new FormData();
+            formData.append('author', currentUser);
+            formData.append('content', content);
+            if (image) formData.append('image', image);
+
+            const res = await fetch('/api/posts', { method: 'POST', body: formData });
+            if (res.ok) {
+                document.getElementById('postContent').value = '';
+                document.getElementById('postImage').value = '';
+                loadPosts();
+            } else {
+                alert('등록 실패');
+            }
+        });
+
+        async function loadPosts() {
+            const res = await fetch('/api/posts');
+            if (!res.ok) return;
+            const posts = await res.json();
+            const list = document.getElementById('postsList');
+            list.innerHTML = '';
+
+            posts.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'post-item';
+                item.innerHTML = `
+                    <div><b>${p.author}</b> <small>(${p.created_at})</small></div>
+                    <p style="margin-top: 8px;">${p.content}</p>
+                    ${p.image_url ? `<img src="${p.image_url}">` : ''}
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
