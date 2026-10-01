@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAVES CHURCH | 젊은 감성의 교회</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --point: #4F46E5; /* 트렌디한 인디고 블루 */
+            --point-light: #EEF2FF;
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --text: #0F172A;
+            --text-sub: #64748B;
+            --radius: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-top: 70px; padding-bottom: 50px; }
+        
+        /* 네비게이션 */
+        header { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid #E2E8F0; }
+        .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 70px; padding: 0 20px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--point); text-decoration: none; letter-spacing: -1px; }
+        .menu-btns button { background: var(--point-light); color: var(--point); border: none; padding: 8px 16px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .menu-btns button:hover { background: var(--point); color: white; }
+
+        /* 자동 슬라이더 */
+        .slider-wrap { position: relative; max-width: 1200px; margin: 20px auto; border-radius: var(--radius); overflow: hidden; aspect-ratio: 21/9; }
+        .slides { display: flex; transition: transform 0.5s ease; height: 100%; }
+        .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 40px; color: white; }
+        .slide h2 { font-size: 2.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.5); margin-bottom: 10px; }
+        .slider-controls { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 10px; }
+        .slider-controls button { background: rgba(0,0,0,0.5); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(4px); }
+        .slider-controls button:hover { background: var(--point); }
+
+        /* 공통 컨테이너 & 카드 */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .slider-wrap { aspect-ratio: 16/9; } .slide h2 { font-size: 1.5rem; } }
+        
+        .card { background: var(--surface); padding: 30px; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+
+        /* 게시판 & 폼 */
+        input, textarea, select { width: 100%; padding: 15px; background: #F1F5F9; border: none; border-radius: 12px; margin-bottom: 15px; font-size: 1rem; outline: none; transition: 0.2s; }
+        input:focus, textarea:focus { box-shadow: 0 0 0 2px var(--point); }
+        .btn-primary { width: 100%; background: var(--point); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        
+        .post-item { border-bottom: 1px solid #E2E8F0; padding: 20px 0; }
+        .post-item:last-child { border: none; }
+        .post-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin-top: 15px; cursor: pointer; transition: 0.3s; }
+        .post-img:hover { opacity: 0.9; }
+
+        /* 모달 & 라이트박스(사진확대) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 999; display: none; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: white; padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; }
+        #lightbox.active { display: flex; }
+        #lightbox img { max-width: 90%; max-height: 80vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .lightbox-close { color: white; font-size: 2rem; position: absolute; top: 20px; right: 30px; cursor: pointer; }
+
+        /* [추가기능] 팝업 (기본 비활성화 상태) */
+        /* 활성화하려면 아래 html에서 id="noticePopup"의 hidden 클래스를 제거하세요 */
+        .hidden { display: none !important; }
+        .popup-box { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 350px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <!-- 팝업 기능 (필요시 활성화) -->
+    <!-- 설명: 행사나 특별 공지가 있을 때 아래 div의 'hidden'을 지우면 접속 시 중앙에 팝업이 뜹니다. -->
+    <div id="noticePopup" class="modal-overlay hidden" style="z-index: 2000;">
+        <div class="popup-box">
+            <h2>🎉 수련회 안내</h2>
+            <p style="margin: 15px 0; color:var(--text-sub);">2026 청년부 수련회 등록이 시작되었습니다.</p>
+            <button class="btn-primary" onclick="document.getElementById('noticePopup').classList.add('hidden')">닫기</button>
+        </div>
+    </div>
+
+    <!-- 헤더 -->
+    <header>
+        <div class="nav-inner">
+            <a href="#" class="logo">WAVES</a>
+            <div class="menu-btns" id="authArea">
+                <button onclick="showModal('loginModal')">로그인</button>
+                <button onclick="showModal('signupModal')" style="background:var(--text); color:white;">등록신청</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 슬라이더 기능 -->
+    <div class="slider-wrap">
+        <div class="slides" id="slideTrack">
+            <!-- 고품질 청년/예배 이미지 -->
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1600&auto=format&fit=crop');">
+                <h2>일어나 빛을 발하라<br><span style="font-size:1.2rem; font-weight:400;">Arise, shine</span></h2>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1600&auto=format&fit=crop');">
+                <h2>함께 지어져 가는 공동체<br><span style="font-size:1.2rem; font-weight:400;">Waves Community</span></h2>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1473280025148-643f9b0cbac2?q=80&w=1600&auto=format&fit=crop');">
+                <h2>다음 세대를 품는 교회<br><span style="font-size:1.2rem; font-weight:400;">Next Generation</span></h2>
+            </div>
+        </div>
+        <div class="slider-controls">
+            <button onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
+            <button onclick="togglePlay()" id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
+            <button onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- 추가 기능: 주보 & 헌금안내 -->
+    <div class="container grid-2">
+        <div class="card">
+            <div class="section-title"><i class="fa-solid fa-book-open"></i> 온라인 주보 뷰어</div>
+            <p style="color:var(--text-sub); margin-bottom: 20px;">스마트폰으로 편하게 이번 주 주보를 확인하세요.</p>
+            <!-- 주보 이미지나 PDF 링크 삽입 -->
+            <div style="background:#F1F5F9; border-radius:12px; height:200px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
+                <i class="fa-regular fa-file-pdf" style="font-size:3rem; color:var(--point);"></i>
+                <button class="btn-primary" style="width:auto; padding:8px 20px;">이번 주 주보 보기</button>
+            </div>
+        </div>
+        <div class="card" style="background: var(--point); color:white;">
+            <div class="section-title" style="color:white;"><i class="fa-solid fa-hand-holding-heart"></i> 온라인 헌금 안내</div>
+            <p style="opacity:0.9; margin-bottom:20px;">마음을 담은 예물은 아래 계좌를 이용해 주세요.</p>
+            <div style="background:rgba(255,255,255,0.1); padding:20px; border-radius:12px;">
+                <p style="font-size:0.9rem; opacity:0.8;">십일조 및 주일헌금</p>
+                <h3 style="margin:5px 0 15px; letter-spacing:1px;">신한은행 110-123-456789</h3>
+                <p style="font-size:0.9rem; opacity:0.8;">예금주: 웨이브스교회</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 게시판 영역 -->
+    <div class="container">
+        <div class="card">
+            <div class="section-title">
+                <i class="fa-solid fa-comment-dots"></i> 나눔 게시판
+                <button onclick="openWritePanel()" style="margin-left:auto; background:var(--point); color:white; border:none; padding:8px 16px; border-radius:30px; cursor:pointer;">글쓰기</button>
+            </div>
+            
+            <div id="writePanel" class="hidden" style="background:#F8FAFC; padding:20px; border-radius:12px; margin-bottom:20px;">
+                <textarea id="postContent" rows="3" placeholder="은혜로운 나눔을 작성해보세요..."></textarea>
+                <input type="file" id="postImage" accept="image/*">
+                <button class="btn-primary" onclick="submitPost()">게시물 등록</button>
+            </div>
+
+            <div id="boardList">게시물을 불러오는 중...</div>
+        </div>
+    </div>
+
+    <!-- 모달: 로그인/가입/관리자/라이트박스 -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:20px;">로그인</h2>
+            <input type="text" id="l_id" placeholder="아이디">
+            <input type="password" id="l_pw" placeholder="비밀번호">
+            <button class="btn-primary" onclick="submitLogin()">로그인</button>
+            <p style="text-align:center; margin-top:15px; font-size:0.9rem; cursor:pointer;" onclick="hideModal('loginModal'); showModal('signupModal');">아직 회원이 아니신가요?</p>
+            <button style="width:100%; background:none; border:none; margin-top:10px; color:var(--text-sub); cursor:pointer;" onclick="hideModal('loginModal')">닫기</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="signupModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:10px;">교인 등록신청</h2>
+            <p style="font-size:0.85rem; color:red; margin-bottom:20px;">* 교역자의 승인 후 활동이 가능합니다.</p>
+            <input type="text" id="s_id" placeholder="사용할 아이디">
+            <input type="password" id="s_pw" placeholder="비밀번호">
+            <input type="text" id="s_name" placeholder="실명">
+            <button class="btn-primary" onclick="submitSignup()">승인 요청하기</button>
+            <button style="width:100%; background:none; border:none; margin-top:10px; color:var(--text-sub); cursor:pointer;" onclick="hideModal('signupModal')">취소</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-content" style="max-width:600px;">
+            <h2 style="margin-bottom:20px;">관리자 승인 센터</h2>
+            <div id="adminList"></div>
+            <button class="btn-primary" style="margin-top:20px;" onclick="hideModal('adminModal')">닫기</button>
+        </div>
+    </div>
+
+    <!-- 사진 확대(라이트박스) UI -->
+    <div id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightboxImg" src="" alt="확대이미지">
+    </div>
+
+    <script>
+        // --- 1. 슬라이더 기능 (자동 및 멈춤) ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const track = document.getElementById('slideTrack');
+        let slideInterval;
+        let isPlaying = true;
+
+        function updateSlide() { track.style.transform = `translateX(-${currentSlide * 100}%)`; }
+        function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; updateSlide(); }
+        function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; updateSlide(); }
+        
+        function startSlide() { slideInterval = setInterval(nextSlide, 3500); }
+        function stopSlide() { clearInterval(slideInterval); }
+        
+        function togglePlay() {
+            const btn = document.getElementById('playPauseBtn');
+            if (isPlaying) {
+                stopSlide();
+                btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            } else {
+                startSlide();
+                btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            }
+            isPlaying = !isPlaying;
+        }
+        startSlide();
+
+        // --- 2. 라이트박스(사진확대) 기능 ---
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        // --- 3. 인증 및 게시판 기능 ---
+        let user = null;
+        function showModal(id) { document.getElementById(id).classList.add('active'); }
+        function hideModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        async function submitSignup() {
+            const id = document.getElementById('s_id').value;
+            const pw = document.getElementById('s_pw').value;
+            const name = document.getElementById('s_name').value;
+            const res = await fetch('/api/signup', { method:'POST', body: JSON.stringify({username:id, password:pw, fullName:name})});
+            if(res.ok) { alert('승인 요청이 완료되었습니다.'); hideModal('signupModal'); }
+            else alert('오류 발생');
+        }
+
+        async function submitLogin() {
+            const id = document.getElementById('l_id').value;
+            const pw = document.getElementById('l_pw').value;
+            const res = await fetch('/api/login', { method:'POST', body: JSON.stringify({username:id, password:pw})});
+            const data = await res.json();
+            if(res.ok) {
+                user = data;
+                hideModal('loginModal');
+                renderHeader();
+            } else alert(data.error);
+        }
+
+        function renderHeader() {
+            const area = document.getElementById('authArea');
+            if(user) {
+                area.innerHTML = `
+                    ${user.isAdmin ? `<button onclick="loadAdmin()" style="background:#10B981; color:white; margin-right:10px;">관리자센터</button>` : ''}
+                    <span style="font-weight:bold; margin-right:15px;">${user.fullName}님</span>
+                    <button onclick="user=null; renderHeader();" style="background:#F1F5F9; color:var(--text-sub);">로그아웃</button>
+                `;
+            } else {
+                area.innerHTML = `<button onclick="showModal('loginModal')">로그인</button> <button onclick="showModal('signupModal')" style="background:var(--text); color:white;">등록신청</button>`;
+            }
+        }
+
+        function openWritePanel() {
+            if(!user) return alert('로그인 후 이용 가능합니다.');
+            document.getElementById('writePanel').classList.toggle('hidden');
+        }
+
+        async function submitPost() {
+            const content = document.getElementById('postContent').value;
+            const imgFile = document.getElementById('postImage').files[0];
+            const fd = new FormData();
+            fd.append('author', user.fullName);
+            fd.append('content', content);
+            if(imgFile) fd.append('image', imgFile);
+
+            await fetch('/api/posts', { method: 'POST', body: fd });
+            document.getElementById('postContent').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('writePanel').classList.add('hidden');
+            loadPosts();
+        }
+
+        async function loadPosts() {
+            const res = await fetch('/api/posts');
+            const data = await res.json();
+            const list = document.getElementById('boardList');
+            list.innerHTML = '';
+            data.forEach(p => {
+                list.innerHTML += `
+                    <div class="post-item">
+                        <div style="font-weight:bold; margin-bottom:10px;">${p.author}</div>
+                        <p>${p.content}</p>
+                        ${p.image_url ? `<img src="${p.image_url}" class="post-img" onclick="openLightbox('${p.image_url}')">` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        async function loadAdmin() {
+            showModal('adminModal');
+            const res = await fetch('/api/admin/users');
+            const data = await res.json();
+            const list = document.getElementById('adminList');
+            list.innerHTML = data.map(u => `
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; padding:10px; background:#F1F5F9; border-radius:8px;">
+                    <div><b>${u.full_name}</b> (${u.username}) - ${u.status==='pending'?'대기중':'승인됨'}</div>
+                    ${u.status==='pending' ? `<button onclick="adminAction(${u.id}, 'approve')" style="background:var(--point); color:white; border:none; padding:5px 10px; border-radius:5px;">승인</button>` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function adminAction(id, action) {
+            await fetch('/api/admin/action', { method:'POST', body: JSON.stringify({id, action})});
+            loadAdmin();
+        }
+
+        loadPosts();
+    </script>
+</body>
+</html>
