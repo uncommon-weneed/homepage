@@ -3,122 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>교회 홈페이지</title>
+    <title>은혜로운 교회 | Grace Church</title>
+    <!-- 구글 웹폰트 및 아이콘 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --primary: #1e3a5f;
+            --primary-light: #2d5584;
+            --accent: #d4af37;
+            --bg-main: #f8fafc;
+            --surface: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(149, 157, 165, 0.1);
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8f9fa; color: #333; }
-        header { background-color: #003366; color: white; padding: 20px; text-align: center; }
-        nav { background-color: #002244; display: flex; justify-content: center; gap: 20px; padding: 12px; }
-        nav a { color: white; text-decoration: none; font-weight: bold; }
-        .container { max-width: 900px; margin: 30px auto; padding: 0 15px; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 25px; }
-        .hidden { display: none; }
-        input, textarea, button { width: 100%; padding: 10px; margin-top: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        button { background-color: #003366; color: white; border: none; font-weight: bold; cursor: pointer; }
-        .post-item { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .post-item img { max-width: 100%; max-height: 400px; margin-top: 10px; border-radius: 6px; }
+        body { 
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; 
+            background-color: var(--bg-main); 
+            color: var(--text-dark); 
+            line-height: 1.6;
+        }
+
+        /* 네비게이션 헤더 */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* 히어로 배너 */
+        .hero {
+            background: linear-gradient(rgba(30, 58, 95, 0.8), rgba(30, 58, 95, 0.85)), 
+                        url('https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=1600&q=80') center/cover;
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .hero h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 12px; }
+        .hero p { font-size: 1.1rem; opacity: 0.9; font-weight: 300; }
+
+        /* 메인 레이아웃 */
+        .main-container {
+            max-width: 900px;
+            margin: -40px auto 60px;
+            padding: 0 20px;
+        }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 예배 안내 그리드 */
+        .worship-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+        .worship-item {
+            background: var(--bg-main);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary);
+        }
+        .worship-item h4 { font-size: 1rem; color: var(--primary); margin-bottom: 4px; }
+        .worship-item p { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* 작성 폼 */
+        .form-group { margin-bottom: 16px; }
+        textarea, input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        textarea:focus, input:focus { border-color: var(--primary-light); }
+        .file-upload-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-light); }
+        .btn-secondary { background: var(--border); color: var(--text-dark); }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-sm { padding: 6px 12px; font-size: 0.85rem; }
+
+        /* 피드 리스트 */
+        .post-card {
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+        }
+        .post-card:last-child { border-bottom: none; }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .post-author { font-weight: 600; font-size: 0.95rem; }
+        .post-time { font-size: 0.8rem; color: var(--text-muted); }
+        .post-body { font-size: 1rem; color: var(--text-dark); white-space: pre-wrap; margin-bottom: 12px; }
+        .post-img { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius-md); margin-top: 8px; }
+
+        /* 모달 윈도우 */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .modal.active { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+        }
+        .hidden { display: none !important; }
+        .img-preview { max-height: 120px; border-radius: 8px; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
+    <!-- 상단 네비게이션 -->
     <header>
-        <h1>교회 홈페이지</h1>
-        <p>환영합니다. 하나님의 은혜가 함께하시길 바랍니다.</p>
+        <div class="nav-container">
+            <a href="#" class="logo"><i class="fa-solid fa-church"></i> 은혜로운 교회</a>
+            <div class="nav-links">
+                <a href="#notice">예배 안내</a>
+                <a href="#board">소식/게시판</a>
+                <div id="authNav">
+                    <button class="btn btn-primary btn-sm" onclick="openModal('login')">로그인</button>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <nav>
-        <a href="#notice">교회 안내</a>
-        <a href="#board">공지/게시판</a>
-        <a href="#auth" id="navAuthLink">로그인</a>
-    </nav>
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <h1>말씀과 사랑이 머무는 곳</h1>
+        <p>우리 교회에 오신 모든 분들을 예수님의 이름으로 진심으로 환영합니다.</p>
+    </section>
 
-    <div class="container">
-        <!-- 교회 안내 섹션 -->
+    <main class="main-container">
+        <!-- 예배 안내 -->
         <section class="card" id="notice">
-            <h2> 예배 안내</h2>
-            <p style="margin-top: 10px; line-height: 1.6;">
-                • <b>주일 대예배:</b> 매주 주일 오전 11:00 (대성전)<br>
-                • <b>수요 기도회:</b> 매주 수요일 오후 7:30 (비전홀)<br>
-                • <b>새벽 기도회:</b> 월~금 오전 5:30 (소성전)
-            </p>
-        </section>
-
-        <!-- 회원가입 & 로그인 영역 -->
-        <section class="card" id="auth">
-            <div id="authForms">
-                <h3 id="authTitle">로그인</h3>
-                <input type="text" id="username" placeholder="아이디">
-                <input type="password" id="password" placeholder="비밀번호">
-                <button onclick="handleLogin()">로그인</button>
-                <button onclick="handleSignup()" style="background-color: #28a745;">회원가입</button>
+            <div class="card-header">
+                <span class="card-title"><i class="fa-regular fa-clock"></i> 예배 시간 안내</span>
             </div>
-            <div id="userInfo" class="hidden">
-                <p><b id="userDisplay"></b>님 환영합니다.</p>
-                <button onclick="handleLogout()" style="background-color: #6c757d;">로그아웃</button>
+            <div class="worship-grid">
+                <div class="worship-item">
+                    <h4>주일 대예배</h4>
+                    <p>매주 주일 11:00 AM | 본당 2층 대성전</p>
+                </div>
+                <div class="worship-item">
+                    <h4>수요 기도회</h4>
+                    <p>매주 수요일 07:30 PM | 비전홀</p>
+                </div>
+                <div class="worship-item">
+                    <h4>새벽 기도회</h4>
+                    <p>월 ~ 금 05:30 AM | 소예배실</p>
+                </div>
             </div>
         </section>
 
-        <!-- 게시물 작성 (로그인 시 노출) -->
+        <!-- 글쓰기 카드 (로그인 사용자 전용) -->
         <section class="card hidden" id="writeSection">
-            <h3>새 소식 / 공지 작성</h3>
+            <div class="card-header">
+                <span class="card-title"><i class="fa-solid fa-pen-nib"></i> 새로운 소식 등록</span>
+            </div>
             <form id="postForm">
-                <textarea id="postContent" rows="4" placeholder="내용을 입력하세요..." required></textarea>
-                <input type="file" id="postImage" accept="image/*">
-                <button type="submit">게시글 등록</button>
+                <div class="form-group">
+                    <textarea id="postContent" rows="3" placeholder="나누고 싶은 은혜로운 소식을 작성해보세요..." required></textarea>
+                </div>
+                <div class="file-upload-box">
+                    <input type="file" id="postImage" accept="image/*" onchange="previewImage(this)">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> 게시글 등록</button>
+                </div>
+                <img id="imagePreview" class="img-preview" alt="미리보기">
             </form>
         </section>
 
-        <!-- 게시판 목록 -->
+        <!-- 소식 게시판 -->
         <section class="card" id="board">
-            <h2>교회 소식 게시판</h2>
-            <div id="postsList" style="margin-top: 15px;"></div>
+            <div class="card-header">
+                <span class="card-title"><i class="fa-solid fa-bullhorn"></i> 교회 소식 피드</span>
+                <button class="btn btn-secondary btn-sm" onclick="loadPosts()"><i class="fa-solid fa-rotate-right"></i> 새로고침</button>
+            </div>
+            <div id="postsList">
+                <p style="text-align: center; color: var(--text-muted); padding: 20px;">소식을 불러오는 중입니다...</p>
+            </div>
         </section>
+    </main>
+
+    <!-- 로그인 / 회원가입 통합 모달 -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <h3 id="modalTitle" style="margin-bottom: 16px; font-weight: 700;">로그인</h3>
+            <div class="form-group">
+                <input type="text" id="username" placeholder="아이디를 입력하세요">
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="비밀번호를 입력하세요">
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;">
+                <button id="modalActionBtn" class="btn btn-primary" onclick="submitAuth()">로그인</button>
+                <button class="btn btn-secondary" onclick="toggleAuthMode()" id="switchAuthBtn">회원가입으로 전환</button>
+                <button class="btn btn-sm" style="color: var(--text-muted);" onclick="closeModal()">닫기</button>
+            </div>
+        </div>
     </div>
 
     <script>
         let currentUser = localStorage.getItem('currentUser');
+        let isSignupMode = false;
 
         function updateUI() {
+            const authNav = document.getElementById('authNav');
+            const writeSection = document.getElementById('writeSection');
+
             if (currentUser) {
-                document.getElementById('authForms').classList.add('hidden');
-                document.getElementById('userInfo').classList.remove('hidden');
-                document.getElementById('writeSection').classList.remove('hidden');
-                document.getElementById('userDisplay').innerText = currentUser;
+                authNav.innerHTML = `
+                    <span style="font-size:0.9rem; font-weight:600; margin-right:8px;">${currentUser} 성도님</span>
+                    <button class="btn btn-danger btn-sm" onclick="handleLogout()">로그아웃</button>
+                `;
+                writeSection.classList.remove('hidden');
             } else {
-                document.getElementById('authForms').classList.remove('hidden');
-                document.getElementById('userInfo').classList.add('hidden');
-                document.getElementById('writeSection').classList.add('hidden');
+                authNav.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openModal('login')">로그인</button>`;
+                writeSection.classList.add('hidden');
             }
             loadPosts();
         }
 
-        async function handleSignup() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            const res = await fetch('/api/signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: u, password: p })
-            });
-            const data = await res.json();
-            alert(res.ok ? '회원가입이 완료되었습니다.' : data.error);
+        // 모달 관리
+        function openModal(mode) {
+            isSignupMode = (mode === 'signup');
+            renderModalTexts();
+            document.getElementById('authModal').classList.add('active');
+        }
+        function closeModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+        function toggleAuthMode() {
+            isSignupMode = !isSignupMode;
+            renderModalTexts();
+        }
+        function renderModalTexts() {
+            document.getElementById('modalTitle').innerText = isSignupMode ? '성도 회원가입' : '성도 로그인';
+            document.getElementById('modalActionBtn').innerText = isSignupMode ? '가입하기' : '로그인';
+            document.getElementById('switchAuthBtn').innerText = isSignupMode ? '기존 계정으로 로그인' : '새 계정 회원가입';
         }
 
-        async function handleLogin() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: u, password: p })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                currentUser = data.username;
-                localStorage.setItem('currentUser', currentUser);
-                updateUI();
-            } else {
-                alert(data.error);
+        // 인증 처리
+        async function submitAuth() {
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value.trim();
+            if (!u || !p) return alert('아이디와 비밀번호를 입력해주세요.');
+
+            const endpoint = isSignupMode ? '/api/signup' : '/api/login';
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: u, password: p })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    if (isSignupMode) {
+                        alert('회원가입이 완료되었습니다. 로그인해주세요.');
+                        toggleAuthMode();
+                    } else {
+                        currentUser = data.username;
+                        localStorage.setItem('currentUser', currentUser);
+                        closeModal();
+                        updateUI();
+                    }
+                } else {
+                    alert(data.error || '요청 처리에 실패했습니다.');
+                }
+            } catch (err) {
+                alert('서버와 통신 중 오류가 발생했습니다. Pages 바인딩을 확인하세요.');
             }
         }
 
@@ -128,6 +394,20 @@
             updateUI();
         }
 
+        // 이미지 미리보기
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // 게시글 전송
         document.getElementById('postForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const content = document.getElementById('postContent').value;
@@ -138,33 +418,55 @@
             formData.append('content', content);
             if (image) formData.append('image', image);
 
-            const res = await fetch('/api/posts', { method: 'POST', body: formData });
-            if (res.ok) {
-                document.getElementById('postContent').value = '';
-                document.getElementById('postImage').value = '';
-                loadPosts();
-            } else {
-                alert('등록 실패');
+            try {
+                const res = await fetch('/api/posts', { method: 'POST', body: formData });
+                if (res.ok) {
+                    document.getElementById('postContent').value = '';
+                    document.getElementById('postImage').value = '';
+                    document.getElementById('imagePreview').style.display = 'none';
+                    loadPosts();
+                } else {
+                    alert('게시글 등록에 실패했습니다.');
+                }
+            } catch (err) {
+                alert('게시글 등록 중 통신 오류가 발생했습니다.');
             }
         });
 
+        // 게시글 목록 호출
         async function loadPosts() {
-            const res = await fetch('/api/posts');
-            if (!res.ok) return;
-            const posts = await res.json();
             const list = document.getElementById('postsList');
-            list.innerHTML = '';
+            try {
+                const res = await fetch('/api/posts');
+                if (!res.ok) throw new Error();
+                const posts = await res.json();
+                
+                if (posts.length === 0) {
+                    list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">등록된 소식이 없습니다.</p>`;
+                    return;
+                }
 
-            posts.forEach(p => {
-                const item = document.createElement('div');
-                item.className = 'post-item';
-                item.innerHTML = `
-                    <div><b>${p.author}</b> <small>(${p.created_at})</small></div>
-                    <p style="margin-top: 8px;">${p.content}</p>
-                    ${p.image_url ? `<img src="${p.image_url}">` : ''}
-                `;
-                list.appendChild(item);
-            });
+                list.innerHTML = '';
+                posts.forEach(p => {
+                    const item = document.createElement('div');
+                    item.className = 'post-card';
+                    const initial = p.author ? p.author.charAt(0) : '교';
+                    item.innerHTML = `
+                        <div class="post-meta">
+                            <div class="avatar">${initial}</div>
+                            <div>
+                                <div class="post-author">${p.author}</div>
+                                <div class="post-time">${p.created_at || '방금 전'}</div>
+                            </div>
+                        </div>
+                        <div class="post-body">${p.content}</div>
+                        ${p.image_url ? `<img src="${p.image_url}" class="post-img" loading="lazy">` : ''}
+                    `;
+                    list.appendChild(item);
+                });
+            } catch (err) {
+                list.innerHTML = `<p style="text-align:center; color:#ef4444; padding:20px;">소식을 불러오지 못했습니다. DB 바인딩을 확인하세요.</p>`;
+            }
         }
 
         updateUI();
