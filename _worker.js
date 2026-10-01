@@ -136,10 +136,15 @@ export default {
       const fileName = url.pathname.replace("/api/images/", "");
       const object = await env.BUCKET.get(fileName);
       if (!object) return new Response("Not found", { status: 404 });
-      const headers = new Headers(); object.writeHttpMetadata(headers); headers.set("etag", object.httpEtag);
       
-      // 영상 파일일 경우 브라우저 재생을 위해 범위(Range) 및 미디어타입 강제 할당
+      const headers = new Headers(); 
+      object.writeHttpMetadata(headers); 
+      headers.set("etag", object.httpEtag);
+      headers.set("Cache-Control", "public, max-age=31536000"); // 캐시 최적화
+      
+      // 영상 파일일 경우 브라우저 재생을 위해 미디어타입 강제 할당
       if(fileName.endsWith('.mp4')) headers.set("Content-Type", "video/mp4");
+      if(fileName.endsWith('.webm')) headers.set("Content-Type", "video/webm");
       
       return new Response(object.body, { headers });
     }
