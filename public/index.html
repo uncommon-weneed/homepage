@@ -20,54 +20,70 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
         body { background: var(--bg); color: var(--text); padding-top: 70px; padding-bottom: 60px; }
 
+        /* 네비게이션 */
         header { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.92); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid var(--border); }
         .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 70px; padding: 0 20px; }
         .logo { font-size: 1.5rem; font-weight: 800; color: var(--point); text-decoration: none; }
-        .menu-btns button { background: var(--point-light); color: var(--point); border: none; padding: 8px 16px; border-radius: 30px; font-weight: 600; cursor: pointer; }
+        .menu-btns button { background: var(--point-light); color: var(--point); border: none; padding: 8px 16px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .menu-btns button:hover { background: var(--point); color: white; }
 
+        /* 슬라이더 */
         .slider-wrap { position: relative; max-width: 1200px; margin: 20px auto; border-radius: var(--radius); overflow: hidden; aspect-ratio: 21/9; }
         .slides { display: flex; transition: transform 0.5s ease; height: 100%; }
         .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 40px; color: white; }
         .slide h2 { font-size: 2.3rem; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .slider-controls { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 10px; }
-        .slider-controls button { background: rgba(0,0,0,0.5); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; }
 
+        /* 메인 컨테이너 */
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
         .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
         .card { background: var(--surface); padding: 28px; border-radius: var(--radius); box-shadow: 0 6px 20px rgba(0,0,0,0.03); border: 1px solid var(--border); }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
+        /* 주보 표시 영역 */
+        #latestBulletinArea { text-align: center; }
+        #latestBulletinArea img { width: 100%; max-height: 500px; object-fit: contain; border-radius: 8px; cursor: zoom-in; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+
+        /* 게시판 탭 메뉴 */
+        .board-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; overflow-x: auto; white-space: nowrap; }
+        .board-tab { background: none; border: none; font-size: 1.05rem; font-weight: 600; color: var(--text-sub); cursor: pointer; padding: 5px 10px; position: relative; }
+        .board-tab.active { color: var(--point); }
+        .board-tab.active::after { content: ''; position: absolute; bottom: -12px; left: 0; width: 100%; height: 3px; background: var(--point); border-radius: 3px; }
+
+        /* 폼 요소 */
         input, textarea, select { width: 100%; padding: 12px 14px; background: #F1F5F9; border: 1px solid transparent; border-radius: 10px; margin-bottom: 12px; font-size: 0.95rem; outline: none; }
         input:focus, textarea:focus { border-color: var(--point); background: white; }
         .btn-primary { width: 100%; background: var(--point); color: white; border: none; padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-        .btn-sm { padding: 5px 10px; font-size: 0.8rem; border-radius: 6px; border: none; cursor: pointer; }
+        .btn-sm { padding: 6px 12px; font-size: 0.85rem; border-radius: 6px; border: none; cursor: pointer; }
 
-        /* 게시글 카드 */
-        .post-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
+        /* 게시글 리스트 뷰 */
+        .post-item { border-bottom: 1px solid var(--border); padding: 20px 0; display: flex; flex-direction: column; gap: 10px; }
         .post-item:last-child { border: none; }
-        .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .post-title { font-size: 1.15rem; font-weight: 700; cursor: pointer; color: var(--text); }
+        .post-header { display: flex; justify-content: space-between; align-items: center; }
+        .post-title { font-size: 1.2rem; font-weight: 700; cursor: pointer; color: var(--text); }
         .post-title:hover { color: var(--point); }
-        .post-preview-text { color: var(--text-sub); font-size: 0.95rem; margin-top: 6px; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .post-thumb { width: 100%; max-height: 280px; object-fit: cover; border-radius: 10px; margin-top: 12px; cursor: pointer; }
+        .post-preview-text { color: var(--text-sub); font-size: 0.95rem; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .post-thumb { width: 100%; max-height: 350px; object-fit: cover; border-radius: 10px; margin-top: 5px; cursor: pointer; }
+        
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; background: var(--point-light); color: var(--point); }
+        .badge.notice { background: #FEE2E2; color: #DC2626; }
+        .badge.bulletin { background: #FEF3C7; color: #D97706; }
 
         /* 모달 및 라이트박스 */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: white; padding: 30px; border-radius: 18px; width: 100%; max-width: 540px; max-height: 85vh; overflow-y: auto; }
+        .modal-content { background: white; padding: 30px; border-radius: 18px; width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
         
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; align-items: center; justify-content: center; }
         #lightbox.active { display: flex; }
-        #lightbox img { max-width: 92%; max-height: 85vh; border-radius: 8px; }
-        .lightbox-close { color: white; font-size: 2.2rem; position: absolute; top: 25px; right: 30px; cursor: pointer; }
+        #lightbox img { max-width: 95%; max-height: 90vh; border-radius: 8px; }
+        .lightbox-close { color: white; font-size: 2.5rem; position: absolute; top: 20px; right: 30px; cursor: pointer; }
 
         .hidden { display: none !important; }
-        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; background: var(--point-light); color: var(--point); }
 
         @media (max-width: 768px) {
             .grid-2 { grid-template-columns: 1fr; }
             .slider-wrap { aspect-ratio: 16/9; }
-            .slide h2 { font-size: 1.5rem; }
+            .slide h2 { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -76,10 +92,7 @@
     <header>
         <div class="nav-inner">
             <a href="#" class="logo">WAVES</a>
-            <div class="menu-btns" id="authArea">
-                <button onclick="showModal('loginModal')">로그인</button>
-                <button onclick="showModal('signupModal')" style="background:var(--text); color:white;">등록신청</button>
-            </div>
+            <div class="menu-btns" id="authArea"></div>
         </div>
     </header>
 
@@ -93,52 +106,52 @@
                 <h2>함께 지어져 가는 공동체<br><span style="font-size:1.1rem; font-weight:400;">Waves Community</span></h2>
             </div>
         </div>
-        <div class="slider-controls">
-            <button onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
-            <button onclick="togglePlay()" id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
-            <button onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
-        </div>
     </div>
 
     <!-- 주보 및 온라인 헌금 -->
     <div class="container grid-2">
         <div class="card">
-            <div class="section-title"><i class="fa-solid fa-book-open"></i> 온라인 주보</div>
-            <p style="color:var(--text-sub); margin-bottom: 16px;">이번 주 예배 순서와 소식을 확인하세요.</p>
-            <div id="latestBulletinArea" style="background:#F1F5F9; border-radius:12px; padding:20px; text-align:center;">
-                <p id="bulletinTitle">등록된 최신 주보를 불러옵니다.</p>
-                <button class="btn-primary" style="margin-top:12px; width:auto; padding:8px 24px;" onclick="viewLatestBulletin()">주보 상세 보기</button>
+            <div class="section-title"><i class="fa-solid fa-book-open"></i> 이번 주 온라인 주보</div>
+            <p style="color:var(--text-sub); margin-bottom: 16px;">사진을 터치하시면 크게 보실 수 있습니다.</p>
+            <div id="latestBulletinArea">
+                <!-- 주보가 즉시 노출되는 영역 -->
+                <p style="color:var(--text-sub); padding:30px 0;">등록된 주보를 불러오고 있습니다...</p>
             </div>
         </div>
         <div class="card" style="background: var(--point); color:white;">
             <div class="section-title" style="color:white;"><i class="fa-solid fa-hand-holding-heart"></i> 온라인 헌금 안내</div>
             <p style="opacity:0.9; margin-bottom:16px;">마음을 담은 예물은 아래 계좌를 이용해 주세요.</p>
-            <div style="background:rgba(255,255,255,0.1); padding:16px; border-radius:10px;">
-                <p style="font-size:0.85rem; opacity:0.85;">십일조 / 주일헌금</p>
-                <h3 style="margin:4px 0 10px; letter-spacing:1px;">신한 110-123-456789</h3>
-                <p style="font-size:0.85rem; opacity:0.85;">예금주: 웨이브스교회</p>
+            <div style="background:rgba(255,255,255,0.1); padding:20px; border-radius:12px;">
+                <p style="font-size:0.9rem; opacity:0.85;">십일조 / 주일예물</p>
+                <h3 style="margin:5px 0 15px; letter-spacing:1px; font-size: 1.5rem;">신한 110-123-456789</h3>
+                <p style="font-size:0.9rem; opacity:0.85;">예금주: 웨이브스교회</p>
             </div>
         </div>
     </div>
 
-    <!-- 나눔 게시판 -->
+    <!-- 나눔 게시판 영역 -->
     <div class="container">
         <div class="card">
             <div class="section-title">
                 <i class="fa-solid fa-comment-dots"></i> 교회 소식 & 나눔터
-                <button onclick="openWritePanel()" style="margin-left:auto; background:var(--point); color:white; border:none; padding:8px 18px; border-radius:30px; cursor:pointer;">글쓰기 / 주보등록</button>
+                <button onclick="openWritePanel()" style="margin-left:auto; background:var(--point); color:white; border:none; padding:10px 20px; border-radius:30px; cursor:pointer;">게시물 작성</button>
+            </div>
+
+            <!-- 카테고리 탭 -->
+            <div class="board-tabs" id="boardTabs">
+                <button class="board-tab active" onclick="setCategoryTab('전체')">전체보기</button>
+                <button class="board-tab" onclick="setCategoryTab('공지사항')">공지사항</button>
+                <button class="board-tab" onclick="setCategoryTab('일반나눔')">일반나눔</button>
+                <button class="board-tab" onclick="setCategoryTab('행사사진')">행사사진</button>
+                <button class="board-tab" onclick="setCategoryTab('주보')">주보함</button>
             </div>
             
-            <!-- 작성 패널 -->
-            <div id="writePanel" class="hidden" style="background:#F8FAFC; border:1px solid var(--border); padding:20px; border-radius:12px; margin-bottom:24px;">
+            <!-- 글쓰기 패널 -->
+            <div id="writePanel" class="hidden" style="background:#F8FAFC; border:1px solid var(--border); padding:25px; border-radius:12px; margin-bottom:24px;">
                 <h4 style="margin-bottom:12px;">새 게시글 작성</h4>
-                <select id="postCategory">
-                    <option value="일반나눔">일반나눔</option>
-                    <option value="주보">주보 (온라인 주보함 반영)</option>
-                    <option value="공지사항">공지사항</option>
-                </select>
-                <input type="text" id="postTitle" placeholder="글 제목">
-                <textarea id="postContent" rows="4" placeholder="내용을 작성하세요..."></textarea>
+                <select id="postCategory"></select> <!-- 관리자 권한에 따라 JS로 동적 생성 -->
+                <input type="text" id="postTitle" placeholder="제목을 입력하세요">
+                <textarea id="postContent" rows="5" placeholder="내용을 작성하세요..."></textarea>
                 <input type="file" id="postImage" accept="image/*">
                 <button class="btn-primary" onclick="submitPost()">등록하기</button>
             </div>
@@ -149,21 +162,21 @@
 
     <!-- 글 상세 모달 (본문 + 사진 확대) -->
     <div class="modal-overlay" id="detailModal">
-        <div class="modal-content" style="max-width: 640px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                 <span class="badge" id="modalCategory">일반</span>
-                <span style="font-size:0.85rem; color:var(--text-sub);" id="modalAuthorMeta">작성자</span>
+                <span style="font-size:0.9rem; color:var(--text-sub);" id="modalAuthorMeta">작성자</span>
             </div>
-            <h2 id="modalTitle" style="font-size:1.4rem; margin-bottom:14px; word-break:break-all;"></h2>
-            <div id="modalContent" style="white-space:pre-wrap; line-height:1.7; color:#334155; margin-bottom:18px;"></div>
+            <h2 id="modalTitle" style="font-size:1.5rem; margin-bottom:15px; word-break:break-all;"></h2>
+            <div id="modalContent" style="white-space:pre-wrap; line-height:1.7; color:#334155; margin-bottom:20px; font-size:1.05rem;"></div>
             <div id="modalImageWrap"></div>
             
-            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px; border-top:1px solid var(--border); padding-top:14px;">
+            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:25px; border-top:1px solid var(--border); padding-top:15px;">
                 <div id="modalOwnerActions" class="hidden" style="display:flex; gap:8px;">
                     <button class="btn-sm" style="background:#E2E8F0;" onclick="openEditFromDetail()">수정</button>
                     <button class="btn-sm" style="background:#EF4444; color:white;" onclick="deleteFromDetail()">삭제</button>
                 </div>
-                <button class="btn-sm" style="background:var(--text); color:white;" onclick="hideModal('detailModal')">닫기</button>
+                <button class="btn-sm" style="background:var(--text); color:white; padding: 8px 16px;" onclick="hideModal('detailModal')">닫기</button>
             </div>
         </div>
     </div>
@@ -181,90 +194,78 @@
             <input type="file" id="editImage" accept="image/*">
             <div style="display:flex; gap:8px;">
                 <button class="btn-primary" onclick="submitEdit()">수정 완료</button>
-                <button class="btn-sm" style="background:#E2E8F0; width:80px;" onclick="hideModal('editModal')">취소</button>
+                <button class="btn-sm" style="background:#E2E8F0; width:100px;" onclick="hideModal('editModal')">취소</button>
             </div>
         </div>
     </div>
 
     <!-- 로그인 모달 -->
     <div class="modal-overlay" id="loginModal">
-        <div class="modal-content">
-            <h3 style="margin-bottom:16px;">로그인</h3>
+        <div class="modal-content" style="max-width: 400px;">
+            <h3 style="margin-bottom:16px; text-align:center;">로그인</h3>
             <input type="text" id="l_id" placeholder="아이디">
             <input type="password" id="l_pw" placeholder="비밀번호">
             <button class="btn-primary" onclick="submitLogin()">로그인</button>
-            <button style="width:100%; background:none; border:none; margin-top:12px; color:var(--text-sub); cursor:pointer;" onclick="hideModal('loginModal')">닫기</button>
+            <p style="text-align:center; margin-top:15px; font-size:0.8rem; color:#888;">관리자: admin / admin</p>
+            <button style="width:100%; background:none; border:none; margin-top:5px; color:var(--text-sub); cursor:pointer;" onclick="hideModal('loginModal')">닫기</button>
         </div>
     </div>
 
     <!-- 가입 신청 모달 -->
     <div class="modal-overlay" id="signupModal">
-        <div class="modal-content">
-            <h3 style="margin-bottom:8px;">성도 등록신청</h3>
-            <p style="font-size:0.85rem; color:red; margin-bottom:14px;">교역자 승인 후 글쓰기가 가능합니다.</p>
+        <div class="modal-content" style="max-width: 400px;">
+            <h3 style="margin-bottom:8px; text-align:center;">성도 등록신청</h3>
+            <p style="font-size:0.85rem; color:red; margin-bottom:14px; text-align:center;">교역자 승인 후 글쓰기가 가능합니다.</p>
             <input type="text" id="s_id" placeholder="아이디">
             <input type="password" id="s_pw" placeholder="비밀번호">
             <input type="text" id="s_name" placeholder="실명">
             <button class="btn-primary" onclick="submitSignup()">승인 요청</button>
-            <button style="width:100%; background:none; border:none; margin-top:12px; color:var(--text-sub); cursor:pointer;" onclick="hideModal('signupModal')">닫기</button>
+            <button style="width:100%; background:none; border:none; margin-top:12px; color:var(--text-sub); cursor:pointer;" onclick="hideModal('signupModal')">취소</button>
         </div>
     </div>
 
     <!-- 관리자 모달 -->
     <div class="modal-overlay" id="adminModal">
-        <div class="modal-content" style="max-width:600px;">
+        <div class="modal-content">
             <h3 style="margin-bottom:16px;">교인 가입 승인 센터</h3>
             <div id="adminList"></div>
-            <button class="btn-primary" style="margin-top:16px;" onclick="hideModal('adminModal')">확인 완료</button>
+            <button class="btn-primary" style="margin-top:16px;" onclick="hideModal('adminModal')">닫기</button>
         </div>
     </div>
 
-    <!-- 풀스크린 사진 확대 (라이트박스) -->
+    <!-- 풀스크린 라이트박스 -->
     <div id="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
         <img id="lightboxImg" src="" alt="확대이미지">
     </div>
 
     <script>
-        // 1. 슬라이더 제어
+        // --- 슬라이더 로직 ---
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
-        const track = document.getElementById('slideTrack');
-        let slideInterval;
-        let isPlaying = true;
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            document.getElementById('slideTrack').style.transform = `translateX(-${currentSlide * 100}%)`;
+        }, 3500);
 
-        function updateSlide() { track.style.transform = `translateX(-${currentSlide * 100}%)`; }
-        function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; updateSlide(); }
-        function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; updateSlide(); }
-        function startSlide() { slideInterval = setInterval(nextSlide, 3500); }
-        function stopSlide() { clearInterval(slideInterval); }
-        function togglePlay() {
-            const btn = document.getElementById('playPauseBtn');
-            if (isPlaying) { stopSlide(); btn.innerHTML = '<i class="fa-solid fa-play"></i>'; }
-            else { startSlide(); btn.innerHTML = '<i class="fa-solid fa-pause"></i>'; }
-            isPlaying = !isPlaying;
-        }
-        startSlide();
-
-        // 2. 모달 및 라이트박스
+        // --- 공통 UI ---
         function showModal(id) { document.getElementById(id).classList.add('active'); }
         function hideModal(id) { document.getElementById(id).classList.remove('active'); }
-        function openLightbox(src) {
-            document.getElementById('lightboxImg').src = src;
-            document.getElementById('lightbox').classList.add('active');
-        }
+        function openLightbox(src) { document.getElementById('lightboxImg').src = src; document.getElementById('lightbox').classList.add('active'); }
         function closeLightbox() { document.getElementById('lightbox').classList.remove('active'); }
 
-        // 3. 사용자 및 인증
+        // --- 데이터 상태 ---
         let user = JSON.parse(localStorage.getItem('user_session') || 'null');
         let postsData = [];
+        let currentTab = '전체';
         let activePost = null;
 
+        // --- 인증 및 권한 로직 ---
         function renderHeader() {
             const area = document.getElementById('authArea');
             if (user) {
                 area.innerHTML = `
-                    ${user.isAdmin ? `<button onclick="loadAdmin()" style="background:#10B981; color:white; margin-right:8px;">승인센터</button>` : ''}
+                    ${user.isAdmin ? `<button onclick="loadAdmin()" style="background:#10B981; color:white; margin-right:8px;">가입승인</button>` : ''}
                     <span style="font-weight:600; margin-right:12px;">${user.fullName}님</span>
                     <button onclick="handleLogout()" style="background:#E2E8F0; color:var(--text-sub);">로그아웃</button>
                 `;
@@ -274,6 +275,21 @@
                     <button onclick="showModal('signupModal')" style="background:var(--text); color:white;">등록신청</button>
                 `;
             }
+            renderCategoryOptions();
+        }
+
+        // 주보 등록은 관리자만 보이도록 옵션 렌더링
+        function renderCategoryOptions() {
+            const select = document.getElementById('postCategory');
+            let html = `
+                <option value="일반나눔">일반나눔</option>
+                <option value="공지사항">공지사항</option>
+                <option value="행사사진">행사사진</option>
+            `;
+            if (user && user.isAdmin) {
+                html += `<option value="주보">🌟 주보 (메인화면 즉시반영)</option>`;
+            }
+            select.innerHTML = html;
         }
 
         async function submitLogin() {
@@ -295,7 +311,7 @@
             const pw = document.getElementById('s_pw').value.trim();
             const name = document.getElementById('s_name').value.trim();
             const res = await fetch('/api/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:id, password:pw, fullName:name}) });
-            if (res.ok) { alert('가입 신청 완료! 교역자 승인 후 이용 가능합니다.'); hideModal('signupModal'); }
+            if (res.ok) { alert('가입 신청 완료!'); hideModal('signupModal'); }
             else alert('오류 발생');
         }
 
@@ -303,21 +319,30 @@
             localStorage.removeItem('user_session');
             user = null;
             renderHeader();
+            document.getElementById('writePanel').classList.add('hidden');
             loadPosts();
         }
 
         function openWritePanel() {
-            if (!user) return alert('로그인 후 이용하실 수 있습니다.');
+            if (!user) return alert('로그인 및 승인 후 이용 가능합니다.');
             document.getElementById('writePanel').classList.toggle('hidden');
         }
 
-        // 4. 글쓰기
+        // --- 게시글 데이터 로직 ---
+        function setCategoryTab(tabName) {
+            currentTab = tabName;
+            // 탭 UI 활성화 처리
+            document.querySelectorAll('.board-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderPostList();
+        }
+
         async function submitPost() {
-            const category = document.getElementById('postCategory').value;
+            const category = document.getElementById('postCategory').value.replace('🌟 ', '').trim();
             const title = document.getElementById('postTitle').value.trim();
             const content = document.getElementById('postContent').value.trim();
             const file = document.getElementById('postImage').files[0];
-            if (!title || !content) return alert('제목과 내용을 입력하세요.');
+            if (!title) return alert('제목을 입력하세요.');
 
             const fd = new FormData();
             fd.append('author', user.fullName);
@@ -337,23 +362,59 @@
             } else alert('등록 실패');
         }
 
-        // 5. 게시글 목록 불러오기 및 파싱
         async function loadPosts() {
             const res = await fetch('/api/posts');
             postsData = await res.json();
+            
+            // 메인 화면 "주보" 즉시 노출 로직 (가장 최근 주보 1개)
+            const latestBulletin = postsData.find(p => (p.author || '').includes('|주보'));
+            const bulletinArea = document.getElementById('latestBulletinArea');
+            if (latestBulletin) {
+                const parts = (latestBulletin.author || '').split('|');
+                const title = parts[2] || '이번 주 주보';
+                
+                if(latestBulletin.image_url) {
+                    bulletinArea.innerHTML = `
+                        <h4 style="margin-bottom:10px; font-size:1.1rem; color:var(--text);">${title}</h4>
+                        <img src="${latestBulletin.image_url}" onclick="openLightbox('${latestBulletin.image_url}')">
+                    `;
+                } else {
+                    bulletinArea.innerHTML = `<h4 style="margin-bottom:10px;">${title}</h4><p>${latestBulletin.content}</p>`;
+                }
+            } else {
+                bulletinArea.innerHTML = `<p style="color:var(--text-sub); padding:30px 0;">등록된 온라인 주보가 없습니다.</p>`;
+            }
+
+            renderPostList();
+        }
+
+        function renderPostList() {
             const list = document.getElementById('boardList');
             list.innerHTML = '';
+            
+            let filteredPosts = postsData;
+            if(currentTab !== '전체') {
+                filteredPosts = postsData.filter(p => {
+                    const cat = (p.author || '').split('|')[3] || '일반나눔';
+                    return cat.includes(currentTab);
+                });
+            }
 
-            let latestBulletin = null;
+            if(filteredPosts.length === 0) {
+                list.innerHTML = `<p style="text-align:center; color:var(--text-sub); padding:40px 0;">등록된 게시물이 없습니다.</p>`;
+                return;
+            }
 
-            postsData.forEach(p => {
+            filteredPosts.forEach(p => {
                 const parts = (p.author || '').split('|');
                 const authorName = parts[0] || '익명';
                 const postOwner = parts[1] || '';
                 const postTitle = parts[2] || '제목 없음';
-                const postCategory = parts[3] || '일반';
+                const postCategory = parts[3] || '일반나눔';
 
-                if (postCategory === '주보' && !latestBulletin) latestBulletin = { ...p, postTitle };
+                let badgeClass = 'badge';
+                if(postCategory === '공지사항') badgeClass += ' notice';
+                if(postCategory === '주보') badgeClass += ' bulletin';
 
                 const canManage = user && (user.isAdmin || user.username === postOwner);
 
@@ -361,8 +422,8 @@
                     <div class="post-item">
                         <div class="post-header">
                             <div>
-                                <span class="badge">${postCategory}</span>
-                                <span style="font-size:0.85rem; color:var(--text-sub); margin-left:6px;">${authorName}</span>
+                                <span class="${badgeClass}">${postCategory}</span>
+                                <span style="font-size:0.85rem; color:var(--text-sub); margin-left:8px;">${authorName}</span>
                             </div>
                             ${canManage ? `
                                 <div>
@@ -377,17 +438,9 @@
                     </div>
                 `;
             });
-
-            if (latestBulletin) {
-                document.getElementById('bulletinTitle').innerText = latestBulletin.postTitle;
-                window.latestBulletinId = latestBulletin.id;
-            } else {
-                document.getElementById('bulletinTitle').innerText = '등록된 주보가 없습니다.';
-                window.latestBulletinId = null;
-            }
         }
 
-        // 6. 글 상세 모달 열기 (확대 뷰)
+        // --- 상세 뷰 모달 ---
         function openDetail(id) {
             activePost = postsData.find(p => p.id === id);
             if (!activePost) return;
@@ -396,8 +449,13 @@
             const authorName = parts[0] || '익명';
             const postOwner = parts[1] || '';
             const postTitle = parts[2] || '제목 없음';
-            const postCategory = parts[3] || '일반';
+            const postCategory = parts[3] || '일반나눔';
 
+            let badgeClass = 'badge';
+            if(postCategory === '공지사항') badgeClass += ' notice';
+            if(postCategory === '주보') badgeClass += ' bulletin';
+
+            document.getElementById('modalCategory').className = badgeClass;
             document.getElementById('modalCategory').innerText = postCategory;
             document.getElementById('modalAuthorMeta').innerText = `작성자: ${authorName}`;
             document.getElementById('modalTitle').innerText = postTitle;
@@ -406,29 +464,21 @@
             const imgWrap = document.getElementById('modalImageWrap');
             if (activePost.image_url) {
                 imgWrap.innerHTML = `
-                    <img src="${activePost.image_url}" style="width:100%; border-radius:10px; cursor:zoom-in;" onclick="openLightbox('${activePost.image_url}')">
-                    <p style="font-size:0.75rem; color:var(--text-sub); margin-top:4px; text-align:center;">* 사진을 누르면 전체화면으로 확대됩니다.</p>
+                    <img src="${activePost.image_url}" style="width:100%; border-radius:12px; cursor:zoom-in; box-shadow:0 5px 15px rgba(0,0,0,0.1);" onclick="openLightbox('${activePost.image_url}')">
+                    <p style="font-size:0.8rem; color:var(--text-sub); margin-top:8px; text-align:center;"><i class="fa-solid fa-magnifying-glass-plus"></i> 사진을 터치하면 크게 보실 수 있습니다.</p>
                 `;
             } else {
                 imgWrap.innerHTML = '';
             }
 
             const ownerActions = document.getElementById('modalOwnerActions');
-            if (user && (user.isAdmin || user.username === postOwner)) {
-                ownerActions.classList.remove('hidden');
-            } else {
-                ownerActions.classList.add('hidden');
-            }
+            if (user && (user.isAdmin || user.username === postOwner)) ownerActions.classList.remove('hidden');
+            else ownerActions.classList.add('hidden');
 
             showModal('detailModal');
         }
 
-        function viewLatestBulletin() {
-            if (window.latestBulletinId) openDetail(window.latestBulletinId);
-            else alert('등록된 주보가 없습니다.');
-        }
-
-        // 7. 글 수정 및 삭제
+        // --- 수정 / 삭제 ---
         function openEdit(id) {
             const p = postsData.find(item => item.id === id);
             if (!p) return;
@@ -441,59 +491,38 @@
             document.getElementById('editImage').value = '';
             showModal('editModal');
         }
-
-        function openEditFromDetail() {
-            hideModal('detailModal');
-            if (activePost) openEdit(activePost.id);
-        }
+        function openEditFromDetail() { hideModal('detailModal'); if (activePost) openEdit(activePost.id); }
 
         async function submitEdit() {
             const id = document.getElementById('editPostId').value;
-            const authorMeta = document.getElementById('editAuthorMeta').value;
-            const keepImage = document.getElementById('editKeepImage').value;
-            const title = document.getElementById('editTitle').value.trim();
-            const content = document.getElementById('editContent').value.trim();
-            const file = document.getElementById('editImage').files[0];
-
             const fd = new FormData();
             fd.append('id', id);
-            fd.append('authorMeta', authorMeta);
-            fd.append('keepImage', keepImage);
-            fd.append('title', title);
-            fd.append('content', content);
-            if (file) fd.append('image', file);
+            fd.append('authorMeta', document.getElementById('editAuthorMeta').value);
+            fd.append('keepImage', document.getElementById('editKeepImage').value);
+            fd.append('title', document.getElementById('editTitle').value.trim());
+            fd.append('content', document.getElementById('editContent').value.trim());
+            if (document.getElementById('editImage').files[0]) fd.append('image', document.getElementById('editImage').files[0]);
 
             const res = await fetch('/api/posts', { method:'PUT', body: fd });
-            if (res.ok) {
-                hideModal('editModal');
-                loadPosts();
-            } else alert('수정 실패');
+            if (res.ok) { hideModal('editModal'); loadPosts(); }
         }
 
         async function deletePost(id) {
-            if (!confirm('이 게시물을 정말 삭제하시겠습니까?')) return;
-            const res = await fetch('/api/posts', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) });
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            const res = await fetch('/api/posts', { method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id}) });
             if (res.ok) loadPosts();
-            else alert('삭제 실패');
         }
+        function deleteFromDetail() { if (activePost) { deletePost(activePost.id); hideModal('detailModal'); } }
 
-        function deleteFromDetail() {
-            if (activePost) {
-                deletePost(activePost.id);
-                hideModal('detailModal');
-            }
-        }
-
-        // 8. 관리자 승인 기능
+        // --- 관리자 승인 로직 ---
         async function loadAdmin() {
             showModal('adminModal');
             const res = await fetch('/api/admin/users');
             const data = await res.json();
-            const list = document.getElementById('adminList');
-            list.innerHTML = data.map(u => `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding:10px; background:#F1F5F9; border-radius:8px;">
-                    <div><b>${u.full_name}</b> (${u.username}) - ${u.status==='pending'?'대기중':'승인됨'}</div>
-                    ${u.status==='pending' ? `<button onclick="adminAction(${u.id}, 'approve')" class="btn-sm" style="background:var(--point); color:white;">승인</button>` : ''}
+            document.getElementById('adminList').innerHTML = data.map(u => `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding:12px; background:#F1F5F9; border-radius:8px;">
+                    <div><b>${u.full_name}</b> (${u.username}) <br><span style="font-size:0.8rem; color:${u.status==='pending'?'#D97706':'#10B981'};">${u.status==='pending'?'승인대기':'승인완료'}</span></div>
+                    ${u.status==='pending' ? `<button onclick="adminAction(${u.id}, 'approve')" class="btn-sm" style="background:var(--point); color:white;">가입승인</button>` : ''}
                 </div>
             `).join('');
         }
