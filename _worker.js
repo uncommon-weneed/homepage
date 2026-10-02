@@ -100,7 +100,7 @@ export default {
       return new Response("OK", { status: 200 });
     }
     if (url.pathname === "/api/posts" && request.method === "PUT") {
-      // 🐛 버그 수정 완료: authorMeta, title, category를 분리해서 받아 정상적인 순서로 조합합니다.
+      // 🐛 버그 수정 완료: 카테고리와 제목이 뒤바뀌지 않도록 정확한 포맷 적용
       const formData = await request.formData();
       const id = formData.get("id"); 
       const content = formData.get("content") || ""; 
