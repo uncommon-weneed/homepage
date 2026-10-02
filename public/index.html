@@ -47,7 +47,7 @@
         .menu-btns .btn-admin { background: var(--accent); }
         .menu-btns .btn-admin:hover { background: #b8952b; box-shadow: 0 6px 15px rgba(212,175,55,0.3); }
 
-        /* 메인 배너 슬라이더 (2026 트렌드 와이드형) */
+        /* 메인 배너 슬라이더 */
         .slider-container { position: relative; width: 100%; height: calc(100vh - 80px); overflow: hidden; background: #111; }
         .slides { display: flex; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); height: 100%; }
         .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
@@ -75,12 +75,13 @@
         .section-header h2 { font-size: 2.5rem; font-weight: 800; color: var(--primary); font-family: 'Pretendard', serif; letter-spacing: -1px; }
         .section-header p { color: var(--accent); font-weight: 700; margin-top: 12px; font-size: 1.15rem; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* 내부 탭 (Sub-navigation) */
+        /* 교회 소개 내부 탭 (Sub-navigation) */
         .sub-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
         .sub-tab { background: #F3F4F6; border: none; font-size: 1.05rem; font-weight: 700; color: var(--text-muted); cursor: pointer; padding: 12px 28px; border-radius: 30px; transition: 0.3s; }
         .sub-tab:hover { background: #E5E7EB; color: var(--text-dark); }
         .sub-tab.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(23,45,36,0.2); }
 
+        /* 전환 효과가 있는 탭 콘텐츠 */
         .tab-content { display: none; animation: fadeIn 0.5s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
@@ -112,7 +113,7 @@
         .schedule-item { display: flex; justify-content: space-between; align-items: center; padding: 22px 25px; background: var(--bg-main); border-radius: var(--radius-md); border-left: 5px solid var(--accent); transition: 0.3s; margin-bottom: 15px; }
         .schedule-item:hover { background: var(--primary-light); transform: translateX(5px); }
 
-        /* 통합 게시판 (페이지네이션 적용) */
+        /* 통합 게시판 (페이지네이션) */
         .board-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
         .board-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
         .board-tab { background: none; border: none; font-size: 1.1rem; font-weight: 700; color: var(--text-muted); cursor: pointer; padding: 10px 15px; position: relative; transition: 0.3s; white-space: nowrap; }
@@ -125,7 +126,9 @@
         .post-content-wrap { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; background: var(--primary-light); color: var(--primary); }
         .badge.notice { background: #FEE2E2; color: #DC2626; }
-        .post-title { font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin: 10px 0; cursor: pointer; }
+        .badge.bulletin { background: #FEF3C7; color: #D97706; }
+        
+        .post-title { font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin: 10px 0; cursor: pointer; line-height: 1.3; }
         .post-title:hover { color: var(--accent); }
         .post-thumb-box { width: 200px; height: 200px; flex-shrink: 0; border-radius: var(--radius-md); overflow: hidden; cursor: pointer; }
         .post-thumb-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
@@ -139,7 +142,7 @@
         .gallery-info { padding: 20px; }
         .gallery-title { font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* 페이지네이션 */
+        /* 페이지네이션 번호 */
         .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; }
         .page-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: white; color: var(--text-muted); font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .page-btn:hover { border-color: var(--primary); color: var(--primary); }
@@ -168,6 +171,16 @@
         #lightbox.active { display: flex; }
         #lightbox img { max-width: 95%; max-height: 95vh; border-radius: 10px; }
         .lightbox-close { color: white; font-size: 3rem; position: absolute; top: 30px; right: 50px; cursor: pointer; transition: 0.3s; }
+
+        /* 인라인 댓글 박스 */
+        .comments-section { background: #F9FAFB; padding: 20px; border-radius: var(--radius-md); border: 1px dashed var(--border); margin-top: 20px; }
+        .comment-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.03); font-size: 0.95rem; }
+        .comment-item:last-child { border-bottom: none; }
+        .comment-author { font-weight: 800; color: var(--text-dark); margin-right: 10px; white-space: nowrap; }
+        
+        .comment-input-wrap { display: flex; gap: 10px; margin-top: 15px; }
+        .comment-input-wrap input { margin: 0; padding: 12px 15px; font-size: 0.95rem; border-radius: 10px; }
+        .comment-input-wrap button { margin: 0; padding: 12px 20px; border-radius: 10px; font-size: 0.95rem; white-space: nowrap; width: auto; }
 
         .hidden { display: none !important; }
 
@@ -226,6 +239,12 @@
                     <p>기독교대한하나님의성회 소속 건강한 교회로 나아갑니다.</p>
                 </div>
             </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1920&auto=format&fit=crop');">
+                <div class="slide-content">
+                    <h2>함께<br>세상의 빛과 소금이 되는 공동체</h2>
+                    <p>기독교대한하나님의성회 소속 건강한 교회로 나아갑니다.</p>
+                </div>
+            </div>
         </div>
         
         <button class="slider-arrow prev" onclick="prevSlide()"><i class="fa-solid fa-angle-left"></i></button>
@@ -240,13 +259,14 @@
         </div>
     </div>
 
-    <!-- 2. 교회 소개 (탭 분리 적용) -->
+    <!-- 2. 교회 소개 (버튼 클릭 시 전환 됨) -->
     <div class="container" id="section-about">
         <div class="section-header fade-up">
             <h2>About Us</h2>
             <p>교회 소개</p>
         </div>
         
+        <!-- 탭 버튼 -->
         <div class="sub-tabs fade-up">
             <button class="sub-tab active" onclick="switchAboutTab('greet', this)">인사말</button>
             <button class="sub-tab" onclick="switchAboutTab('people', this)">섬기는 사람들</button>
@@ -254,10 +274,10 @@
             <button class="sub-tab" onclick="switchAboutTab('vision', this)">사역 비전</button>
         </div>
 
-        <!-- 인사말 -->
+        <!-- 인사말 탭 콘텐츠 -->
         <div id="tab-greet" class="tab-content active card fade-up">
             <div class="card-body profile-wrap">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop" class="profile-img" alt="담임목사">
+                <img src="http://www.kagnews.org/data/editor/2409/20240925091515_7738fb0637bcf8eca720e6815f2511f3_wp32.jpg" class="profile-img" alt="담임목사">
                 <div class="profile-info">
                     <h3>"은혜와 축복의 자리로 초대합니다."</h3>
                     <p style="margin-top:15px; margin-bottom:20px;">할렐루야! 성령의 교회(구 울산순복음한사랑교회)는 오순절 성령의 강력한 역사와 말씀이 살아 숨 쉬는 생명 공동체입니다.<br>예수 그리스도의 십자가 사랑으로 상처받은 영혼을 치유하고, 성령 충만함을 입어 세상의 빛과 소금의 역할을 다하고자 합니다.</p>
@@ -266,7 +286,7 @@
             </div>
         </div>
         
-        <!-- 섬기는 사람들 -->
+        <!-- 섬기는 사람들 탭 콘텐츠 -->
         <div id="tab-people" class="tab-content card fade-up">
             <div class="card-body">
                 <h3 style="font-size:1.6rem; color:var(--primary); margin-bottom:20px;">섬기는 사람들</h3>
@@ -283,7 +303,7 @@
             </div>
         </div>
 
-        <!-- 연혁 -->
+        <!-- 연혁 탭 콘텐츠 -->
         <div id="tab-history" class="tab-content card fade-up">
             <div class="card-body">
                 <h3 style="font-size:1.6rem; color:var(--primary); margin-bottom:30px;">교회 발자취</h3>
@@ -301,7 +321,7 @@
             </div>
         </div>
 
-        <!-- 사역 비전 -->
+        <!-- 사역 비전 탭 콘텐츠 -->
         <div id="tab-vision" class="tab-content card fade-up">
             <div class="card-body text-center" style="text-align:center;">
                 <i class="fa-solid fa-seedling" style="font-size:4rem; color:var(--accent); margin-bottom:20px;"></i>
@@ -572,7 +592,7 @@
         }
         startSlide(); setTimeout(() => document.querySelectorAll('.slide:first-child .fade-up').forEach(el => el.classList.add('visible')), 300);
 
-        // --- 교회 소개 탭 ---
+        // --- 교회 소개 탭 전환 (누락되었던 기능 복원!) ---
         function switchAboutTab(tabId, btnElement) {
             document.querySelectorAll('#section-about .sub-tab').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
@@ -603,9 +623,12 @@
         let user = JSON.parse(localStorage.getItem('user_session') || 'null');
         let postsData = []; let commentsData = []; 
         let currentTab = '전체'; 
-        let currentFilteredPosts = []; // 현재 탭/페이지네이션 및 이전/다음글 처리를 위한 배열
+        let currentFilteredPosts = []; 
+        
+        // 💡 페이지네이션 게시물 개수 설정 (요청하신 대로 5개로 수정)
         let currentPage = 1;
-        const postsPerPage = 10;
+        const postsPerPage = 5; 
+        
         let activePostIndex = -1;
 
         function renderHeader() {
@@ -711,7 +734,7 @@
                 list.className = '';
             }
 
-            // 페이지 분할 (10개씩)
+            // 페이지 분할 (5개씩)
             const totalPages = Math.ceil(currentFilteredPosts.length / postsPerPage);
             const startIndex = (currentPage - 1) * postsPerPage;
             const paginatedPosts = currentFilteredPosts.slice(startIndex, startIndex + postsPerPage);
@@ -850,7 +873,7 @@
             const parts = (p.author || '').split('|');
             document.getElementById('editPostId').value = p.id; 
             document.getElementById('editAuthorMeta').value = `${parts[0]}|${parts[1]}`; // 이름|아이디
-            document.getElementById('editCategory').value = parts[3] || '일반나눔'; // 🐛 분리 보관
+            document.getElementById('editCategory').value = parts[3] || '일반나눔'; // 🐛 카테고리 분리 보관
             document.getElementById('editKeepImage').value = p.image_url || '';
             document.getElementById('editTitle').value = parts[2] || ''; 
             document.getElementById('editContent').value = p.content || ''; 
