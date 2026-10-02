@@ -231,6 +231,12 @@
                     <p>기독교대한하나님의성회 소속 건강한 교회로 나아갑니다.</p>
                 </div>
             </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1920&auto=format&fit=crop');">
+                <div class="slide-content">
+                    <h2>성령의 빛을 가지고<br>세상에 사랑을 나누는 교회</h2>
+                    <p>우리 교회는 성령의 빛을 가지고 세상에 사랑을 나누는 공동체입니다.</p>
+                </div>
+            </div>
         </div>
         
         <button class="slider-arrow prev" onclick="prevSlide()"><i class="fa-solid fa-angle-left"></i></button>
@@ -241,6 +247,7 @@
             <div class="slider-dots" id="slideDots">
                 <div class="dot active" onclick="goToSlide(0)"></div>
                 <div class="dot" onclick="goToSlide(1)"></div>
+                <div class="dot" onclick="goToSlide(2)"></div>
             </div>
         </div>
     </div>
@@ -728,6 +735,9 @@
             paginatedPosts.forEach((p, index) => {
                 const parts = (p.author || '').split('|'); const authorName = parts[0] || '익명'; const postOwner = parts[1] || ''; const postTitle = parts[2] || '제목 없음'; const postCategory = parts[3] || '일반나눔';
                 const actualIndex = startIndex + index; // 전체 필터 배열에서의 진짜 인덱스
+                
+                // ⭐ 추가할 부분: 전체 게시물 수에서 역순으로 순차 번호 생성
+                const seqNumber = currentFilteredPosts.length - actualIndex;
 
                 let badgeClass = 'badge'; if(postCategory === '공지사항') badgeClass += ' notice'; if(postCategory === '주보') badgeClass += ' bulletin';
                 
@@ -750,7 +760,8 @@
                         <div class="post-item">
                             <div class="post-content-wrap">
                                 <div class="post-meta">
-                                    <span class="post-number">No.${p.id}</span>
+                                    <!-- ⭐ 수정할 부분: p.id 대신 seqNumber 출력 -->
+                                    <span class="post-number">No.${seqNumber}</span>
                                     <span class="${badgeClass}">${postCategory}</span>
                                     <span style="color:var(--text-muted); font-weight:700; margin-left:auto;"><i class="fa-solid fa-user-pen"></i> ${authorName}</span>
                                     <span style="color:var(--text-muted); font-size:0.9rem; margin-left:10px;"><i class="fa-regular fa-comment-dots"></i> ${postComments.length}</span>
@@ -788,7 +799,10 @@
             const parts = (p.author || '').split('|'); const postCategory = parts[3] || '일반나눔';
             let badgeClass = 'badge'; if(postCategory === '공지사항') badgeClass += ' notice'; if(postCategory === '주보') badgeClass += ' bulletin';
             
-            document.getElementById('modalPostNo').innerText = `No.${p.id}`;
+            // ⭐ 추가할 부분: 모달창에서도 순차 번호 표시
+            const seqNumber = currentFilteredPosts.length - index;
+            document.getElementById('modalPostNo').innerText = `No.${seqNumber}`;
+            
             document.getElementById('modalCategory').className = badgeClass; document.getElementById('modalCategory').innerText = postCategory;
             document.getElementById('modalAuthorMeta').innerText = `작성자: ${parts[0] || '익명'}`; document.getElementById('modalTitle').innerText = parts[2] || '제목 없음'; document.getElementById('modalContent').innerText = p.content;
             
