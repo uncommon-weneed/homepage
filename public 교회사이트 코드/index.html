@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성령의 교회 | HOLY SPIRIT CHURCH</title>
+    <!-- Pretendard 웹폰트 및 FontAwesome 아이콘 -->
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #172D24; /* 고급스럽고 딥한 그린 */
+            --primary-light: #EBF1EE;
+            --accent: #C79A5E; /* 클래식 골드 */
+            --bg-main: #FDFDFD;
+            --surface: #FFFFFF;
+            --text-dark: #111827;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg-main); color: var(--text-dark); line-height: 1.6; padding-top: 80px; overflow-x: hidden; }
+
+        /* 스크롤 & 모달 애니메이션 */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.95) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+
+        /* 상단 네비게이션 */
+        header { position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 30px rgba(0,0,0,0.03); transition: 0.3s; }
+        .nav-inner { max-width: 1350px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 20px; }
+        .logo { font-size: 1.6rem; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+        
+        .nav-menu { display: flex; gap: 35px; }
+        .nav-menu a { text-decoration: none; font-weight: 700; color: var(--text-dark); transition: color 0.2s; font-size: 1.05rem; position: relative; cursor: pointer; }
+        .nav-menu a:hover { color: var(--accent); }
+        .nav-menu a::after { content:''; position:absolute; width:0; height:2px; background:var(--accent); bottom:-6px; left:50%; transform:translateX(-50%); transition:0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        .nav-menu a:hover::after, .nav-menu a.active::after { width:100%; }
+
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .menu-btns button { background: var(--primary); color: white; border: none; padding: 10px 24px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
+        .menu-btns button:hover { background: #0f1d17; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(23,45,36,0.2); }
+        .menu-btns .btn-admin { background: var(--accent); }
+        .menu-btns .btn-admin:hover { background: #b88a4e; box-shadow: 0 6px 15px rgba(199,154,94,0.3); }
+
+        /* 메인 배너 슬라이더 (2026 트렌드 와이드형) */
+        .slider-container { position: relative; width: 100%; height: calc(100vh - 80px); overflow: hidden; background: #111; }
+        .slides { display: flex; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); height: 100%; }
+        .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
+        .slide::before { content: ''; position: absolute; inset:0; background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.7)); }
+        
+        .slide-content { position: relative; z-index: 2; text-align: center; color: white; margin-top: 40px; padding: 0 20px; }
+        .slide-content h2 { font-size: 3.8rem; font-weight: 800; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.5); letter-spacing: -1.5px; line-height: 1.25; }
+        .slide-content p { font-size: 1.35rem; font-weight: 300; opacity: 0.95; letter-spacing: 1px; margin-top: 15px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+
+        .slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: transparent; color: rgba(255,255,255,0.4); border: none; font-size: 3.5rem; cursor: pointer; z-index: 10; transition: 0.3s; padding: 20px; }
+        .slider-arrow:hover { color: white; transform: translateY(-50%) scale(1.1); }
+        .slider-arrow.prev { left: 30px; }
+        .slider-arrow.next { right: 30px; }
+        
+        .slider-play-controls { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 10; align-items: center; background: rgba(0,0,0,0.5); padding: 12px 25px; border-radius: 40px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .slider-play-controls button { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
+        .slider-play-controls button:hover { color: var(--accent); }
+        .slider-dots { display: flex; gap: 12px; margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px; }
+        .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+        .dot.active { background: white; transform: scale(1.5); width: 20px; border-radius: 10px; }
+
+        /* 공통 섹션 레이아웃 */
+        .container { max-width: 1350px; margin: 0 auto; padding: 100px 20px; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 800; color: var(--primary); font-family: 'Pretendard', serif; letter-spacing: -1px; }
+        .section-header p { color: var(--accent); font-weight: 700; margin-top: 12px; font-size: 1.15rem; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* 내부 탭 (Sub-navigation) */
+        .sub-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
+        .sub-tab { background: #F3F4F6; border: none; font-size: 1.05rem; font-weight: 700; color: var(--text-muted); cursor: pointer; padding: 12px 28px; border-radius: 30px; transition: 0.3s; }
+        .sub-tab:hover { background: #E5E7EB; color: var(--text-dark); }
+        .sub-tab.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(23,45,36,0.2); }
+
+        .tab-content { display: none; animation: fadeIn 0.5s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+        /* 카드 및 그리드 */
+        .grid-premium { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: 0 10px 40px rgba(0,0,0,0.03); overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--border); transition: 0.3s; }
+        .card:hover { box-shadow: 0 15px 50px rgba(0,0,0,0.06); transform: translateY(-5px); }
+        .card-header { background: var(--primary); color: white; padding: 25px 35px; font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+        .card-body { padding: 40px; flex-grow: 1; }
+
+        /* 프로필 & 연혁 (교회소개) */
+        .profile-wrap { display: flex; gap: 30px; align-items: center; }
+        .profile-img { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 5px solid var(--primary-light); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .profile-info h3 { font-size: 1.8rem; color: var(--primary); margin-bottom: 5px; }
+        .profile-info p { font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; }
+        
+        .history-list { border-left: 2px solid var(--accent); padding-left: 25px; margin-left: 10px; }
+        .history-item { position: relative; margin-bottom: 30px; }
+        .history-item::before { content:''; position:absolute; left:-33px; top:5px; width:14px; height:14px; background:var(--accent); border-radius:50%; box-shadow: 0 0 0 4px white; }
+        .history-year { font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
+
+        /* 주보 & 예배 */
+        .bulletin-highlight { background: #F9FAFB; padding: 40px; border-radius: var(--radius-lg); text-align: center; border: 1px solid var(--border); }
+        .bulletin-img-wrap { width: 100%; max-width: 600px; margin: 20px auto 0; background: white; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .bulletin-img-wrap img { width: 100%; height: auto; display: block; cursor: zoom-in; transition: 0.5s; }
+        .bulletin-img-wrap img:hover { transform: scale(1.02); }
+        
+        .schedule-item { display: flex; justify-content: space-between; align-items: center; padding: 22px 25px; background: var(--bg-main); border-radius: var(--radius-md); border-left: 5px solid var(--accent); transition: 0.3s; margin-bottom: 15px; }
+        .schedule-item:hover { background: var(--primary-light); transform: translateX(5px); }
+
+        /* 통합 게시판 (페이지네이션) */
+        .board-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .board-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .board-tab { background: none; border: none; font-size: 1.1rem; font-weight: 700; color: var(--text-muted); cursor: pointer; padding: 10px 15px; position: relative; transition: 0.3s; white-space: nowrap; }
+        .board-tab.active { color: var(--primary); }
+        .board-tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 3px 3px 0 0; }
+
+        /* 리스트 뷰 */
+        .post-item { display: flex; gap: 30px; padding: 30px; border-bottom: 1px solid var(--border); transition: 0.3s; background: white; border-radius: var(--radius-lg); margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .post-item:hover { box-shadow: 0 12px 35px rgba(0,0,0,0.06); transform: translateY(-3px); }
+        .post-content-wrap { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; background: var(--primary-light); color: var(--primary); }
+        .badge.notice { background: #FEE2E2; color: #DC2626; }
+        .badge.bulletin { background: #FEF3C7; color: #D97706; }
+        .post-number { font-size: 0.9rem; font-weight: 800; color: var(--accent); margin-right: 5px; }
+        .post-title { font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin: 10px 0; cursor: pointer; line-height: 1.35; }
+        .post-title:hover { color: var(--accent); }
+        .post-excerpt { color: var(--text-muted); font-size: 1.05rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+        .post-thumb-box { width: 200px; height: 200px; flex-shrink: 0; border-radius: var(--radius-md); overflow: hidden; cursor: pointer; }
+        .post-thumb-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .post-thumb-box img:hover { transform: scale(1.1); }
+
+        /* 갤러리 뷰 (Grid) */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .gallery-item { background: white; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.04); cursor: pointer; transition: 0.3s; border: 1px solid var(--border); }
+        .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .gallery-thumb { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .gallery-info { padding: 20px; }
+        .gallery-title { font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* 페이지네이션 */
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; }
+        .page-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: white; color: var(--text-muted); font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .page-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* 폼 요소 */
+        input, textarea, select { width: 100%; padding: 16px 20px; background: #F9FAFB; border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 15px; font-size: 1.05rem; transition: 0.3s; }
+        input:focus, textarea:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px var(--primary-light); outline: none; }
+        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: var(--radius-md); font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-primary:hover { background: #13241d; }
+
+        /* 모달 팝업 (Pop-in 모션 추가) */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+        .modal-content { background: white; padding: 40px; border-radius: var(--radius-lg); width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.25); position: relative; display: none; }
+        .modal-overlay.active .modal-content { display: block; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        /* 모달 내 이전글/다음글 네비게이션 */
+        .modal-nav-btns { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .modal-nav-btns button { background: #F3F4F6; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; color: var(--text-dark); transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+        .modal-nav-btns button:hover:not(:disabled) { background: var(--primary-light); color: var(--primary); }
+        .modal-nav-btns button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* 인라인 댓글 UI */
+        .comments-section { background: #F9FAFB; padding: 20px; border-radius: var(--radius-md); border: 1px dashed var(--border); margin-top: 25px; }
+        .comments-header { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
+        .comment-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.03); font-size: 0.95rem; }
+        .comment-item:last-child { border-bottom: none; }
+        .comment-author { font-weight: 800; color: var(--text-dark); margin-right: 10px; white-space: nowrap; }
+
+        /* 라이트박스 */
+        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
+        #lightbox.active { display: flex; }
+        #lightbox img { max-width: 95%; max-height: 95vh; border-radius: 10px; }
+        .lightbox-close { color: white; font-size: 3rem; position: absolute; top: 30px; right: 50px; cursor: pointer; transition: 0.3s; }
+
+        /* 관리자 테이블 */
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 1rem; }
+        .admin-table th, .admin-table td { padding: 15px; border-bottom: 1px solid var(--border); text-align: left; }
+        .admin-table th { background: #F3F4F6; font-weight: 800; }
+        .admin-table td button { margin-right: 4px; padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.85rem; }
+
+        .hidden { display: none !important; }
+
+        /* 관리자 이미지 교체 버튼 스타일 */
+        .admin-img-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 30;
+            background: rgba(199, 154, 94, 0.95);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            border: none;
+        }
+        .admin-img-badge:hover { background: #b88a4e; transform: scale(1.05); }
+
+        footer { background: var(--primary); color: rgba(255,255,255,0.7); padding: 60px 20px; text-align: center; margin-top: 50px; }
+        .footer-logo { font-size: 1.8rem; font-weight: 800; color: white; margin-bottom: 10px; }
+
+        .top-btn { position: fixed; bottom: 30px; right: 30px; background: var(--primary); color: white; width: 55px; height: 55px; border-radius: 50%; border: none; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 99; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateY(20px); }
+        .top-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .top-btn:hover { background: var(--accent); transform: translateY(-5px); }
+
+        @media (max-width: 992px) {
+            .nav-menu { display: none; }
+            .grid-premium { grid-template-columns: 1fr; }
+            .post-item { flex-direction: column-reverse; gap: 20px; padding: 25px; }
+            .post-thumb-box { width: 100%; height: 250px; }
+            .slide-content h2 { font-size: 2.2rem; }
+            .profile-wrap { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-inner">
+            <a href="#" class="logo"><i class="fa-solid fa-dove"></i> 성령의 교회</a>
+            <div class="nav-menu">
+                <a onclick="scrollToSection('section-home')">홈</a>
+                <a onclick="scrollToSection('section-about')">교회 소개</a>
+                <a onclick="scrollToSection('section-worship')">예배 안내</a>
+                <a onclick="scrollToSection('section-board')">소식/나눔</a>
+                <a onclick="scrollToSection('section-location')">오시는 길</a>
+            </div>
+            <div class="header-right">
+                <div class="menu-btns" id="authArea"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. 메인 슬라이더 (배너 사진 교체 버튼 포함) -->
+    <div class="slider-container" id="section-home">
+        <div class="slides" id="slideTrack">
+            <div class="slide" id="slideBanner1" style="background-image: url('https://images.unsplash.com/photo-1542458428-132d43e57ea1?q=80&w=1920&auto=format&fit=crop');">
+                <button class="admin-img-badge hidden" onclick="triggerSiteImgUpload('banner_1')"><i class="fa-solid fa-camera"></i> 1번 배너 사진 변경</button>
+                <div class="slide-content">
+                    <h2 id="dailyGraceText" class="fade-up">오순절 성령의 강력한 역사,<br>말씀이 살아 숨 쉬는 교회</h2>
+                    <div id="adminGraceBtnWrap" class="hidden fade-up" style="margin-top: 20px;">
+                        <button onclick="openDailyGraceModal()" style="background: var(--accent); color: white; border: none; padding: 10px 24px; border-radius: 30px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                            <i class="fa-solid fa-pen-to-square"></i> Daily Grace 문구 수정
+                        </button>
+                    </div>
+                    <p class="fade-up" style="transition-delay:0.2s;">성령의 교회에 오신 것을 환영합니다.</p>
+                </div>
+            </div>
+            <div class="slide" id="slideBanner2" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1920&auto=format&fit=crop');">
+                <button class="admin-img-badge hidden" onclick="triggerSiteImgUpload('banner_2')"><i class="fa-solid fa-camera"></i> 2번 배너 사진 변경</button>
+                <div class="slide-content">
+                    <h2>상처받은 영혼을 치유하고<br>세상의 빛과 소금이 되는 공동체</h2>
+                    <p>기독교대한하나님의성회 소속 건강한 교회로 나아갑니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="slider-arrow prev" onclick="prevSlide()"><i class="fa-solid fa-angle-left"></i></button>
+        <button class="slider-arrow next" onclick="nextSlide()"><i class="fa-solid fa-angle-right"></i></button>
+
+        <div class="slider-play-controls">
+            <button onclick="togglePlay()" id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
+            <div class="slider-dots" id="slideDots">
+                <div class="dot active" onclick="goToSlide(0)"></div>
+                <div class="dot" onclick="goToSlide(1)"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 교회 소개 (탭 전환 적용) -->
+    <div class="container" id="section-about">
+        <div class="section-header fade-up">
+            <h2>About Us</h2>
+            <p>교회 소개</p>
+        </div>
+        
+        <!-- 탭 버튼 -->
+        <div class="sub-tabs fade-up">
+            <button class="sub-tab active" onclick="switchAboutTab('greet', this)">인사말</button>
+            <button class="sub-tab" onclick="switchAboutTab('people', this)">섬기는 사람들</button>
+            <button class="sub-tab" onclick="switchAboutTab('history', this)">교회 연혁</button>
+            <button class="sub-tab" onclick="switchAboutTab('vision', this)">사역 비전</button>
+        </div>
+
+        <!-- 인사말 탭 (담임목사 사진 변경 버튼 포함) -->
+        <div id="tab-greet" class="tab-content active card fade-up">
+            <div class="card-body profile-wrap" style="position:relative;">
+                <div style="position:relative; width:max-content; margin: 0 auto;">
+                    <img id="pastorProfileImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop" class="profile-img" alt="담임목사">
+                    <button class="admin-img-badge hidden" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); font-size:0.75rem; padding:4px 10px; width:max-content;" onclick="triggerSiteImgUpload('pastor_img')"><i class="fa-solid fa-camera"></i> 사진 변경</button>
+                </div>
+                <div class="profile-info">
+                    <h3>"은혜와 축복의 자리로 초대합니다."</h3>
+                    <p style="margin-top:15px; margin-bottom:20px;">할렐루야! 성령의 교회(구 울산순복음한사랑교회)는 오순절 성령의 강력한 역사와 말씀이 살아 숨 쉬는 생명 공동체입니다.<br>예수 그리스도의 십자가 사랑으로 상처받은 영혼을 치유하고, 성령 충만함을 입어 세상의 빛과 소금의 역할을 다하고자 합니다.</p>
+                    <span style="font-weight:700; color:var(--text-dark);">담임목사 김경희</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 섬기는 사람들 탭 -->
+        <div id="tab-people" class="tab-content card fade-up">
+            <div class="card-body">
+                <h3 style="font-size:1.6rem; color:var(--primary); margin-bottom:20px;">섬기는 사람들</h3>
+                <div class="grid-premium" style="gap:20px;">
+                    <div style="background:#F9FAFB; padding:20px; border-radius:12px; display:flex; align-items:center; gap:15px;">
+                        <i class="fa-solid fa-user-tie" style="font-size:2.5rem; color:var(--accent);"></i>
+                        <div><h4 style="font-size:1.2rem;">김경희 목사</h4><p style="color:var(--text-muted);">담임목사</p></div>
+                    </div>
+                    <div style="background:#F9FAFB; padding:20px; border-radius:12px; display:flex; align-items:center; gap:15px;">
+                        <i class="fa-solid fa-users" style="font-size:2.5rem; color:var(--accent);"></i>
+                        <div><h4 style="font-size:1.2rem;">당회 및 제직회</h4><p style="color:var(--text-muted);">교회를 위해 헌신하는 일꾼들</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 연혁 탭 -->
+        <div id="tab-history" class="tab-content card fade-up">
+            <div class="card-body">
+                <h3 style="font-size:1.6rem; color:var(--primary); margin-bottom:30px;">교회 발자취</h3>
+                <div class="history-list">
+                    <div class="history-item">
+                        <div class="history-year">2026</div><p>성령의 교회로 명칭 변경 및 홈페이지 개편</p>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-year">2010</div><p>언양 지역 성전 건축 및 입당 예배</p>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-year">2000</div><p>울산순복음한사랑교회 창립 예배 (기하성 소속)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 사역 비전 탭 -->
+        <div id="tab-vision" class="tab-content card fade-up">
+            <div class="card-body" style="text-align:center;">
+                <i class="fa-solid fa-seedling" style="font-size:4rem; color:var(--accent); margin-bottom:20px;"></i>
+                <h3 style="font-size:1.8rem; color:var(--primary); margin-bottom:15px;">다음 세대와 지역 사회를 품는 교회</h3>
+                <p style="font-size:1.1rem; max-width:700px; margin:0 auto;">말씀 양육과 뜨거운 기도를 통해 영적 군사를 배출하며,<br>이웃 사랑을 실천하여 지역사회에 선한 영향력을 끼치는 교회가 되겠습니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 예배 안내 및 메인 주보 -->
+    <div class="container" id="section-worship" style="background:#F9FAFB; border-radius:var(--radius-lg);">
+        <div class="section-header fade-up">
+            <h2>Worship Guide</h2>
+            <p>예배 및 모임 안내</p>
+        </div>
+        <div class="grid-premium fade-up">
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-book-open"></i> 이번 주 온라인 주보</div>
+                <div class="card-body bulletin-highlight" id="latestBulletinArea">
+                    <p style="color:var(--text-muted); margin-top:50px;">등록된 주보를 불러오고 있습니다...</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fa-regular fa-clock"></i> 정규 예배 시간표</div>
+                <div class="card-body" style="padding: 25px;">
+                    <div class="schedule-item">
+                        <div class="schedule-info"><h4>주일 예배</h4><p>본당 대예배실</p></div><div class="schedule-time">주일 오전 11:00</div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-info"><h4>주일 오후 예배</h4><p>본당 대예배실</p></div><div class="schedule-time">주일 오후 2:00</div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-info"><h4>수요 기도회</h4><p>비전홀</p></div><div class="schedule-time">수요일 오후 7:30</div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-info"><h4>매일 저녁 기도회</h4><p>소예배실</p></div><div class="schedule-time">매일 오후 8:00</div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-info"><h4>새벽 기도회</h4><p>소예배실</p></div><div class="schedule-time">매일 오전 5:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 통합 게시판 (5개 단위 페이지네이션) -->
+    <div class="container" id="section-board">
+        <div class="section-header fade-up">
+            <h2>Church Board</h2>
+            <p>소식과 나눔</p>
+        </div>
+
+        <div class="board-controls fade-up">
+            <div class="board-tabs" id="boardTabs">
+                <button class="board-tab active" onclick="setCategoryTab('전체')">전체보기</button>
+                <button class="board-tab" onclick="setCategoryTab('공지사항')">공지사항</button>
+                <button class="board-tab" onclick="setCategoryTab('자유게시판')">자유게시판</button>
+                <button class="board-tab" onclick="setCategoryTab('갤러리')">갤러리</button>
+                <button class="board-tab hidden" id="tabBulletin" onclick="setCategoryTab('주보')"><i class="fa-solid fa-lock"></i> 주보(관리자)</button>
+            </div>
+            <button onclick="openWritePanel()" style="background:var(--primary); color:white; border:none; padding:12px 25px; border-radius:30px; font-weight:700; cursor:pointer; box-shadow:0 4px 15px rgba(28,51,42,0.2);"><i class="fa-solid fa-pen"></i> 글쓰기</button>
+        </div>
+        
+        <div id="writePanel" class="hidden" style="background:var(--surface); border:1px solid var(--border); padding:35px; border-radius:var(--radius-lg); margin-bottom:40px; box-shadow:0 10px 30px rgba(0,0,0,0.03);">
+            <h4 style="margin-bottom:20px; font-size:1.4rem; color:var(--primary);">새 게시글 작성</h4>
+            <select id="postCategory"></select>
+            <input type="text" id="postTitle" placeholder="제목을 입력하세요">
+            <textarea id="postContent" rows="6" placeholder="내용을 작성해주세요..."></textarea>
+            <input type="file" id="postImage" accept="image/*">
+            <button class="btn-primary" onclick="submitPost()">등록하기</button>
+        </div>
+
+        <!-- 통합 리스트 영역 -->
+        <div id="boardList" class="fade-up">게시물을 불러오는 중...</div>
+        
+        <!-- 페이지 번호 -->
+        <div class="pagination fade-up" id="paginationArea"></div>
+    </div>
+
+    <!-- 5. 헌금안내 및 오시는 길 -->
+    <div class="container" id="section-location" style="padding-top:20px;">
+        <div class="section-header fade-up">
+            <h2>Offering & Location</h2>
+            <p>헌금 안내 및 오시는 길</p>
+        </div>
+        <div class="grid-premium fade-up">
+            <!-- 헌금 안내 -->
+            <div class="card" style="background: var(--primary); color:white; justify-content:center; align-items:center; text-align:center; padding:50px;">
+                <i class="fa-solid fa-hand-holding-heart" style="font-size:4rem; color:var(--accent); margin-bottom:20px;"></i>
+                <h3 style="font-size:1.8rem; margin-bottom:15px;">온라인 헌금 안내</h3>
+                <p style="opacity:0.9; margin-bottom:25px; font-size:1.1rem;">정성 어린 마음을 담은 예물은<br>아래 계좌를 이용해 주시기 바랍니다.</p>
+                <div style="background:rgba(255,255,255,0.1); padding:25px; border-radius:16px; width:100%;">
+                    <p style="font-size:1rem; opacity:0.8;">십일조 및 주일헌금</p>
+                    <h2 style="margin:10px 0; letter-spacing:1px; font-size:2rem; font-weight:800; color:var(--accent);">신한 110-123-456789</h2>
+                    <p style="font-size:1rem; opacity:0.8;">예금주 : 성령의교회</p>
+                </div>
+            </div>
+            <!-- 약도 -->
+            <div class="card" style="padding:0; border:none; min-height:450px; position:relative;">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25875.485292416805!2d129.1082103!3d35.5681655!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568ab4532bfa329%3A0xc34dbd1445b20da6!2z7Jq47IKw6rSR7Jet7IucIOyauOyjvOq1sCDslrjslpHsnYk!5e0!3m2!1sko!2skr!4v1714529340000!5m2!1sko!2skr" style="width:100%; height:100%; border:none; border-radius:var(--radius-lg);" allowfullscreen="" loading="lazy"></iframe>
+                <div style="position:absolute; bottom:20px; left:20px; right:20px; background:white; padding:20px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+                    <p style="font-weight:800; color:var(--primary); font-size:1.2rem; margin-bottom:5px;">성령의 교회 (구 울산순복음한사랑교회)</p>
+                    <p style="color:var(--text-muted);">울산광역시 울주군 언양읍</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Top Button & Footer -->
+    <button class="top-btn" id="topBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+
+    <footer>
+        <div class="container" style="padding:40px 20px; text-align:center;">
+            <div style="font-size:2rem; font-weight:800; color:white; margin-bottom:15px;"><i class="fa-solid fa-dove"></i> 성령의 교회</div>
+            <p style="font-size:1.05rem; opacity:0.8; margin-bottom:5px;">기독교대한하나님의성회 | 담임목사 : 김경희</p>
+            <p style="font-size:1.05rem; opacity:0.8;">울산광역시 울주군 언양읍 (구 울산순복음한사랑교회)</p>
+            <p style="font-size:0.9rem; margin-top:20px; opacity:0.5;">Copyright © 2026 HOLY SPIRIT CHURCH. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 글 상세 팝업 -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <span style="position:absolute; top:25px; right:30px; font-size:1.8rem; cursor:pointer; color:var(--text-muted); z-index:10;" onclick="hideModal('detailModal')"><i class="fa-solid fa-xmark"></i></span>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <div><span class="post-number" id="modalPostNo"></span><span class="badge" id="modalCategory">일반</span></div>
+                <span style="font-size:1rem; color:var(--text-muted); font-weight:600;" id="modalAuthorMeta"></span>
+            </div>
+            
+            <h2 id="modalTitle" style="font-size:2rem; margin-bottom:25px; word-break:break-all; color:var(--text-dark); font-weight:800; line-height:1.4;"></h2>
+            <div id="modalContent" style="white-space:pre-wrap; line-height:1.8; color:#374151; margin-bottom:30px; font-size:1.15rem;"></div>
+            <div id="modalImageWrap"></div>
+            
+            <!-- 인라인 댓글 기능 통합 -->
+            <div class="comments-section" style="margin-top:40px;">
+                <div class="comments-header" id="modalCommentsHeader"><i class="fa-regular fa-comment-dots"></i> 댓글</div>
+                <div id="modalCommentsList"></div>
+                <div id="modalCommentFormWrap"></div>
+            </div>
+
+            <!-- 관리자/작성자 버튼 -->
+            <div id="modalOwnerActions" class="hidden" style="display:flex; justify-content:flex-end; gap:10px; margin-top:25px;">
+                <button style="padding:10px 20px; border:none; border-radius:8px; font-weight:700; cursor:pointer; background:#F3F4F6; color:var(--text-dark);" onclick="openEditFromDetail()">수정</button>
+                <button style="padding:10px 20px; border:none; border-radius:8px; font-weight:700; cursor:pointer; background:#EF4444; color:white;" onclick="deleteFromDetail()">삭제</button>
+            </div>
+
+            <!-- 이전글/다음글 네비게이션 -->
+            <div class="modal-nav-btns">
+                <button id="btnPrevPost" onclick="goPrevPost()"><i class="fa-solid fa-arrow-left"></i> 이전글</button>
+                <button id="btnNextPost" onclick="goNextPost()">다음글 <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Grace 수정 모달 -->
+    <div class="modal-overlay" id="dailyGraceModal">
+        <div class="modal-content" style="max-width: 550px;">
+            <h3 style="margin-bottom: 15px; font-size: 1.5rem; color: var(--primary); font-weight:800;">Daily Grace 수정</h3>
+            <textarea id="editDailyGraceInput" rows="5" placeholder="입력하세요..."></textarea>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-primary" onclick="submitDailyGrace()">적용</button>
+                <button class="btn-primary" style="background: #E2E8F0; color: var(--text-dark);" onclick="hideModal('dailyGraceModal')">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 게시글 수정 폼 -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h3 style="margin-bottom:20px; font-size:1.6rem; font-weight:800;">게시글 수정</h3>
+            <input type="hidden" id="editPostId"><input type="hidden" id="editAuthorMeta"><input type="hidden" id="editCategory"><input type="hidden" id="editKeepImage">
+            <input type="text" id="editTitle" placeholder="제목">
+            <textarea id="editContent" rows="8" placeholder="내용"></textarea>
+            <p style="font-size:1rem; color:var(--text-muted); margin-bottom:10px;">새 사진으로 변경 (선택):</p>
+            <input type="file" id="editImage" accept="image/*">
+            <div style="display:flex; gap:12px; margin-top:25px;">
+                <button class="btn-primary" onclick="submitEdit()">수정 완료</button>
+                <button class="btn-primary" style="background:#E2E8F0; color:var(--text-dark);" onclick="hideModal('editModal')">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 관리자 대시보드 모달 -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-content" style="max-width: 900px;">
+            <span style="position:absolute; top:25px; right:30px; font-size:1.8rem; cursor:pointer; color:var(--text-muted);" onclick="hideModal('adminModal')"><i class="fa-solid fa-xmark"></i></span>
+            <h3 style="margin-bottom:20px; font-size:1.8rem; color:var(--primary); font-weight:800;"><i class="fa-solid fa-shield-halved"></i> 통합 관리자 패널</h3>
+            <div class="sub-tabs" style="justify-content:flex-start; margin-bottom:20px;">
+                <button class="sub-tab active" id="adminTab1" onclick="switchAdminTab(1)">회원 관리</button>
+                <button class="sub-tab" id="adminTab2" onclick="switchAdminTab(2)">게시물 강제 삭제</button>
+            </div>
+            <div id="adminArea1">
+                <table class="admin-table" style="width:100%; border-collapse:collapse; text-align:left;">
+                    <thead style="background:#F3F4F6;"><tr><th style="padding:15px;">이름/아이디</th><th style="padding:15px;">상태</th><th style="padding:15px;">관리</th></tr></thead>
+                    <tbody id="adminUserList"></tbody>
+                </table>
+            </div>
+            <div id="adminArea2" class="hidden">
+                <table class="admin-table" style="width:100%; border-collapse:collapse; text-align:left;">
+                    <thead style="background:#F3F4F6;"><tr><th style="padding:15px;">분류/제목</th><th style="padding:15px;">작성자</th><th style="padding:15px;">삭제</th></tr></thead>
+                    <tbody id="adminPostList"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 로그인 & 회원가입 모달 -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content" style="max-width: 450px;">
+            <h3 style="margin-bottom:30px; text-align:center; font-size:1.8rem; color:var(--primary); font-weight:800;">로그인</h3>
+            <input type="text" id="l_id" placeholder="아이디">
+            <input type="password" id="l_pw" placeholder="비밀번호" onkeydown="if(event.key==='Enter') submitLogin()">
+            <button class="btn-primary" style="margin-top:15px;" onclick="submitLogin()">로그인</button>
+            <button style="width:100%; background:none; border:none; margin-top:20px; color:var(--text-muted); cursor:pointer; font-weight:700;" onclick="hideModal('loginModal')">닫기</button>
+        </div>
+    </div>
+    <div class="modal-overlay" id="signupModal">
+        <div class="modal-content" style="max-width: 450px;">
+            <h3 style="margin-bottom:15px; text-align:center; font-size:1.8rem; color:var(--primary); font-weight:800;">성도 등록</h3>
+            <p id="signupError" style="font-size:1.05rem; color:#DC2626; margin-bottom:25px; text-align:center; font-weight:700;">승인 후 글쓰기 가능</p>
+            <input type="text" id="s_id" placeholder="아이디">
+            <input type="password" id="s_pw" placeholder="비밀번호">
+            <input type="text" id="s_name" placeholder="실명">
+            <button class="btn-primary" style="margin-top:20px;" onclick="submitSignup()">가입 신청</button>
+            <button style="width:100%; background:none; border:none; margin-top:20px; color:var(--text-muted); cursor:pointer; font-weight:700;" onclick="hideModal('signupModal')">취소</button>
+        </div>
+    </div>
+
+    <!-- 전체화면 라이트박스 -->
+    <div id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></span>
+        <img id="lightboxImg" src="" alt="전체화면">
+    </div>
+
+    <!-- 숨김 파일 인풋 (관리자 전용 이미지 교체용) -->
+    <input type="file" id="siteImgFileInput" accept="image/*" class="hidden" onchange="handleSiteImgSelected(event)">
+
+    <script>
+        // --- 네비게이션 스크롤 및 모션 ---
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if(el) { window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' }); }
+        }
+        window.addEventListener('beforeunload', () => { sessionStorage.setItem('scrollPos', window.scrollY); });
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        window.addEventListener('scroll', () => {
+            const topBtn = document.getElementById('topBtn');
+            if(window.scrollY > 500) topBtn.classList.add('visible'); else topBtn.classList.remove('visible');
+        });
+
+        // --- 메인 슬라이더 ---
+        let currentSlide = 0; const slides = document.querySelectorAll('.slide'); const track = document.getElementById('slideTrack'); const dots = document.querySelectorAll('.dot');
+        let slideInterval; let isPlaying = true;
+        function updateSlide() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach(dot => dot.classList.remove('active')); if(dots[currentSlide]) dots[currentSlide].classList.add('active');
+            document.querySelectorAll('.slide-content h2, .slide-content p').forEach(el => { el.classList.remove('visible'); setTimeout(() => el.classList.add('visible'), 50); });
+        }
+        function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; updateSlide(); }
+        function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; updateSlide(); }
+        function goToSlide(index) { currentSlide = index; updateSlide(); }
+        function startSlide() { slideInterval = setInterval(nextSlide, 5000); }
+        function stopSlide() { clearInterval(slideInterval); }
+        function togglePlay() {
+            const btn = document.getElementById('playPauseBtn');
+            if (isPlaying) { stopSlide(); btn.innerHTML = '<i class="fa-solid fa-play"></i>'; }
+            else { startSlide(); btn.innerHTML = '<i class="fa-solid fa-pause"></i>'; }
+            isPlaying = !isPlaying;
+        }
+        startSlide(); setTimeout(() => document.querySelectorAll('.slide:first-child .fade-up').forEach(el => el.classList.add('visible')), 300);
+
+        // --- 교회 소개 탭 전환 ---
+        function switchAboutTab(tabId, btnElement) {
+            document.querySelectorAll('#section-about .sub-tab').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            document.querySelectorAll('#section-about .tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
+        // --- Daily Grace ---
+        async function loadDailyGrace() {
+            try { const res = await fetch('/api/settings/daily-grace'); const data = await res.json(); if (data.text) document.getElementById('dailyGraceText').innerHTML = data.text.replace(/\n/g, '<br>'); } catch (e) {}
+        }
+        function openDailyGraceModal() {
+            const currentHtml = document.getElementById('dailyGraceText').innerHTML; document.getElementById('editDailyGraceInput').value = currentHtml.replace(/<br\s*[\/]?>/gi, '\n'); showModal('dailyGraceModal');
+        }
+        async function submitDailyGrace() {
+            const text = document.getElementById('editDailyGraceInput').value.trim(); if (!text) return alert('문구를 입력해주세요.');
+            const res = await fetch('/api/settings/daily-grace', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+            if (res.ok) { hideModal('dailyGraceModal'); loadDailyGrace(); alert('변경되었습니다.'); }
+        }
+
+        // --- 사이트 고정 이미지 (배너, 목사님 사진) 동적 로드 및 관리자 교체 ---
+        let currentSiteImgKey = null;
+
+        async function loadSiteSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const settings = await res.json();
+                if (settings.banner_1) document.getElementById('slideBanner1').style.backgroundImage = `url('${settings.banner_1}')`;
+                if (settings.banner_2) document.getElementById('slideBanner2').style.backgroundImage = `url('${settings.banner_2}')`;
+                if (settings.pastor_img) document.getElementById('pastorProfileImg').src = settings.pastor_img;
+            } catch (e) {}
+        }
+
+        function triggerSiteImgUpload(key) {
+            currentSiteImgKey = key;
+            const input = document.getElementById('siteImgFileInput');
+            input.value = '';
+            input.click();
+        }
+
+        async function handleSiteImgSelected(event) {
+            const file = event.target.files[0];
+            if (!file || !currentSiteImgKey) return;
+
+            const fd = new FormData();
+            fd.append('key', currentSiteImgKey);
+            fd.append('image', file);
+
+            const res = await fetch('/api/admin/site-image', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (res.ok) {
+                if (currentSiteImgKey === 'banner_1') document.getElementById('slideBanner1').style.backgroundImage = `url('${data.imageUrl}')`;
+                if (currentSiteImgKey === 'banner_2') document.getElementById('slideBanner2').style.backgroundImage = `url('${data.imageUrl}')`;
+                if (currentSiteImgKey === 'pastor_img') document.getElementById('pastorProfileImg').src = data.imageUrl;
+            } else {
+                alert('이미지 업로드에 실패했습니다.');
+            }
+        }
+
+        // --- 공통 UI ---
+        function showModal(id) { document.getElementById(id).classList.add('active'); }
+        function hideModal(id) { document.getElementById(id).classList.remove('active'); if(id==='signupModal') document.getElementById('signupError').innerText = "승인 후 글쓰기 가능"; }
+        function openLightbox(src) { document.getElementById('lightboxImg').src = src; document.getElementById('lightbox').classList.add('active'); }
+        function closeLightbox() { document.getElementById('lightbox').classList.remove('active'); }
+
+        // --- 상태 및 인증 ---
+        let user = JSON.parse(localStorage.getItem('user_session') || 'null');
+        let postsData = []; let commentsData = []; 
+        let currentTab = '전체'; 
+        let currentFilteredPosts = []; 
+        
+        // 페이지당 5개 게시물 출력
+        let currentPage = 1;
+        const postsPerPage = 5; 
+        
+        let activePostIndex = -1;
+
+        function renderHeader() {
+            const area = document.getElementById('authArea');
+            const tabBulletin = document.getElementById('tabBulletin');
+            const adminGraceWrap = document.getElementById('adminGraceBtnWrap');
+            const adminBadges = document.querySelectorAll('.admin-img-badge');
+            
+            if (user) {
+                area.innerHTML = `
+                    ${user.isAdmin ? `<button class="btn-admin" onclick="loadAdminDashboard()"><i class="fa-solid fa-user-shield"></i> 관리자</button>` : ''}
+                    <button style="background:transparent; color:var(--text-dark); pointer-events:none;">${user.fullName}님</button>
+                    <button onclick="handleLogout()" style="background:#F3F4F6; color:var(--text-muted);"><i class="fa-solid fa-right-from-bracket"></i></button>
+                `;
+                if(user.isAdmin) {
+                    tabBulletin.classList.remove('hidden');
+                    adminGraceWrap.classList.remove('hidden');
+                    adminBadges.forEach(b => b.classList.remove('hidden'));
+                } else {
+                    tabBulletin.classList.add('hidden');
+                    adminGraceWrap.classList.add('hidden');
+                    adminBadges.forEach(b => b.classList.add('hidden'));
+                }
+            } else {
+                area.innerHTML = `<button onclick="showModal('loginModal')">로그인</button> <button class="btn-admin" onclick="showModal('signupModal')">등록신청</button>`;
+                tabBulletin.classList.add('hidden');
+                adminGraceWrap.classList.add('hidden');
+                adminBadges.forEach(b => b.classList.add('hidden'));
+            }
+            let html = `<option value="자유게시판">자유게시판</option><option value="일반나눔">일반나눔</option><option value="공지사항">공지사항</option><option value="갤러리">갤러리</option>`;
+            if (user && user.isAdmin) html += `<option value="주보">🌟 주보 (메인화면 즉시반영)</option>`;
+            document.getElementById('postCategory').innerHTML = html;
+        }
+
+        async function submitLogin() {
+            const id = document.getElementById('l_id').value.trim(); const pw = document.getElementById('l_pw').value.trim();
+            const res = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:id, password:pw}) });
+            const data = await res.json();
+            if (res.ok) { user = data; localStorage.setItem('user_session', JSON.stringify(data)); hideModal('loginModal'); renderHeader(); loadPosts(); } 
+            else alert(data.error);
+        }
+
+        async function submitSignup() {
+            const id = document.getElementById('s_id').value.trim(); const pw = document.getElementById('s_pw').value.trim(); const name = document.getElementById('s_name').value.trim();
+            const res = await fetch('/api/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:id, password:pw, fullName:name}) });
+            const data = await res.json();
+            if (res.ok) { alert('가입 신청 완료! 관리자 승인 후 로그인 가능합니다.'); hideModal('signupModal'); }
+            else document.getElementById('signupError').innerText = data.error; 
+        }
+
+        function handleLogout() { localStorage.removeItem('user_session'); user = null; renderHeader(); document.getElementById('writePanel').classList.add('hidden'); loadPosts(); }
+        function openWritePanel() { if (!user) return alert('로그인 후 이용 가능합니다.'); document.getElementById('writePanel').classList.toggle('hidden'); }
+
+        // --- 게시판 로직 ---
+        function setCategoryTab(tabName) {
+            currentTab = tabName;
+            currentPage = 1;
+            document.querySelectorAll('.board-tab').forEach(btn => btn.classList.remove('active')); event.target.classList.add('active');
+            processFilteredPosts();
+        }
+
+        async function submitPost() {
+            const category = document.getElementById('postCategory').value.replace('🌟 ', '').trim();
+            const title = document.getElementById('postTitle').value.trim(); const content = document.getElementById('postContent').value.trim(); const file = document.getElementById('postImage').files[0];
+            if (!title) return alert('제목을 입력하세요.');
+            const fd = new FormData(); fd.append('author', user.fullName); fd.append('username', user.username); fd.append('title', title); fd.append('category', category); fd.append('content', content); if (file) fd.append('image', file);
+            const res = await fetch('/api/posts', { method: 'POST', body: fd });
+            if (res.ok) { document.getElementById('postTitle').value = ''; document.getElementById('postContent').value = ''; document.getElementById('postImage').value = ''; document.getElementById('writePanel').classList.add('hidden'); loadPosts(); } 
+            else alert('등록 실패');
+        }
+
+        async function loadPosts() {
+            const [resPosts, resComments] = await Promise.all([fetch('/api/posts'), fetch('/api/comments')]);
+            postsData = await resPosts.json(); commentsData = await resComments.json();
+            
+            // 메인 주보 노출
+            const latestBulletin = postsData.find(p => (p.author || '').includes('|주보'));
+            const bulletinArea = document.getElementById('latestBulletinArea');
+            if (latestBulletin) {
+                const parts = (latestBulletin.author || '').split('|'); const title = parts[2] || '이번 주 온라인 주보';
+                if(latestBulletin.image_url) {
+                    bulletinArea.innerHTML = `<h4 style="font-size:1.5rem; margin-bottom:15px; color:var(--text-dark); font-weight:800;">${title}</h4><div class="bulletin-img-wrap"><img src="${latestBulletin.image_url}" onclick="openLightbox('${latestBulletin.image_url}')"></div>`;
+                } else {
+                    bulletinArea.innerHTML = `<h4 style="font-size:1.5rem; margin-bottom:15px;">${title}</h4><p style="white-space:pre-wrap; line-height:1.7; font-size:1.1rem;">${latestBulletin.content}</p>`;
+                }
+            }
+            
+            processFilteredPosts();
+
+            setTimeout(() => { const savedPos = sessionStorage.getItem('scrollPos'); if (savedPos) { window.scrollTo({ top: parseInt(savedPos), behavior: 'instant' }); sessionStorage.removeItem('scrollPos'); } }, 100);
+        }
+
+        // 페이지네이션 처리 함수 (글 순서 번호 적용)
+        function processFilteredPosts() {
+            const list = document.getElementById('boardList');
+            const pageArea = document.getElementById('paginationArea');
+            list.innerHTML = ''; pageArea.innerHTML = '';
+
+            // 필터링
+            currentFilteredPosts = postsData.filter(p => {
+                const cat = (p.author || '').split('|')[3] || '일반나눔';
+                if(!user?.isAdmin && cat === '주보') return false;
+                if(currentTab !== '전체' && !cat.includes(currentTab)) return false;
+                return true;
+            });
+
+            if(currentFilteredPosts.length === 0) { list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:80px 0; font-size:1.2rem;">등록된 게시물이 없습니다.</p>`; list.className = ""; return; }
+
+            if (currentTab === '갤러리') {
+                list.className = 'gallery-grid';
+            } else {
+                list.className = '';
+            }
+
+            // 5개씩 페이지 분할
+            const totalPages = Math.ceil(currentFilteredPosts.length / postsPerPage);
+            const startIndex = (currentPage - 1) * postsPerPage;
+            const paginatedPosts = currentFilteredPosts.slice(startIndex, startIndex + postsPerPage);
+
+            paginatedPosts.forEach((p, index) => {
+                const parts = (p.author || '').split('|'); const authorName = parts[0] || '익명'; const postTitle = parts[2] || '제목 없음'; const postCategory = parts[3] || '일반나눔';
+                const actualIndex = startIndex + index;
+                
+                // 순차적 게시글 번호 (전체 개수 - 실제 인덱스)
+                const sequentialNumber = currentFilteredPosts.length - actualIndex;
+
+                let badgeClass = 'badge'; if(postCategory === '공지사항') badgeClass += ' notice'; if(postCategory === '주보') badgeClass += ' bulletin';
+                
+                if (currentTab === '갤러리') {
+                    list.innerHTML += `
+                        <div class="gallery-item" onclick="openDetailByIndex(${actualIndex})">
+                            <img src="${p.image_url || 'https://via.placeholder.com/300x300?text=No+Image'}" class="gallery-thumb">
+                            <div class="gallery-info">
+                                <span class="${badgeClass}" style="margin-bottom:8px; display:inline-block;">${postCategory}</span>
+                                <div class="gallery-title">${postTitle}</div>
+                                <div style="font-size:0.9rem; color:var(--text-muted);"><i class="fa-solid fa-user-pen"></i> ${authorName}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const postComments = commentsData.filter(c => c.post_id === p.id);
+                    list.innerHTML += `
+                        <div class="post-item">
+                            <div class="post-content-wrap">
+                                <div class="post-meta">
+                                    <span class="post-number">No.${sequentialNumber}</span>
+                                    <span class="${badgeClass}">${postCategory}</span>
+                                    <span style="color:var(--text-muted); font-weight:700; margin-left:auto;"><i class="fa-solid fa-user-pen"></i> ${authorName}</span>
+                                    <span style="color:var(--text-muted); font-size:0.9rem; margin-left:10px;"><i class="fa-regular fa-comment-dots"></i> ${postComments.length}</span>
+                                </div>
+                                <div class="post-title" onclick="openDetailByIndex(${actualIndex})">${postTitle}</div>
+                                <div class="post-excerpt" onclick="openDetailByIndex(${actualIndex})">${p.content}</div>
+                            </div>
+                            ${p.image_url ? `<div class="post-thumb-box" onclick="openDetailByIndex(${actualIndex})"><img src="${p.image_url}"></div>` : ''}
+                        </div>
+                    `;
+                }
+            });
+
+            // 페이지 버튼
+            if (totalPages > 1) {
+                let pageHtml = '';
+                for(let i=1; i<=totalPages; i++) {
+                    pageHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                }
+                pageArea.innerHTML = pageHtml;
+            }
+        }
+
+        function goToPage(pageNum) {
+            currentPage = pageNum;
+            processFilteredPosts();
+            document.getElementById('section-board').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // --- 상세 모달 ---
+        function openDetailByIndex(index) {
+            if(index < 0 || index >= currentFilteredPosts.length) return;
+            activePostIndex = index;
+            const p = currentFilteredPosts[index];
+            const parts = (p.author || '').split('|'); const postCategory = parts[3] || '일반나눔';
+            let badgeClass = 'badge'; if(postCategory === '공지사항') badgeClass += ' notice'; if(postCategory === '주보') badgeClass += ' bulletin';
+            
+            const sequentialNumber = currentFilteredPosts.length - index;
+            document.getElementById('modalPostNo').innerText = `No.${sequentialNumber}`;
+            document.getElementById('modalCategory').className = badgeClass; document.getElementById('modalCategory').innerText = postCategory;
+            document.getElementById('modalAuthorMeta').innerText = `작성자: ${parts[0] || '익명'}`; document.getElementById('modalTitle').innerText = parts[2] || '제목 없음'; document.getElementById('modalContent').innerText = p.content;
+            
+            const imgWrap = document.getElementById('modalImageWrap');
+            if (p.image_url) {
+                imgWrap.innerHTML = `<img src="${p.image_url}" style="width:100%; border-radius:16px; cursor:zoom-in; box-shadow:0 10px 40px rgba(0,0,0,0.1);" onclick="openLightbox('${p.image_url}')">`;
+            } else imgWrap.innerHTML = '';
+
+            const postComments = commentsData.filter(c => c.post_id === p.id);
+            document.getElementById('modalCommentsHeader').innerHTML = `<i class="fa-regular fa-comment-dots"></i> 댓글 (${postComments.length})`;
+            document.getElementById('modalCommentsList').innerHTML = postComments.map(c => `
+                <div class="comment-item">
+                    <div><span class="comment-author">${c.author}</span><span style="color:var(--text-muted);">${c.content}</span></div>
+                    <div style="display:flex; align-items:center;">
+                        <span style="font-size:0.8rem; color:#999;">${(c.created_at || '').slice(5, 16)}</span>
+                        ${(user && (user.isAdmin || user.fullName === c.author)) ? `<button style="background:none; border:none; color:#EF4444; margin-left:8px; cursor:pointer;" onclick="deleteComment(${c.id})"><i class="fa-solid fa-xmark"></i></button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('modalCommentFormWrap').innerHTML = user ? `
+                <div class="comment-input-wrap">
+                    <input type="text" id="modal-comment-input" placeholder="댓글 달기..." style="margin:0; flex-grow:1;" onkeydown="if(event.key==='Enter') submitComment(${p.id})">
+                    <button class="btn-primary" style="width:auto; padding:12px 20px;" onclick="submitComment(${p.id})">등록</button>
+                </div>
+            ` : `<p style="font-size:0.9rem; color:var(--text-muted); margin-top:15px;">* 로그인 후 댓글 작성 가능</p>`;
+
+            const ownerActions = document.getElementById('modalOwnerActions');
+            if (user && (user.isAdmin || user.username === (parts[1] || ''))) ownerActions.classList.remove('hidden'); else ownerActions.classList.add('hidden');
+
+            document.getElementById('btnPrevPost').disabled = (index === 0);
+            document.getElementById('btnNextPost').disabled = (index === currentFilteredPosts.length - 1);
+
+            showModal('detailModal');
+        }
+
+        function goPrevPost() { if (activePostIndex > 0) openDetailByIndex(activePostIndex - 1); }
+        function goNextPost() { if (activePostIndex < currentFilteredPosts.length - 1) openDetailByIndex(activePostIndex + 1); }
+
+        async function submitComment(postId) {
+            const content = document.getElementById(`modal-comment-input`).value.trim();
+            if (!content) return alert('내용을 입력하세요.');
+            const res = await fetch('/api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ postId, author: user.fullName, content }) });
+            if (res.ok) { 
+                const resComments = await fetch('/api/comments'); commentsData = await resComments.json();
+                openDetailByIndex(activePostIndex);
+                processFilteredPosts();
+            }
+        }
+        async function deleteComment(id) {
+            if(!confirm('댓글을 삭제하시겠습니까?')) return;
+            const res = await fetch('/api/comments', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) });
+            if (res.ok) { 
+                const resComments = await fetch('/api/comments'); commentsData = await resComments.json();
+                openDetailByIndex(activePostIndex); 
+                processFilteredPosts();
+            }
+        }
+
+        // --- 수정 / 삭제 ---
+        function openEditFromDetail() {
+            hideModal('detailModal'); 
+            if (activePostIndex === -1) return;
+            const p = currentFilteredPosts[activePostIndex];
+            const parts = (p.author || '').split('|');
+            document.getElementById('editPostId').value = p.id; 
+            document.getElementById('editAuthorMeta').value = `${parts[0]}|${parts[1]}`;
+            document.getElementById('editCategory').value = parts[3] || '일반나눔';
+            document.getElementById('editKeepImage').value = p.image_url || '';
+            document.getElementById('editTitle').value = parts[2] || ''; 
+            document.getElementById('editContent').value = p.content || ''; 
+            document.getElementById('editImage').value = '';
+            showModal('editModal');
+        }
+
+        async function submitEdit() {
+            const fd = new FormData(); 
+            fd.append('id', document.getElementById('editPostId').value); 
+            fd.append('authorMeta', document.getElementById('editAuthorMeta').value); 
+            fd.append('category', document.getElementById('editCategory').value);
+            fd.append('keepImage', document.getElementById('editKeepImage').value); 
+            fd.append('title', document.getElementById('editTitle').value.trim()); 
+            fd.append('content', document.getElementById('editContent').value.trim()); 
+            if (document.getElementById('editImage').files[0]) fd.append('image', document.getElementById('editImage').files[0]);
+            const res = await fetch('/api/posts', { method:'PUT', body: fd }); if (res.ok) { hideModal('editModal'); loadPosts(); }
+        }
+
+        async function deleteFromDetail() {
+            if (activePostIndex === -1) return;
+            const p = currentFilteredPosts[activePostIndex];
+            if (!confirm('정말 삭제하시겠습니까? 관련 댓글도 모두 삭제됩니다.')) return;
+            const res = await fetch('/api/posts', { method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id: p.id}) }); 
+            if (res.ok) { hideModal('detailModal'); loadPosts(); }
+        }
+
+        // --- 관리자 대시보드 ---
+        function switchAdminTab(tabIndex) {
+            document.getElementById('adminArea1').classList.add('hidden'); document.getElementById('adminArea2').classList.add('hidden');
+            document.getElementById(`adminArea${tabIndex}`).classList.remove('hidden');
+        }
+
+        async function loadAdminDashboard() {
+            showModal('adminModal');
+            const resUsers = await fetch('/api/admin/users'); const users = await resUsers.json();
+            document.getElementById('adminUserList').innerHTML = users.map(u => `
+                <tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:15px;"><b>${u.full_name}</b><br><span style="font-size:0.85rem; color:#888;">${u.username}</span></td>
+                    <td style="padding:15px;"><span style="font-weight:800; color:${u.status==='pending'?'#D97706':'#10B981'};">${u.status==='pending'?'승인대기':'완료'}</span></td>
+                    <td style="padding:15px;">
+                        ${u.status==='pending' ? `<button style="background:var(--primary); color:white;" onclick="adminUserAction(${u.id}, 'approve')">승인</button>` : ''}
+                        <button style="background:#E5E7EB; color:#374151;" onclick="adminUserAction(${u.id}, 'reset_pw')">비번초기화</button>
+                        <button style="background:#FEE2E2; color:#DC2626;" onclick="adminUserAction(${u.id}, 'delete')">삭제</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('adminPostList').innerHTML = postsData.map(p => {
+                const parts = (p.author || '').split('|'); const title = parts[2] || '제목 없음'; const cat = parts[3] || '일반'; const author = parts[0] || '익명';
+                return `<tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:15px;"><span class="badge ${cat==='공지사항'?'notice':cat==='주보'?'bulletin':''}">${cat}</span><br><b style="font-size:0.9rem;">${title}</b></td>
+                    <td style="padding:15px;">${author}</td>
+                    <td style="padding:15px;"><button style="background:#FEE2E2; color:#DC2626;" onclick="adminPostDelete(${p.id})">삭제</button></td>
+                </tr>`;
+            }).join('');
+        }
+
+        async function adminUserAction(id, action) {
+            if (action === 'delete' && !confirm('해당 회원을 강제 삭제하시겠습니까?')) return;
+            if (action === 'reset_pw' && !confirm('비밀번호를 0000 으로 초기화합니다. 계속하시겠습니까?')) return;
+            await fetch('/api/admin/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id, action}) });
+            if (action === 'reset_pw') alert('비밀번호가 0000 으로 초기화되었습니다.');
+            loadAdminDashboard();
+        }
+
+        async function adminPostDelete(id) {
+            if (!confirm('이 게시물을 강제 삭제하시겠습니까? 댓글도 함께 삭제됩니다.')) return;
+            await fetch('/api/admin/posts/delete', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id}) });
+            await loadPosts(); loadAdminDashboard();
+        }
+
+        // 초기 구동
+        loadDailyGrace();
+        loadSiteSettings();
+        renderHeader();
+        loadPosts();
+    </script>
+</body>
+</html>

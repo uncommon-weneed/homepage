@@ -1,0 +1,22 @@
+{
+  "name": "homepage",
+  "main": "_worker.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "church-db",
+      "database_id": "90fa98b6-d9c7-4ae7-af15-83742cfee1c3"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "church-bucket"
+    }
+  ]
+}
