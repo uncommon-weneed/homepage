@@ -28,26 +28,21 @@
             --nav-height: 65px;
         }
 
-        /* 기본 리셋 및 글로벌 스타일 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; -webkit-tap-highlight-color: transparent; }
         html, body { width: 100%; height: 100%; background: var(--bg-base); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
         
-        /* 앱 레이아웃 (SPA 구조) */
         #app-container { display: none; width: 100%; height: 100vh; flex-direction: column; }
         .view-section { display: none; flex-grow: 1; overflow-y: auto; padding-bottom: calc(var(--nav-height) + 20px); animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
         
-        /* 공통 애니메이션 */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.9) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
         @keyframes pulseAlert { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* 커스텀 스크롤바 */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 142, 139, 0.3); border-radius: 10px; }
 
-        /* 시크릿 진입 화면 (Auth Wall) */
         #auth-wall { position: fixed; inset: 0; background: url('https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1920&auto=format&fit=crop') center/cover; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
         #auth-wall::before { content: ''; position: absolute; inset: 0; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); }
         .auth-box { position: relative; z-index: 1; background: rgba(255,255,255,0.7); backdrop-filter: blur(20px); padding: 50px 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 90%; max-width: 380px; text-align: center; border: 1px solid rgba(255,255,255,0.5); }
@@ -58,7 +53,6 @@
         .btn-auth { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: var(--radius-sm); font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255,142,139,0.3); }
         .btn-auth:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
-        /* 상단 앱 헤더 */
         .app-header { position: sticky; top: 0; width: 100%; height: 60px; background: rgba(248, 249, 250, 0.85); backdrop-filter: blur(12px); z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid rgba(0,0,0,0.02); }
         .header-title { font-size: 1.2rem; font-weight: 800; color: var(--primary); font-family: 'Georgia', serif; font-style: italic; display: flex; align-items: center; gap: 8px; }
         .header-actions { display: flex; gap: 15px; align-items: center; }
@@ -66,7 +60,6 @@
         .icon-btn:hover { background: var(--primary-light); color: var(--primary); }
         .icon-btn.active { color: var(--primary); background: var(--primary-light); transform: rotate(90deg); }
 
-        /* 하단/측면 앱 네비게이션 (모바일 최적화 Bottom Nav) */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--border-light); z-index: 100; display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -4px 20px rgba(0,0,0,0.02); }
         .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 25%; height: 100%; color: var(--text-muted); text-decoration: none; transition: 0.3s; cursor: pointer; }
         .nav-item i { font-size: 1.3rem; margin-bottom: 4px; transition: 0.3s; }
@@ -86,7 +79,6 @@
             .app-header { left: 250px; width: calc(100% - 250px); }
         }
 
-        /* ---------------- Home View ---------------- */
         .home-container { max-width: 800px; margin: 0 auto; padding: 20px; }
         .banner-wrap { position: relative; width: 100%; height: 350px; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 30px; }
         .banner-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease; z-index: 1; }
@@ -114,7 +106,6 @@
         .tl-date { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
         .tl-desc { font-size: 1rem; color: var(--text-main); }
 
-        /* ---------------- Calendar View ---------------- */
         .calendar-container { max-width: 900px; margin: 0 auto; padding: 20px; }
         .cal-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .cal-month-title { font-size: 1.8rem; font-weight: 800; font-family: 'Georgia', serif; }
@@ -131,7 +122,6 @@
         .dot-diary { width: 6px; height: 6px; background: var(--primary); border-radius: 50%; }
         .dot-schedule { width: 6px; height: 6px; background: var(--secondary); border-radius: 50%; }
 
-        /* ---------------- Board View ---------------- */
         .board-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
         .board-tabs { display: flex; gap: 15px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
         .board-tab { background: none; border: none; font-size: 1.1rem; font-weight: 700; color: var(--text-muted); cursor: pointer; padding: 8px 4px; position: relative; transition: 0.3s; white-space: nowrap; }
@@ -160,7 +150,6 @@
         .fab:hover { transform: scale(1.1) rotate(90deg); background: var(--primary-dark); }
         @media(min-width: 768px) { .fab { bottom: 40px; right: 40px; } }
 
-        /* ---------------- 모달 공통 및 폼 ---------------- */
         .form-group { margin-bottom: 20px; }
         .form-label { display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
         .form-input, .form-textarea, .form-select { width: 100%; padding: 16px; background: #F8F9FA; border: 1px solid var(--border-light); border-radius: 14px; font-size: 1.05rem; transition: 0.3s; color: var(--text-main); }
@@ -179,14 +168,12 @@
         .btn-close:hover { color: var(--primary); }
         .modal-body { padding: 30px; overflow-y: auto; flex-grow: 1; }
 
-        /* Day View 모달 전용 리스트 */
         .day-entry-item { background: #F8F9FA; padding: 20px; border-radius: 16px; margin-bottom: 15px; border-left: 4px solid var(--primary); cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm); }
         .day-entry-item:hover { background: var(--primary-light); transform: translateX(5px); }
         .day-entry-item.schedule { border-left-color: var(--secondary); }
         .entry-cat { font-size: 0.85rem; font-weight: 800; color: var(--text-muted); margin-bottom: 5px; display: inline-block; }
         .entry-title { font-size: 1.15rem; font-weight: 800; color: var(--text-main); }
 
-        /* 상세 보기 모달 */
         .detail-meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 15px; }
         .detail-author { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
         .detail-date { font-size: 0.9rem; color: var(--text-muted); }
@@ -194,7 +181,6 @@
         .detail-content { font-size: 1.1rem; line-height: 1.8; color: #4A5568; white-space: pre-wrap; margin-bottom: 30px; }
         .detail-image { width: 100%; border-radius: 16px; margin-bottom: 20px; cursor: zoom-in; }
         
-        /* 덧글 영역 */
         .comment-section { background: #F8F9FA; border-radius: 16px; padding: 20px; margin-top: 30px; }
         .comment-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
         .comment-list { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
@@ -207,12 +193,10 @@
         .comment-input-row input { flex-grow: 1; padding: 12px 15px; border: 1px solid var(--border-light); border-radius: 10px; outline: none; }
         .comment-input-row button { padding: 12px 20px; background: var(--text-main); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
 
-        /* 커스텀 토스트 알림 */
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(45, 55, 72, 0.95); backdrop-filter: blur(10px); color: white; padding: 15px 25px; border-radius: 30px; font-size: 1rem; font-weight: 600; opacity: 0; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); pointer-events: none; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         .toast i { color: var(--primary); font-size: 1.2rem; }
 
-        /* 관리자/편집 모드 배지 */
         .edit-badge { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.9); color: var(--text-main); padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-sm); border: none; z-index: 10; display: none; align-items: center; gap: 5px; }
         .edit-badge:hover { background: var(--primary); color: white; }
         body.edit-mode .edit-badge { display: flex; }
@@ -220,7 +204,6 @@
         body.edit-mode .edit-mode-only { display: inline-block !important; }
         body.edit-mode .edit-mode-only-flex { display: flex !important; }
         
-        /* 라이트박스 */
         #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
         #lightbox img { max-width: 95vw; max-height: 95vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); object-fit: contain; }
     </style>
@@ -242,7 +225,7 @@
         </div>
     </div>
 
-    <!-- 2. 로그인 후 작성자 선택 팝업 (새로 추가됨) -->
+    <!-- 2. 로그인 후 작성자 선택 팝업 -->
     <div class="modal-overlay" id="authorSelectModal">
         <div class="modal-content" style="max-width: 400px; text-align: center; padding: 40px 30px;">
             <i class="fa-solid fa-face-smile-wink" style="font-size:3.5rem; color:var(--primary); margin-bottom:20px;"></i>
@@ -250,6 +233,19 @@
             <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:25px;">앞으로 남길 추억에 기록될 이름을 적어주세요.</p>
             <input type="text" id="authorNameInput" class="form-input" placeholder="예: 영재, 수진" onkeydown="if(event.key==='Enter') setAuthorName()" style="text-align:center; font-weight:700;">
             <button class="btn-submit" onclick="setAuthorName()" style="margin-top:10px;"><i class="fa-solid fa-heart"></i> 시작하기</button>
+        </div>
+    </div>
+
+    <!-- 자체 커스텀 Confirm 모달 (경고창 대체) -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-content" style="max-width: 350px; text-align: center; padding: 30px;">
+            <i class="fa-solid fa-circle-exclamation" style="font-size: 3rem; color: #FC8181; margin-bottom: 15px;"></i>
+            <h3 style="font-size: 1.3rem; margin-bottom: 10px;">정말 삭제하시겠습니까?</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">이 작업은 되돌릴 수 없습니다.</p>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-submit" id="confirmBtn" style="background: #FC8181;">삭제</button>
+                <button class="btn-submit" style="background: #E2E8F0; color: var(--text-dark);" onclick="hideModal('confirmModal')">취소</button>
+            </div>
         </div>
     </div>
 
@@ -401,7 +397,7 @@
         </div>
     </div>
 
-    <!-- 달력 Day View 모달 (클릭 시 팝업) -->
+    <!-- 달력 Day View 모달 -->
     <div class="modal-overlay" id="dayViewModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -519,15 +515,12 @@
     </div>
 
     <!-- 이미지 확대 라이트박스 -->
-    <div id="lightbox" class="modal-overlay" onclick="closeLightbox()" style="z-index: 3000; background:rgba(0,0,0,0.9);">
+    <div id="lightbox" class="modal-overlay" onclick="closeLightbox()" style="z-index: 3000; background:rgba(0,0,0,0.95);">
         <span style="position:absolute; top:30px; right:30px; color:white; font-size:2.5rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></span>
         <img id="lightboxImg" src="" style="max-width:90%; max-height:90%; border-radius:12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); object-fit:contain;">
     </div>
 
     <script>
-        /* =========================================================================
-           1. 상태 변수 및 초기화 로직
-           ========================================================================= */
         let user = null;
         let postsData = []; let commentsData = []; 
         let siteSettings = {}; let timelineData = [];
@@ -535,28 +528,37 @@
         let isEditMode = false;
         let activePost = null;
 
-        // 화면 로드 시 실행 (LocalStorage 체크하여 로그인 여부 판단)
+        // 자체 확인 창 (alert/confirm 대체)
+        let confirmAction = null;
+        function showConfirm(action) {
+            confirmAction = action;
+            showModal('confirmModal');
+        }
+        document.getElementById('confirmBtn').addEventListener('click', () => {
+            if(confirmAction) confirmAction();
+            hideModal('confirmModal');
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             try { user = JSON.parse(localStorage.getItem('couple_user') || 'null'); } catch(e){}
             
-            // 로그인 이력이 있고, 이름(fullName) 세팅이 "우리"가 아닌 경우 (정상 사용 중)
+            // 로그인 이력이 있고 이름이 설정된 경우
             if(user && user.fullName && user.fullName !== "우리") {
                 document.getElementById('auth-wall').style.display = 'none';
                 document.getElementById('app-container').style.display = 'flex';
                 initApp();
             } 
-            // 로그인 이력은 있으나 이름 세팅이 안 된 경우 (작성자 선택 모달 띄우기)
+            // 로그인은 했지만 이름이 "우리" (기본값) 인 경우
             else if (user) {
                 document.getElementById('auth-wall').style.display = 'none';
                 showModal('authorSelectModal');
             } 
-            // 아예 로그인이 안 된 경우 (시크릿 월 띄우기)
+            // 로그인 안된 경우
             else {
                 document.getElementById('auth-wall').style.opacity = '1';
             }
         });
 
-        // 커스텀 토스트 알림 함수
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toastMsg').innerText = msg;
@@ -564,9 +566,6 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        /* =========================================================================
-           2. 인증 & 작성자 선택 로직
-           ========================================================================= */
         async function submitLogin() {
             const id = document.getElementById('l_id').value.trim(); const pw = document.getElementById('l_pw').value.trim();
             const res = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:id, password:pw}) });
@@ -576,19 +575,18 @@
                 document.getElementById('auth-wall').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('auth-wall').style.display = 'none';
-                    // 로그인 직후 작성자 선택 모달을 띄움
+                    // 로그인 직후 이름 입력 모달 표시
                     showModal('authorSelectModal');
                 }, 500);
             } else { const d = await res.json(); showToast(d.error); }
         }
 
-        // 팝업에서 이름 입력 시 호출됨
         function setAuthorName() {
             const name = document.getElementById('authorNameInput').value.trim();
             if(!name) return showToast('이름을 입력해주세요!');
             
             user.fullName = name;
-            localStorage.setItem('couple_user', JSON.stringify(user)); // 로컬에 확정 저장
+            localStorage.setItem('couple_user', JSON.stringify(user));
             
             hideModal('authorSelectModal');
             document.getElementById('app-container').style.display = 'flex';
@@ -599,9 +597,6 @@
 
         function handleLogout() { localStorage.removeItem('couple_user'); location.reload(); }
 
-        /* =========================================================================
-           3. 앱 구동 및 공통 유틸리티
-           ========================================================================= */
         function initApp() {
             startClock();
             loadSettings();
@@ -610,18 +605,16 @@
             startBannerSlider();
             requestNotificationPermission();
             startNotificationPolling();
-            // 기본 뷰 렌더링
             document.querySelector('.nav-item').click();
         }
 
-        // 하단 탭 뷰 전환 (SPA 네비게이션)
         function switchView(viewId, btnElement) {
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             if(btnElement) btnElement.classList.add('active');
             
             document.querySelectorAll('.view-section').forEach(sec => {
                 sec.classList.remove('active');
-                sec.style.animation = 'none'; void sec.offsetWidth; // 애니메이션 리셋
+                sec.style.animation = 'none'; void sec.offsetWidth;
             });
             
             const target = document.getElementById(`view-${viewId}`);
@@ -635,7 +628,6 @@
             window.scrollTo(0,0);
         }
 
-        // 상단 시계 & 편집 모드 토글
         function startClock() {
             setInterval(() => {
                 const now = new Date(); const days = ['일','월','화','수','목','금','토'];
@@ -656,7 +648,6 @@
             }
         }
 
-        // 배너 슬라이더
         let currentSlide = 0; const banners = document.querySelectorAll('.banner-img');
         function nextSlide() { currentSlide = (currentSlide + 1) % banners.length; updateSlide(); }
         function updateSlide() {
@@ -683,7 +674,6 @@
             setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 300);
         }
 
-        // 라이트 박스
         function openLightbox(url) {
             document.getElementById('lightboxImg').src = url;
             document.getElementById('lightbox').style.display = 'flex';
@@ -694,9 +684,6 @@
             setTimeout(() => document.getElementById('lightbox').style.display = 'none', 300);
         }
 
-        /* =========================================================================
-           4. 디데이 및 타임라인 (설정 연동)
-           ========================================================================= */
         async function loadSettings() {
             const res = await fetch('/api/settings'); siteSettings = await res.json();
             
@@ -749,14 +736,15 @@
             await fetch('/api/settings', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({key:'timeline_data', value:JSON.stringify(timelineData)}) });
             hideModal('addTimelineModal'); document.getElementById('tlDate').value=''; document.getElementById('tlDesc').value=''; renderTimeline(); showToast("역사가 기록되었습니다.");
         }
-        async function deleteTimelineItem(idx) {
-            if(!confirm('삭제하시겠습니까?')) return;
-            timelineData.splice(idx, 1);
-            await fetch('/api/settings', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({key:'timeline_data', value:JSON.stringify(timelineData)}) });
-            renderTimeline(); showToast("삭제되었습니다.");
+        
+        function deleteTimelineItem(idx) {
+            showConfirm(async () => {
+                timelineData.splice(idx, 1);
+                await fetch('/api/settings', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({key:'timeline_data', value:JSON.stringify(timelineData)}) });
+                renderTimeline(); showToast("삭제되었습니다.");
+            });
         }
 
-        // 이미지 파일 관리 (배너 등)
         let currentImgKey = '';
         function triggerSiteImgUpload(key) { currentImgKey = key; document.getElementById('siteImgFileInput').click(); }
         async function handleSiteImgSelected(e) {
@@ -767,9 +755,6 @@
             if(res.ok) { loadSettings(); showToast("사진이 변경되었습니다."); } else showToast('업로드 실패');
         }
 
-        /* =========================================================================
-           5. 캘린더 & 일정/다이어리 관리
-           ========================================================================= */
         let currentCalDate = new Date();
         
         function renderCalendar() {
@@ -789,7 +774,6 @@
             for(let d=1; d<=daysInMonth; d++) {
                 const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
                 
-                // 해당 날짜의 다이어리와 일정 판별
                 const hasDiary = postsData.some(p => { const prts = (p.author||'').split('|'); return prts[3] === '다이어리' && prts[4] === dateStr; });
                 const hasSchedule = postsData.some(p => { const prts = (p.author||'').split('|'); return prts[3] === '일정' && prts[4] === dateStr; });
                 
@@ -805,7 +789,6 @@
 
         function changeMonth(offset) { currentCalDate.setMonth(currentCalDate.getMonth() + offset); renderCalendar(); }
         
-        // 날짜 클릭 시 나오는 Day View 모달
         function openDayView(dateStr) {
             document.getElementById('dayViewDateHdn').value = dateStr;
             const parts = dateStr.split('-');
@@ -834,9 +817,6 @@
             showModal('dayViewModal');
         }
 
-        /* =========================================================================
-           6. 통합 게시판 (스토리, 갤러리) 생성 로직
-           ========================================================================= */
         function openWriteModal(catDefault, dateDefault) { 
             hideModal('dayViewModal');
             document.getElementById('postCategory').value = catDefault || '일상';
@@ -937,15 +917,11 @@
             }
         }
 
-        /* =========================================================================
-           7. 상세 보기 모달 & 덧글 & 수정/삭제
-           ========================================================================= */
         function openDetail(id) {
             activePost = postsData.find(p => p.id === id); if(!activePost) return;
             const parts = (activePost.author||'').split('|');
             document.getElementById('modalCategory').innerText = parts[3]||'기록';
             
-            // 일정/다이어리는 날짜 강조 표시
             let metaTxt = parts[0];
             if(parts[3] === '다이어리' || parts[3] === '일정') metaTxt = `[${parts[4]}] ${parts[0]}`;
             
@@ -954,7 +930,6 @@
             document.getElementById('modalTitle').innerText = parts[2]||'무제';
             document.getElementById('modalContent').innerText = activePost.content;
             
-            // 팝업 내 이미지 클릭 시 라이트박스 연동
             document.getElementById('modalImageWrap').innerHTML = activePost.image_url ? `<img src="${activePost.image_url}" class="detail-image" onclick="openLightbox('${activePost.image_url}')">` : '';
             
             renderComments();
@@ -985,15 +960,17 @@
                 if(document.getElementById('view-board').classList.contains('active')) renderBoardList();
             }
         }
-        async function deleteComment(id) {
-            if(!confirm('해당 댓글을 삭제할까요?')) return;
-            const res = await fetch('/api/comments', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) });
-            if (res.ok) { 
-                const resComments = await fetch('/api/comments'); commentsData = await resComments.json();
-                renderComments();
-                if(document.getElementById('view-board').classList.contains('active')) renderBoardList();
-                showToast('삭제되었습니다.');
-            }
+        
+        function deleteComment(id) {
+            showConfirm(async () => {
+                const res = await fetch('/api/comments', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) });
+                if (res.ok) { 
+                    const resComments = await fetch('/api/comments'); commentsData = await resComments.json();
+                    renderComments();
+                    if(document.getElementById('view-board').classList.contains('active')) renderBoardList();
+                    showToast('삭제되었습니다.');
+                }
+            });
         }
 
         function openEditFromDetail() {
@@ -1027,15 +1004,13 @@
             if (res.ok) { hideModal('editModal'); loadPosts(); showToast("수정이 완료되었습니다!"); }
         }
 
-        async function deleteFromDetail() {
-            if(!confirm('이 기록을 완전히 삭제하시겠습니까? (관련 댓글도 지워집니다)')) return;
-            await fetch('/api/posts', { method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:activePost.id}) });
-            hideModal('detailModal'); loadPosts(); showToast("기록이 삭제되었습니다.");
+        function deleteFromDetail() {
+            showConfirm(async () => {
+                await fetch('/api/posts', { method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:activePost.id}) });
+                hideModal('detailModal'); loadPosts(); showToast("기록이 삭제되었습니다.");
+            });
         }
 
-        /* =========================================================================
-           8. 자동 알림 시스템 (백그라운드 푸시)
-           ========================================================================= */
         function requestNotificationPermission() {
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
                 Notification.requestPermission();
