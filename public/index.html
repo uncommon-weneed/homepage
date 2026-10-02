@@ -4,64 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>성령의 교회 | HOLY SPIRIT CHURCH</title>
+    <!-- Pretendard 웹폰트 및 FontAwesome 아이콘 -->
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        :root { --primary: #1C332A; --primary-light: #E8F0EC; --accent: #C79A5E; --bg-main: #FAFAFA; --surface: #FFFFFF; --text-dark: #1F2937; --text-muted: #6B7280; --border: #E5E7EB; --radius-md: 16px; --radius-lg: 24px; }
+        :root {
+            --primary: #172D24; /* 고급스럽고 딥한 그린 */
+            --primary-light: #EBF1EE;
+            --accent: #C79A5E; /* 클래식 골드 */
+            --bg-main: #FDFDFD;
+            --surface: #FFFFFF;
+            --text-dark: #111827;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
         html { scroll-behavior: smooth; }
         body { background: var(--bg-main); color: var(--text-dark); line-height: 1.6; padding-top: 80px; overflow-x: hidden; }
 
+        /* 스크롤 & 모달 애니메이션 */
         .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .fade-up.visible { opacity: 1; transform: translateY(0); }
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.95) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 
-        /* 네비게이션 */
-        header { position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
-        .nav-inner { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 20px; }
+        /* 상단 네비게이션 */
+        header { position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 30px rgba(0,0,0,0.03); transition: 0.3s; }
+        .nav-inner { max-width: 1350px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 20px; }
         .logo { font-size: 1.6rem; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
-        .nav-menu { display: flex; gap: 30px; }
+        
+        .nav-menu { display: flex; gap: 35px; }
         .nav-menu a { text-decoration: none; font-weight: 700; color: var(--text-dark); transition: color 0.2s; font-size: 1.05rem; position: relative; cursor: pointer; }
         .nav-menu a:hover { color: var(--accent); }
-        .menu-btns button { background: var(--primary); color: white; border: none; padding: 10px 22px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
-        .menu-btns button:hover { background: #13241d; box-shadow: 0 4px 12px rgba(28,51,42,0.3); }
-        .menu-btns .btn-admin { background: var(--accent); }
+        .nav-menu a::after { content:''; position:absolute; width:0; height:2px; background:var(--accent); bottom:-6px; left:50%; transform:translateX(-50%); transition:0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        .nav-menu a:hover::after, .nav-menu a.active::after { width:100%; }
 
-        /* 슬라이더 & Daily Grace */
-        .slider-container { position: relative; width: 100%; height: calc(100vh - 80px); overflow: hidden; background: #000; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .menu-btns button { background: var(--primary); color: white; border: none; padding: 10px 24px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
+        .menu-btns button:hover { background: #0f1d17; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(23,45,36,0.2); }
+        .menu-btns .btn-admin { background: var(--accent); }
+        .menu-btns .btn-admin:hover { background: #b88a4e; box-shadow: 0 6px 15px rgba(199,154,94,0.3); }
+
+        /* 메인 배너 슬라이더 (2026 트렌드 와이드형) */
+        .slider-container { position: relative; width: 100%; height: calc(100vh - 80px); overflow: hidden; background: #111; }
         .slides { display: flex; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); height: 100%; }
         .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
-        .slide::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)); }
-        .slide-content { position: relative; z-index: 2; text-align: center; color: white; margin-top: 30px; padding: 0 20px; }
-        .slide-content h2 { font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; text-shadow: 0 4px 15px rgba(0,0,0,0.5); letter-spacing: -1px; line-height: 1.3; }
-        .slide-content p { font-size: 1.4rem; font-weight: 300; opacity: 0.95; letter-spacing: 1px; margin-top: 15px; }
-
-        .slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: transparent; color: rgba(255,255,255,0.25); border: none; font-size: 3.5rem; cursor: pointer; z-index: 10; transition: 0.3s; padding: 20px; }
-        .slider-arrow:hover { color: rgba(255,255,255,0.8); }
-        .slider-arrow.prev { left: 20px; }
-        .slider-arrow.next { right: 20px; }
+        .slide::before { content: ''; position: absolute; inset:0; background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.7)); }
         
-        .slider-play-controls { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 10; align-items: center; background: rgba(0,0,0,0.4); padding: 10px 25px; border-radius: 30px; backdrop-filter: blur(5px); }
-        .slider-play-controls button { background: none; border: none; color: white; font-size: 1.3rem; cursor: pointer; transition: 0.2s; }
-        .slider-play-controls button:hover { color: var(--accent); transform: scale(1.1); }
-        .slider-dots { display: flex; gap: 10px; margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px; }
-        .dot { width: 10px; height: 10px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; transition: 0.3s; }
-        .dot.active { background: white; transform: scale(1.3); }
+        .slide-content { position: relative; z-index: 2; text-align: center; color: white; margin-top: 40px; padding: 0 20px; }
+        .slide-content h2 { font-size: 3.8rem; font-weight: 800; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.5); letter-spacing: -1.5px; line-height: 1.25; }
+        .slide-content p { font-size: 1.35rem; font-weight: 300; opacity: 0.95; letter-spacing: 1px; margin-top: 15px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
 
-        /* 공통 레이아웃 */
-        .container { max-width: 1300px; margin: 0 auto; padding: 90px 20px; }
-        .section-header { text-align: center; margin-bottom: 50px; }
-        .section-header h2 { font-size: 2.4rem; font-weight: 800; color: var(--primary); font-family: 'Pretendard', serif; }
-        .section-header p { color: var(--accent); font-weight: 600; margin-top: 10px; font-size: 1.15rem; letter-spacing: 1px; }
+        .slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: transparent; color: rgba(255,255,255,0.4); border: none; font-size: 3.5rem; cursor: pointer; z-index: 10; transition: 0.3s; padding: 20px; }
+        .slider-arrow:hover { color: white; transform: translateY(-50%) scale(1.1); }
+        .slider-arrow.prev { left: 30px; }
+        .slider-arrow.next { right: 30px; }
+        
+        .slider-play-controls { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 10; align-items: center; background: rgba(0,0,0,0.5); padding: 12px 25px; border-radius: 40px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .slider-play-controls button { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
+        .slider-play-controls button:hover { color: var(--accent); }
+        .slider-dots { display: flex; gap: 12px; margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px; }
+        .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+        .dot.active { background: white; transform: scale(1.5); width: 20px; border-radius: 10px; }
 
-        .grid-premium { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: 0 10px 40px rgba(0,0,0,0.04); overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--border); }
-        .card-header { background: var(--primary); color: white; padding: 25px 30px; font-size: 1.35rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
-        .card-body { padding: 35px; flex-grow: 1; }
+        /* 공통 섹션 레이아웃 */
+        .container { max-width: 1350px; margin: 0 auto; padding: 100px 20px; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 800; color: var(--primary); font-family: 'Pretendard', serif; letter-spacing: -1px; }
+        .section-header p { color: var(--accent); font-weight: 700; margin-top: 12px; font-size: 1.15rem; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* -------------------------------------
-           교회 소개 내부 탭 (Sub-navigation)
-        ---------------------------------------- */
+        /* 내부 탭 (Sub-navigation) */
         .sub-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
         .sub-tab { background: #F3F4F6; border: none; font-size: 1.05rem; font-weight: 700; color: var(--text-muted); cursor: pointer; padding: 12px 28px; border-radius: 30px; transition: 0.3s; }
         .sub-tab:hover { background: #E5E7EB; color: var(--text-dark); }
@@ -70,6 +85,13 @@
         .tab-content { display: none; animation: fadeIn 0.5s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+        /* 카드 및 그리드 */
+        .grid-premium { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: 0 10px 40px rgba(0,0,0,0.03); overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--border); transition: 0.3s; }
+        .card:hover { box-shadow: 0 15px 50px rgba(0,0,0,0.06); transform: translateY(-5px); }
+        .card-header { background: var(--primary); color: white; padding: 25px 35px; font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+        .card-body { padding: 40px; flex-grow: 1; }
 
         /* 프로필 & 연혁 (교회소개) */
         .profile-wrap { display: flex; gap: 30px; align-items: center; }
@@ -91,7 +113,7 @@
         .schedule-item { display: flex; justify-content: space-between; align-items: center; padding: 22px 25px; background: var(--bg-main); border-radius: var(--radius-md); border-left: 5px solid var(--accent); transition: 0.3s; margin-bottom: 15px; }
         .schedule-item:hover { background: var(--primary-light); transform: translateX(5px); }
 
-        /* 통합 게시판 (페이지네이션 적용) */
+        /* 통합 게시판 (페이지네이션) */
         .board-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
         .board-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
         .board-tab { background: none; border: none; font-size: 1.1rem; font-weight: 700; color: var(--text-muted); cursor: pointer; padding: 10px 15px; position: relative; transition: 0.3s; white-space: nowrap; }
@@ -105,27 +127,13 @@
         .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; background: var(--primary-light); color: var(--primary); }
         .badge.notice { background: #FEE2E2; color: #DC2626; }
         .badge.bulletin { background: #FEF3C7; color: #D97706; }
-        
-        .post-title { font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin: 10px 0; cursor: pointer; line-height: 1.3; }
+        .post-number { font-size: 0.9rem; font-weight: 800; color: var(--accent); margin-right: 5px; }
+        .post-title { font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin: 10px 0; cursor: pointer; line-height: 1.35; }
         .post-title:hover { color: var(--accent); }
-        .post-excerpt { color: var(--text-muted); font-size: 1.1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; margin-bottom: 25px; }
-        
+        .post-excerpt { color: var(--text-muted); font-size: 1.05rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
         .post-thumb-box { width: 200px; height: 200px; flex-shrink: 0; border-radius: var(--radius-md); overflow: hidden; cursor: pointer; }
         .post-thumb-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .post-thumb-box img:hover { transform: scale(1.1); }
-
-        /* 인라인 댓글 박스 */
-        .comments-section { background: #F9FAFB; padding: 20px; border-radius: var(--radius-md); border: 1px dashed var(--border); }
-        .comments-header { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
-        .comment-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.03); font-size: 0.95rem; }
-        .comment-item:last-child { border-bottom: none; }
-        .comment-author { font-weight: 800; color: var(--text-dark); margin-right: 10px; white-space: nowrap; }
-        .comment-text { color: var(--text-muted); flex-grow: 1; word-break: break-all; }
-        .comment-time { font-size: 0.8rem; color: #9CA3AF; white-space: nowrap; margin-left: 15px; }
-        
-        .comment-input-wrap { display: flex; gap: 10px; margin-top: 15px; }
-        .comment-input-wrap input { margin: 0; padding: 12px 15px; font-size: 0.95rem; border-radius: 10px; }
-        .comment-input-wrap button { margin: 0; padding: 12px 20px; border-radius: 10px; font-size: 0.95rem; white-space: nowrap; width: auto; }
 
         /* 갤러리 뷰 (Grid) */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
@@ -135,30 +143,17 @@
         .gallery-info { padding: 20px; }
         .gallery-title { font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* 페이지네이션 번호 */
+        /* 페이지네이션 */
         .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; }
         .page-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: white; color: var(--text-muted); font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .page-btn:hover { border-color: var(--primary); color: var(--primary); }
         .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* 입력 폼 요소 */
+        /* 폼 요소 */
         input, textarea, select { width: 100%; padding: 16px 20px; background: #F9FAFB; border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 15px; font-size: 1.05rem; transition: 0.3s; }
         input:focus, textarea:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px var(--primary-light); outline: none; }
         .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: var(--radius-md); font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
         .btn-primary:hover { background: #13241d; }
-
-        /* 약도 및 푸터 */
-        .map-info-list { list-style: none; display: flex; flex-direction: column; gap: 18px; font-size: 1.1rem; color: var(--text-dark); margin-bottom: 30px; }
-        .map-info-list li { display: flex; align-items: flex-start; gap: 15px; }
-        .map-info-list strong { color: var(--accent); width: 80px; flex-shrink: 0; font-weight: 700; }
-        .map-iframe { width: 100%; height: 100%; min-height: 450px; border: none; }
-
-        .top-btn { position: fixed; bottom: 30px; right: 30px; background: var(--primary); color: white; width: 55px; height: 55px; border-radius: 50%; border: none; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 99; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateY(20px); }
-        .top-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
-        .top-btn:hover { background: var(--accent); transform: translateY(-5px); }
-
-        footer { background: var(--primary); color: rgba(255,255,255,0.7); padding: 60px 20px; text-align: center; margin-top: 50px; }
-        .footer-logo { font-size: 1.8rem; font-weight: 800; color: white; margin-bottom: 10px; }
 
         /* 모달 팝업 (Pop-in 모션 추가) */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
@@ -166,29 +161,68 @@
         .modal-content { background: white; padding: 40px; border-radius: var(--radius-lg); width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.25); position: relative; display: none; }
         .modal-overlay.active .modal-content { display: block; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
+        /* 모달 내 이전글/다음글 네비게이션 */
         .modal-nav-btns { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
         .modal-nav-btns button { background: #F3F4F6; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; color: var(--text-dark); transition: 0.2s; display: flex; align-items: center; gap: 8px; }
         .modal-nav-btns button:hover:not(:disabled) { background: var(--primary-light); color: var(--primary); }
         .modal-nav-btns button:disabled { opacity: 0.3; cursor: not-allowed; }
 
+        /* 인라인 댓글 UI */
+        .comments-section { background: #F9FAFB; padding: 20px; border-radius: var(--radius-md); border: 1px dashed var(--border); margin-top: 25px; }
+        .comments-header { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
+        .comment-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.03); font-size: 0.95rem; }
+        .comment-item:last-child { border-bottom: none; }
+        .comment-author { font-weight: 800; color: var(--text-dark); margin-right: 10px; white-space: nowrap; }
+
+        /* 라이트박스 */
         #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
         #lightbox.active { display: flex; }
         #lightbox img { max-width: 95%; max-height: 95vh; border-radius: 10px; }
         .lightbox-close { color: white; font-size: 3rem; position: absolute; top: 30px; right: 50px; cursor: pointer; transition: 0.3s; }
 
+        /* 관리자 테이블 */
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 1rem; }
-        .admin-table th, .admin-table td { padding: 15px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+        .admin-table th, .admin-table td { padding: 15px; border-bottom: 1px solid var(--border); text-align: left; }
         .admin-table th { background: #F3F4F6; font-weight: 800; }
         .admin-table td button { margin-right: 4px; padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.85rem; }
 
         .hidden { display: none !important; }
+
+        /* 관리자 이미지 교체 버튼 스타일 */
+        .admin-img-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 30;
+            background: rgba(199, 154, 94, 0.95);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            border: none;
+        }
+        .admin-img-badge:hover { background: #b88a4e; transform: scale(1.05); }
+
+        footer { background: var(--primary); color: rgba(255,255,255,0.7); padding: 60px 20px; text-align: center; margin-top: 50px; }
+        .footer-logo { font-size: 1.8rem; font-weight: 800; color: white; margin-bottom: 10px; }
+
+        .top-btn { position: fixed; bottom: 30px; right: 30px; background: var(--primary); color: white; width: 55px; height: 55px; border-radius: 50%; border: none; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 99; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateY(20px); }
+        .top-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .top-btn:hover { background: var(--accent); transform: translateY(-5px); }
 
         @media (max-width: 992px) {
             .nav-menu { display: none; }
             .grid-premium { grid-template-columns: 1fr; }
             .post-item { flex-direction: column-reverse; gap: 20px; padding: 25px; }
             .post-thumb-box { width: 100%; height: 250px; }
-            .slide-content h2 { font-size: 2.5rem; }
+            .slide-content h2 { font-size: 2.2rem; }
             .profile-wrap { flex-direction: column; text-align: center; }
         }
     </style>
@@ -211,10 +245,11 @@
         </div>
     </header>
 
-    <!-- 1. 메인 슬라이더 -->
+    <!-- 1. 메인 슬라이더 (배너 사진 교체 버튼 포함) -->
     <div class="slider-container" id="section-home">
         <div class="slides" id="slideTrack">
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1542458428-132d43e57ea1?q=80&w=1920&auto=format&fit=crop');">
+            <div class="slide" id="slideBanner1" style="background-image: url('https://images.unsplash.com/photo-1542458428-132d43e57ea1?q=80&w=1920&auto=format&fit=crop');">
+                <button class="admin-img-badge hidden" onclick="triggerSiteImgUpload('banner_1')"><i class="fa-solid fa-camera"></i> 1번 배너 사진 변경</button>
                 <div class="slide-content">
                     <h2 id="dailyGraceText" class="fade-up">오순절 성령의 강력한 역사,<br>말씀이 살아 숨 쉬는 교회</h2>
                     <div id="adminGraceBtnWrap" class="hidden fade-up" style="margin-top: 20px;">
@@ -225,16 +260,11 @@
                     <p class="fade-up" style="transition-delay:0.2s;">성령의 교회에 오신 것을 환영합니다.</p>
                 </div>
             </div>
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1920&auto=format&fit=crop');">
+            <div class="slide" id="slideBanner2" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1920&auto=format&fit=crop');">
+                <button class="admin-img-badge hidden" onclick="triggerSiteImgUpload('banner_2')"><i class="fa-solid fa-camera"></i> 2번 배너 사진 변경</button>
                 <div class="slide-content">
                     <h2>상처받은 영혼을 치유하고<br>세상의 빛과 소금이 되는 공동체</h2>
                     <p>기독교대한하나님의성회 소속 건강한 교회로 나아갑니다.</p>
-                </div>
-            </div>
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1920&auto=format&fit=crop');">
-                <div class="slide-content">
-                    <h2>성령의 빛을 가지고<br>세상에 사랑을 나누는 교회</h2>
-                    <p>우리 교회는 성령의 빛을 가지고 세상에 사랑을 나누는 공동체입니다.</p>
                 </div>
             </div>
         </div>
@@ -247,12 +277,11 @@
             <div class="slider-dots" id="slideDots">
                 <div class="dot active" onclick="goToSlide(0)"></div>
                 <div class="dot" onclick="goToSlide(1)"></div>
-                <div class="dot" onclick="goToSlide(2)"></div>
             </div>
         </div>
     </div>
 
-    <!-- 2. 교회 소개 (탭 분리 적용) -->
+    <!-- 2. 교회 소개 (탭 전환 적용) -->
     <div class="container" id="section-about">
         <div class="section-header fade-up">
             <h2>About Us</h2>
@@ -267,10 +296,13 @@
             <button class="sub-tab" onclick="switchAboutTab('vision', this)">사역 비전</button>
         </div>
 
-        <!-- 인사말 탭 -->
+        <!-- 인사말 탭 (담임목사 사진 변경 버튼 포함) -->
         <div id="tab-greet" class="tab-content active card fade-up">
-            <div class="card-body profile-wrap">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop" class="profile-img" alt="담임목사">
+            <div class="card-body profile-wrap" style="position:relative;">
+                <div style="position:relative; width:max-content; margin: 0 auto;">
+                    <img id="pastorProfileImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop" class="profile-img" alt="담임목사">
+                    <button class="admin-img-badge hidden" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); font-size:0.75rem; padding:4px 10px; width:max-content;" onclick="triggerSiteImgUpload('pastor_img')"><i class="fa-solid fa-camera"></i> 사진 변경</button>
+                </div>
                 <div class="profile-info">
                     <h3>"은혜와 축복의 자리로 초대합니다."</h3>
                     <p style="margin-top:15px; margin-bottom:20px;">할렐루야! 성령의 교회(구 울산순복음한사랑교회)는 오순절 성령의 강력한 역사와 말씀이 살아 숨 쉬는 생명 공동체입니다.<br>예수 그리스도의 십자가 사랑으로 상처받은 영혼을 치유하고, 성령 충만함을 입어 세상의 빛과 소금의 역할을 다하고자 합니다.</p>
@@ -316,7 +348,7 @@
 
         <!-- 사역 비전 탭 -->
         <div id="tab-vision" class="tab-content card fade-up">
-            <div class="card-body text-center" style="text-align:center;">
+            <div class="card-body" style="text-align:center;">
                 <i class="fa-solid fa-seedling" style="font-size:4rem; color:var(--accent); margin-bottom:20px;"></i>
                 <h3 style="font-size:1.8rem; color:var(--primary); margin-bottom:15px;">다음 세대와 지역 사회를 품는 교회</h3>
                 <p style="font-size:1.1rem; max-width:700px; margin:0 auto;">말씀 양육과 뜨거운 기도를 통해 영적 군사를 배출하며,<br>이웃 사랑을 실천하여 지역사회에 선한 영향력을 끼치는 교회가 되겠습니다.</p>
@@ -360,7 +392,7 @@
         </div>
     </div>
 
-    <!-- 4. 통합 게시판 (5개씩 페이지네이션 적용) -->
+    <!-- 4. 통합 게시판 (5개 단위 페이지네이션) -->
     <div class="container" id="section-board">
         <div class="section-header fade-up">
             <h2>Church Board</h2>
@@ -390,7 +422,7 @@
         <!-- 통합 리스트 영역 -->
         <div id="boardList" class="fade-up">게시물을 불러오는 중...</div>
         
-        <!-- 페이지 번호 (페이지네이션) -->
+        <!-- 페이지 번호 -->
         <div class="pagination fade-up" id="paginationArea"></div>
     </div>
 
@@ -401,6 +433,7 @@
             <p>헌금 안내 및 오시는 길</p>
         </div>
         <div class="grid-premium fade-up">
+            <!-- 헌금 안내 -->
             <div class="card" style="background: var(--primary); color:white; justify-content:center; align-items:center; text-align:center; padding:50px;">
                 <i class="fa-solid fa-hand-holding-heart" style="font-size:4rem; color:var(--accent); margin-bottom:20px;"></i>
                 <h3 style="font-size:1.8rem; margin-bottom:15px;">온라인 헌금 안내</h3>
@@ -411,6 +444,7 @@
                     <p style="font-size:1rem; opacity:0.8;">예금주 : 성령의교회</p>
                 </div>
             </div>
+            <!-- 약도 -->
             <div class="card" style="padding:0; border:none; min-height:450px; position:relative;">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25875.485292416805!2d129.1082103!3d35.5681655!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568ab4532bfa329%3A0xc34dbd1445b20da6!2z7Jq47IKw6rSR7Jet7IucIOyauOyjvOq1sCDslrjslpHsnYk!5e0!3m2!1sko!2skr!4v1714529340000!5m2!1sko!2skr" style="width:100%; height:100%; border:none; border-radius:var(--radius-lg);" allowfullscreen="" loading="lazy"></iframe>
                 <div style="position:absolute; bottom:20px; left:20px; right:20px; background:white; padding:20px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
@@ -421,6 +455,7 @@
         </div>
     </div>
 
+    <!-- Floating Top Button & Footer -->
     <button class="top-btn" id="topBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
 
     <footer>
@@ -432,9 +467,7 @@
         </div>
     </footer>
 
-    <!-- ===== 모달 영역 ===== -->
-    
-    <!-- 글 상세 팝업 (모션 적용 & 이전/다음글 추가) -->
+    <!-- 글 상세 팝업 -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <span style="position:absolute; top:25px; right:30px; font-size:1.8rem; cursor:pointer; color:var(--text-muted); z-index:10;" onclick="hideModal('detailModal')"><i class="fa-solid fa-xmark"></i></span>
@@ -481,14 +514,11 @@
         </div>
     </div>
 
-    <!-- 게시글 수정 폼 (카테고리 버그 패치 적용 완료) -->
+    <!-- 게시글 수정 폼 -->
     <div class="modal-overlay" id="editModal">
         <div class="modal-content" style="max-width: 600px;">
             <h3 style="margin-bottom:20px; font-size:1.6rem; font-weight:800;">게시글 수정</h3>
-            <input type="hidden" id="editPostId">
-            <input type="hidden" id="editAuthorMeta"> 
-            <input type="hidden" id="editCategory"> 
-            <input type="hidden" id="editKeepImage">
+            <input type="hidden" id="editPostId"><input type="hidden" id="editAuthorMeta"><input type="hidden" id="editCategory"><input type="hidden" id="editKeepImage">
             <input type="text" id="editTitle" placeholder="제목">
             <textarea id="editContent" rows="8" placeholder="내용"></textarea>
             <p style="font-size:1rem; color:var(--text-muted); margin-bottom:10px;">새 사진으로 변경 (선택):</p>
@@ -500,7 +530,7 @@
         </div>
     </div>
 
-    <!-- 관리자 대시보드 -->
+    <!-- 관리자 대시보드 모달 -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content" style="max-width: 900px;">
             <span style="position:absolute; top:25px; right:30px; font-size:1.8rem; cursor:pointer; color:var(--text-muted);" onclick="hideModal('adminModal')"><i class="fa-solid fa-xmark"></i></span>
@@ -524,7 +554,7 @@
         </div>
     </div>
 
-    <!-- 로그인 & 회원가입 -->
+    <!-- 로그인 & 회원가입 모달 -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content" style="max-width: 450px;">
             <h3 style="margin-bottom:30px; text-align:center; font-size:1.8rem; color:var(--primary); font-weight:800;">로그인</h3>
@@ -546,10 +576,14 @@
         </div>
     </div>
 
+    <!-- 전체화면 라이트박스 -->
     <div id="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></span>
         <img id="lightboxImg" src="" alt="전체화면">
     </div>
+
+    <!-- 숨김 파일 인풋 (관리자 전용 이미지 교체용) -->
+    <input type="file" id="siteImgFileInput" accept="image/*" class="hidden" onchange="handleSiteImgSelected(event)">
 
     <script>
         // --- 네비게이션 스크롤 및 모션 ---
@@ -607,6 +641,45 @@
             if (res.ok) { hideModal('dailyGraceModal'); loadDailyGrace(); alert('변경되었습니다.'); }
         }
 
+        // --- 사이트 고정 이미지 (배너, 목사님 사진) 동적 로드 및 관리자 교체 ---
+        let currentSiteImgKey = null;
+
+        async function loadSiteSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const settings = await res.json();
+                if (settings.banner_1) document.getElementById('slideBanner1').style.backgroundImage = `url('${settings.banner_1}')`;
+                if (settings.banner_2) document.getElementById('slideBanner2').style.backgroundImage = `url('${settings.banner_2}')`;
+                if (settings.pastor_img) document.getElementById('pastorProfileImg').src = settings.pastor_img;
+            } catch (e) {}
+        }
+
+        function triggerSiteImgUpload(key) {
+            currentSiteImgKey = key;
+            const input = document.getElementById('siteImgFileInput');
+            input.value = '';
+            input.click();
+        }
+
+        async function handleSiteImgSelected(event) {
+            const file = event.target.files[0];
+            if (!file || !currentSiteImgKey) return;
+
+            const fd = new FormData();
+            fd.append('key', currentSiteImgKey);
+            fd.append('image', file);
+
+            const res = await fetch('/api/admin/site-image', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (res.ok) {
+                if (currentSiteImgKey === 'banner_1') document.getElementById('slideBanner1').style.backgroundImage = `url('${data.imageUrl}')`;
+                if (currentSiteImgKey === 'banner_2') document.getElementById('slideBanner2').style.backgroundImage = `url('${data.imageUrl}')`;
+                if (currentSiteImgKey === 'pastor_img') document.getElementById('pastorProfileImg').src = data.imageUrl;
+            } else {
+                alert('이미지 업로드에 실패했습니다.');
+            }
+        }
+
         // --- 공통 UI ---
         function showModal(id) { document.getElementById(id).classList.add('active'); }
         function hideModal(id) { document.getElementById(id).classList.remove('active'); if(id==='signupModal') document.getElementById('signupError').innerText = "승인 후 글쓰기 가능"; }
@@ -618,16 +691,18 @@
         let postsData = []; let commentsData = []; 
         let currentTab = '전체'; 
         let currentFilteredPosts = []; 
-        let currentPage = 1;
         
-        // 💡 페이지네이션: 한 페이지당 5개의 게시글이 표시되도록 설정합니다.
+        // 페이지당 5개 게시물 출력
+        let currentPage = 1;
         const postsPerPage = 5; 
+        
         let activePostIndex = -1;
 
         function renderHeader() {
             const area = document.getElementById('authArea');
             const tabBulletin = document.getElementById('tabBulletin');
             const adminGraceWrap = document.getElementById('adminGraceBtnWrap');
+            const adminBadges = document.querySelectorAll('.admin-img-badge');
             
             if (user) {
                 area.innerHTML = `
@@ -635,11 +710,20 @@
                     <button style="background:transparent; color:var(--text-dark); pointer-events:none;">${user.fullName}님</button>
                     <button onclick="handleLogout()" style="background:#F3F4F6; color:var(--text-muted);"><i class="fa-solid fa-right-from-bracket"></i></button>
                 `;
-                if(user.isAdmin) { tabBulletin.classList.remove('hidden'); adminGraceWrap.classList.remove('hidden'); }
-                else { tabBulletin.classList.add('hidden'); adminGraceWrap.classList.add('hidden'); }
+                if(user.isAdmin) {
+                    tabBulletin.classList.remove('hidden');
+                    adminGraceWrap.classList.remove('hidden');
+                    adminBadges.forEach(b => b.classList.remove('hidden'));
+                } else {
+                    tabBulletin.classList.add('hidden');
+                    adminGraceWrap.classList.add('hidden');
+                    adminBadges.forEach(b => b.classList.add('hidden'));
+                }
             } else {
                 area.innerHTML = `<button onclick="showModal('loginModal')">로그인</button> <button class="btn-admin" onclick="showModal('signupModal')">등록신청</button>`;
-                tabBulletin.classList.add('hidden'); adminGraceWrap.classList.add('hidden');
+                tabBulletin.classList.add('hidden');
+                adminGraceWrap.classList.add('hidden');
+                adminBadges.forEach(b => b.classList.add('hidden'));
             }
             let html = `<option value="자유게시판">자유게시판</option><option value="일반나눔">일반나눔</option><option value="공지사항">공지사항</option><option value="갤러리">갤러리</option>`;
             if (user && user.isAdmin) html += `<option value="주보">🌟 주보 (메인화면 즉시반영)</option>`;
@@ -668,7 +752,7 @@
         // --- 게시판 로직 ---
         function setCategoryTab(tabName) {
             currentTab = tabName;
-            currentPage = 1; // 탭 변경 시 1페이지로 리셋
+            currentPage = 1;
             document.querySelectorAll('.board-tab').forEach(btn => btn.classList.remove('active')); event.target.classList.add('active');
             processFilteredPosts();
         }
@@ -704,13 +788,13 @@
             setTimeout(() => { const savedPos = sessionStorage.getItem('scrollPos'); if (savedPos) { window.scrollTo({ top: parseInt(savedPos), behavior: 'instant' }); sessionStorage.removeItem('scrollPos'); } }, 100);
         }
 
-        // 페이지네이션 처리 함수
+        // 페이지네이션 처리 함수 (글 순서 번호 적용)
         function processFilteredPosts() {
             const list = document.getElementById('boardList');
             const pageArea = document.getElementById('paginationArea');
             list.innerHTML = ''; pageArea.innerHTML = '';
 
-            // 필터링 (일반 사용자 주보 숨김 포함)
+            // 필터링
             currentFilteredPosts = postsData.filter(p => {
                 const cat = (p.author || '').split('|')[3] || '일반나눔';
                 if(!user?.isAdmin && cat === '주보') return false;
@@ -720,29 +804,27 @@
 
             if(currentFilteredPosts.length === 0) { list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:80px 0; font-size:1.2rem;">등록된 게시물이 없습니다.</p>`; list.className = ""; return; }
 
-            // 갤러리 뷰 분기
             if (currentTab === '갤러리') {
                 list.className = 'gallery-grid';
             } else {
                 list.className = '';
             }
 
-            // 페이지 분할 (5개씩)
+            // 5개씩 페이지 분할
             const totalPages = Math.ceil(currentFilteredPosts.length / postsPerPage);
             const startIndex = (currentPage - 1) * postsPerPage;
             const paginatedPosts = currentFilteredPosts.slice(startIndex, startIndex + postsPerPage);
 
             paginatedPosts.forEach((p, index) => {
-                const parts = (p.author || '').split('|'); const authorName = parts[0] || '익명'; const postOwner = parts[1] || ''; const postTitle = parts[2] || '제목 없음'; const postCategory = parts[3] || '일반나눔';
-                const actualIndex = startIndex + index; // 전체 필터 배열에서의 진짜 인덱스
+                const parts = (p.author || '').split('|'); const authorName = parts[0] || '익명'; const postTitle = parts[2] || '제목 없음'; const postCategory = parts[3] || '일반나눔';
+                const actualIndex = startIndex + index;
                 
-                // ⭐ 추가할 부분: 전체 게시물 수에서 역순으로 순차 번호 생성
-                const seqNumber = currentFilteredPosts.length - actualIndex;
+                // 순차적 게시글 번호 (전체 개수 - 실제 인덱스)
+                const sequentialNumber = currentFilteredPosts.length - actualIndex;
 
                 let badgeClass = 'badge'; if(postCategory === '공지사항') badgeClass += ' notice'; if(postCategory === '주보') badgeClass += ' bulletin';
                 
                 if (currentTab === '갤러리') {
-                    // 갤러리 뷰
                     list.innerHTML += `
                         <div class="gallery-item" onclick="openDetailByIndex(${actualIndex})">
                             <img src="${p.image_url || 'https://via.placeholder.com/300x300?text=No+Image'}" class="gallery-thumb">
@@ -754,14 +836,12 @@
                         </div>
                     `;
                 } else {
-                    // 리스트 뷰
                     const postComments = commentsData.filter(c => c.post_id === p.id);
                     list.innerHTML += `
                         <div class="post-item">
                             <div class="post-content-wrap">
                                 <div class="post-meta">
-                                    <!-- ⭐ 수정할 부분: p.id 대신 seqNumber 출력 -->
-                                    <span class="post-number">No.${seqNumber}</span>
+                                    <span class="post-number">No.${sequentialNumber}</span>
                                     <span class="${badgeClass}">${postCategory}</span>
                                     <span style="color:var(--text-muted); font-weight:700; margin-left:auto;"><i class="fa-solid fa-user-pen"></i> ${authorName}</span>
                                     <span style="color:var(--text-muted); font-size:0.9rem; margin-left:10px;"><i class="fa-regular fa-comment-dots"></i> ${postComments.length}</span>
@@ -775,7 +855,7 @@
                 }
             });
 
-            // 페이지 번호 렌더링
+            // 페이지 버튼
             if (totalPages > 1) {
                 let pageHtml = '';
                 for(let i=1; i<=totalPages; i++) {
@@ -791,7 +871,7 @@
             document.getElementById('section-board').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // --- 상세 뷰 모달 (이전글 / 다음글 적용) ---
+        // --- 상세 모달 ---
         function openDetailByIndex(index) {
             if(index < 0 || index >= currentFilteredPosts.length) return;
             activePostIndex = index;
@@ -799,10 +879,8 @@
             const parts = (p.author || '').split('|'); const postCategory = parts[3] || '일반나눔';
             let badgeClass = 'badge'; if(postCategory === '공지사항') badgeClass += ' notice'; if(postCategory === '주보') badgeClass += ' bulletin';
             
-            // ⭐ 추가할 부분: 모달창에서도 순차 번호 표시
-            const seqNumber = currentFilteredPosts.length - index;
-            document.getElementById('modalPostNo').innerText = `No.${seqNumber}`;
-            
+            const sequentialNumber = currentFilteredPosts.length - index;
+            document.getElementById('modalPostNo').innerText = `No.${sequentialNumber}`;
             document.getElementById('modalCategory').className = badgeClass; document.getElementById('modalCategory').innerText = postCategory;
             document.getElementById('modalAuthorMeta').innerText = `작성자: ${parts[0] || '익명'}`; document.getElementById('modalTitle').innerText = parts[2] || '제목 없음'; document.getElementById('modalContent').innerText = p.content;
             
@@ -811,12 +889,11 @@
                 imgWrap.innerHTML = `<img src="${p.image_url}" style="width:100%; border-radius:16px; cursor:zoom-in; box-shadow:0 10px 40px rgba(0,0,0,0.1);" onclick="openLightbox('${p.image_url}')">`;
             } else imgWrap.innerHTML = '';
 
-            // 댓글 렌더링 (모달 안에서)
             const postComments = commentsData.filter(c => c.post_id === p.id);
             document.getElementById('modalCommentsHeader').innerHTML = `<i class="fa-regular fa-comment-dots"></i> 댓글 (${postComments.length})`;
             document.getElementById('modalCommentsList').innerHTML = postComments.map(c => `
-                <div style="padding:10px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
-                    <div><span style="font-weight:700; color:var(--text-dark); margin-right:10px;">${c.author}</span><span style="color:var(--text-muted);">${c.content}</span></div>
+                <div class="comment-item">
+                    <div><span class="comment-author">${c.author}</span><span style="color:var(--text-muted);">${c.content}</span></div>
                     <div style="display:flex; align-items:center;">
                         <span style="font-size:0.8rem; color:#999;">${(c.created_at || '').slice(5, 16)}</span>
                         ${(user && (user.isAdmin || user.fullName === c.author)) ? `<button style="background:none; border:none; color:#EF4444; margin-left:8px; cursor:pointer;" onclick="deleteComment(${c.id})"><i class="fa-solid fa-xmark"></i></button>` : ''}
@@ -825,17 +902,15 @@
             `).join('');
 
             document.getElementById('modalCommentFormWrap').innerHTML = user ? `
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <input type="text" id="modal-comment-input" placeholder="댓글 달기..." style="margin:0; padding:10px 15px; flex-grow:1; border-radius:8px;" onkeydown="if(event.key==='Enter') submitComment(${p.id})">
-                    <button class="btn-primary" style="width:auto; padding:10px 20px; border-radius:8px;" onclick="submitComment(${p.id})">등록</button>
+                <div class="comment-input-wrap">
+                    <input type="text" id="modal-comment-input" placeholder="댓글 달기..." style="margin:0; flex-grow:1;" onkeydown="if(event.key==='Enter') submitComment(${p.id})">
+                    <button class="btn-primary" style="width:auto; padding:12px 20px;" onclick="submitComment(${p.id})">등록</button>
                 </div>
             ` : `<p style="font-size:0.9rem; color:var(--text-muted); margin-top:15px;">* 로그인 후 댓글 작성 가능</p>`;
 
-            // 관리자 버튼
             const ownerActions = document.getElementById('modalOwnerActions');
             if (user && (user.isAdmin || user.username === (parts[1] || ''))) ownerActions.classList.remove('hidden'); else ownerActions.classList.add('hidden');
 
-            // 이전/다음글 버튼 제어
             document.getElementById('btnPrevPost').disabled = (index === 0);
             document.getElementById('btnNextPost').disabled = (index === currentFilteredPosts.length - 1);
 
@@ -851,8 +926,8 @@
             const res = await fetch('/api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ postId, author: user.fullName, content }) });
             if (res.ok) { 
                 const resComments = await fetch('/api/comments'); commentsData = await resComments.json();
-                openDetailByIndex(activePostIndex); 
-                processFilteredPosts(); 
+                openDetailByIndex(activePostIndex);
+                processFilteredPosts();
             }
         }
         async function deleteComment(id) {
@@ -865,15 +940,15 @@
             }
         }
 
-        // --- 🐛 글 수정/삭제 (버그 완벽 패치 완료) ---
+        // --- 수정 / 삭제 ---
         function openEditFromDetail() {
             hideModal('detailModal'); 
             if (activePostIndex === -1) return;
             const p = currentFilteredPosts[activePostIndex];
             const parts = (p.author || '').split('|');
             document.getElementById('editPostId').value = p.id; 
-            document.getElementById('editAuthorMeta').value = `${parts[0]}|${parts[1]}`; // 이름|아이디
-            document.getElementById('editCategory').value = parts[3] || '일반나눔'; // 카테고리 분리 보관
+            document.getElementById('editAuthorMeta').value = `${parts[0]}|${parts[1]}`;
+            document.getElementById('editCategory').value = parts[3] || '일반나눔';
             document.getElementById('editKeepImage').value = p.image_url || '';
             document.getElementById('editTitle').value = parts[2] || ''; 
             document.getElementById('editContent').value = p.content || ''; 
@@ -885,7 +960,7 @@
             const fd = new FormData(); 
             fd.append('id', document.getElementById('editPostId').value); 
             fd.append('authorMeta', document.getElementById('editAuthorMeta').value); 
-            fd.append('category', document.getElementById('editCategory').value); // 분리된 카테고리 전송
+            fd.append('category', document.getElementById('editCategory').value);
             fd.append('keepImage', document.getElementById('editKeepImage').value); 
             fd.append('title', document.getElementById('editTitle').value.trim()); 
             fd.append('content', document.getElementById('editContent').value.trim()); 
@@ -946,7 +1021,11 @@
             await loadPosts(); loadAdminDashboard();
         }
 
-        loadDailyGrace(); renderHeader(); loadPosts();
+        // 초기 구동
+        loadDailyGrace();
+        loadSiteSettings();
+        renderHeader();
+        loadPosts();
     </script>
 </body>
 </html>

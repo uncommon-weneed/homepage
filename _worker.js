@@ -21,6 +21,41 @@ export default {
       }
     }
 
+    // [신규] 사이트 전반 설정(배너 슬라이드, 프로필 등) 통합 조회
+    if (url.pathname === "/api/settings" && request.method === "GET") {
+      try {
+        const { results } = await env.DB.prepare("SELECT key, value FROM site_settings").all();
+        const settings = {};
+        (results || []).forEach(r => { settings[r.key] = r.value; });
+        return Response.json(settings);
+      } catch (e) {
+        return Response.json({});
+      }
+    }
+
+    // [신규] 관리자 전용 사이트 이미지/배너 즉시 교체 API
+    if (url.pathname === "/api/admin/site-image" && request.method === "POST") {
+      try {
+        const formData = await request.formData();
+        const key = formData.get("key"); // 예: 'banner_1', 'banner_2', 'pastor_img'
+        const image = formData.get("image");
+        if (!key || !image || typeof image !== "object" || image.size === 0) {
+          return new Response(JSON.stringify({ error: "이미지 파일이 필요합니다." }), { status: 400 });
+        }
+        const ext = (image.name || "jpg").split(".").pop();
+        const fileName = `site-${key}-${Date.now()}.${ext}`;
+        await env.BUCKET.put(fileName, image.stream(), { httpMetadata: { contentType: image.type || "image/jpeg" } });
+        const imageUrl = `/api/images/${fileName}`;
+
+        await env.DB.prepare("INSERT INTO site_settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = ?")
+          .bind(key, imageUrl, imageUrl).run();
+
+        return Response.json({ success: true, key, imageUrl });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+      }
+    }
+
     // [인증 API] 회원가입 & 로그인
     if (url.pathname === "/api/signup" && request.method === "POST") {
       try {
