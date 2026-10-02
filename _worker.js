@@ -53,11 +53,11 @@ export default {
         const { username, password } = await request.json();
         
         // 🔐 고정 접속 정보: 아이디 ourlove / 비밀번호 1004
-        if (username === "ourlove" && password === "1004") {
+        if (username === "zenia" && password === "love") {
           return Response.json({ 
               success: true, 
-              username: "ourlove", 
-              fullName: "우리", 
+              username: "zenia", 
+              fullName: "히니", 
               isAdmin: true, 
               status: "approved" 
           });
