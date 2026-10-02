@@ -2,21 +2,20 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Our Secret Space 💖</title>
     
-    <!-- Web Fonts & Icons -->
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* 2026 Soft Romantic & Glassmorphism Theme */
+            /* Soft Romantic Theme */
             --primary: #FF8282;       
             --primary-light: #FFF0F0; 
             --primary-dark: #E56A6A;
             --secondary: #A0C4E2;     
             --bg-base: #FCF9F6;       
-            --surface: rgba(255, 255, 255, 0.85); 
+            --surface: rgba(255, 255, 255, 0.9); 
             --text-main: #3D3D3D;
             --text-muted: #9CA3AF;
             --border-light: rgba(255, 130, 130, 0.15);
@@ -29,272 +28,260 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-base); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* 모바일 브라우저 하단바 가림 방지를 위한 100dvh 적용 */
+        body { background: #E5E7EB; color: var(--text-main); overflow: hidden; }
 
-        /* 커스텀 스크롤바 */
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 130, 130, 0.3); border-radius: 10px; }
 
-        /* 애니메이션 */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes popIn { 0% { opacity: 0; transform: scale(0.9) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         @keyframes pulseAlert { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        @keyframes expandDown { from { opacity: 0; max-height: 0; transform: translateY(-10px); } to { opacity: 1; max-height: 500px; transform: translateY(0); } }
         
         .fade-up { opacity: 0; transform: translateY(20px); transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
         .fade-up.visible { opacity: 1; transform: translateY(0); }
-        .glass { background: var(--surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: var(--shadow-glass); }
+        .glass { background: var(--surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: var(--shadow-glass); }
 
-        /* 하이브리드 앱 프레임 (PC에서 모바일 비율 고정용) */
-        #app-wrapper { width: 100%; height: 100vh; position: relative; display: flex; justify-content: center; overflow: hidden; background: var(--bg-base); transition: 0.3s; }
-        body.mobile-frame-mode #app-wrapper { background: #E5E7EB; }
-        #app-container { width: 100%; height: 100vh; position: relative; display: flex; flex-direction: column; background: var(--bg-base); transition: 0.3s; }
-        body.mobile-frame-mode #app-container { max-width: 480px; box-shadow: 0 0 40px rgba(0,0,0,0.1); }
+        #app-wrapper { width: 100%; height: 100dvh; display: flex; justify-content: center; position: relative; }
+        #app-container { width: 100%; max-width: 480px; height: 100%; display: flex; flex-direction: column; background: var(--bg-base); box-shadow: 0 0 30px rgba(0,0,0,0.1); position: relative; z-index: 1; }
+        
+        /* PC에서 강제 모바일 뷰 비활성화 시 전체화면 */
+        body:not(.mobile-frame-mode) #app-container { max-width: 100%; box-shadow: none; }
 
-        /* 편집 모드 뱃지 */
         .edit-mode-only { display: none !important; }
         body.edit-mode .edit-mode-only { display: flex !important; }
         body.edit-mode .edit-mode-only-inline { display: inline-block !important; }
+
+        .app-header { flex-shrink: 0; width: 100%; height: 65px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 50; }
+        .header-title { font-weight: 800; font-size: 1.1rem; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
         
-        /* 뷰 컨트롤 */
-        .view-section { display: none; flex-grow: 1; overflow-y: auto; padding-bottom: calc(var(--nav-height) + 30px); animation: fadeIn 0.4s ease; position: relative; }
-        .view-section.active { display: block; }
+        .view-section { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 30px; display: none; position: relative; scroll-behavior: smooth; }
+        .view-section.active { display: block; animation: fadeIn 0.4s ease; }
 
-        /* 1. 시크릿 인증 월 & 작성자 이름 모달 */
-        #auth-wall { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1920&auto=format&fit=crop') center/cover; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
-        #auth-wall::before { content: ''; position: absolute; inset: 0; background: rgba(253, 251, 247, 0.85); backdrop-filter: blur(10px); }
-        .auth-box { position: relative; z-index: 1; padding: 40px 30px; border-radius: var(--radius-lg); width: 90%; max-width: 380px; text-align: center; }
-        .auth-box i.fa-heart { font-size: 3rem; color: var(--primary); margin-bottom: 20px; animation: pulseAlert 2s infinite; }
-        .auth-box h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 25px; letter-spacing: 1px; }
-        
-        /* 공통 폼 UI */
-        .form-input, .form-textarea, .form-select { width: 100%; padding: 16px; background: rgba(255,255,255,0.9); border: 1px solid var(--border-light); border-radius: var(--radius-sm); margin-bottom: 15px; font-size: 1.05rem; transition: 0.3s; outline: none; }
-        .form-input.auth { text-align: center; letter-spacing: 2px; }
-        .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); background: white; }
-        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: var(--radius-sm); font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255,130,130,0.3); }
-        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-        /* 토스트 및 커스텀 Confirm 모달 */
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 16px 25px; border-radius: 30px; font-size: 0.95rem; font-weight: 700; opacity: 0; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10000; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border-light); }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-content { width: 100%; max-width: 550px; max-height: 90vh; border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; transform: scale(0.95) translateY(20px); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: #fff; box-shadow: var(--shadow-glass); }
-        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-        .modal-header { padding: 25px 30px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); }
-        .modal-body { padding: 25px 30px; overflow-y: auto; flex-grow: 1; }
-        .btn-close { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
-        .btn-close:hover { color: var(--primary); }
-
-        /* 헤더 및 네비게이션 */
-        .app-header { position: sticky; top: 0; width: 100%; height: 65px; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
-        .header-clock { font-size: 0.9rem; font-weight: 700; color: var(--primary); font-family: monospace; letter-spacing: 0.5px; }
-        .header-actions { display: flex; gap: 10px; align-items: center; }
-        .icon-btn { background: none; border: none; font-size: 1.2rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .icon-btn:hover, .icon-btn.active { color: var(--primary); background: var(--primary-light); transform: rotate(90deg); }
-
-        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: var(--nav-height); z-index: 100; display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid rgba(255,255,255,0.5); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 30%; height: 100%; color: var(--text-muted); text-decoration: none; transition: 0.3s; cursor: pointer; }
-        .nav-item i { font-size: 1.3rem; margin-bottom: 4px; transition: 0.3s; }
+        .bottom-nav { flex-shrink: 0; width: 100%; height: var(--nav-height); display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid rgba(255,130,130,0.1); background: rgba(255,255,255,0.95); z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 33%; height: 100%; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .nav-item i { font-size: 1.3rem; margin-bottom: 5px; transition: 0.3s; }
         .nav-item.active { color: var(--primary); }
         .nav-item.active i { transform: translateY(-3px); }
 
-        /* 홈 뷰 */
+        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: var(--radius-sm); font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(255,130,130,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-outline { background: white; color: var(--text-main); border: 1px solid var(--border-light); }
+        
+        .form-group { margin-bottom: 15px; }
+        .input-wrap { display: flex; align-items: center; background: white; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 5px 15px; transition: 0.3s; }
+        .input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+        .input-wrap i { color: var(--text-muted); margin-right: 10px; font-size: 1.1rem; }
+        .form-input, .form-textarea, .form-select { flex: 1; width: 100%; padding: 12px 0; border: none; background: transparent; font-size: 1rem; outline: none; }
+        .form-textarea { resize: vertical; min-height: 100px; padding: 12px 0; }
+
+        /* 모달 시스템 */
+        .modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { width: 100%; max-width: 500px; max-height: 90vh; border-radius: var(--radius-lg); background: white; box-shadow: var(--shadow-glass); display: flex; flex-direction: column; transform: scale(0.95); transition: 0.3s; overflow: hidden; }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-header { padding: 20px 25px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); }
+        .modal-body { padding: 25px; overflow-y: auto; }
+        .btn-close { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
+
+        /* 토스트 메시지 */
+        .toast { position: absolute; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(0,0,0,0.8); color: white; padding: 12px 25px; border-radius: 30px; font-size: 0.95rem; font-weight: 600; opacity: 0; transition: 0.4s; z-index: 10000; display: flex; gap: 10px; align-items: center; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        #auth-wall { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1920&auto=format&fit=crop') center/cover; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        #auth-wall::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
+        .auth-box { position: relative; z-index: 1; padding: 40px 30px; border-radius: var(--radius-lg); width: 85%; max-width: 360px; text-align: center; }
+        .role-btn-wrap { display: flex; gap: 15px; margin-top: 20px; }
+        .role-btn { flex: 1; padding: 20px 10px; border-radius: 16px; border: 2px solid var(--border-light); background: white; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .role-btn:hover { border-color: var(--primary); background: var(--primary-light); transform: translateY(-5px); }
+        .role-btn img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+        .role-btn span { font-weight: 800; font-size: 1.1rem; color: var(--text-main); }
+
         .container { padding: 20px; }
-        .banner-wrap { position: relative; width: 100%; height: 350px; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 30px; box-shadow: var(--shadow-soft); cursor: zoom-in; }
-        .banner-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease; z-index: 1; }
-        .banner-img.active { opacity: 1; z-index: 2; }
-        .banner-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6), transparent); z-index: 3; }
-        .banner-content { position: absolute; bottom: 30px; left: 0; width: 100%; text-align: center; z-index: 4; color: white; }
-        .dday-num { font-size: 4rem; font-weight: 800; font-family: 'Georgia', serif; line-height: 1; margin-bottom: 5px; }
+        .banner-wrap { position: relative; width: 100%; height: 300px; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 25px; box-shadow: var(--shadow-soft); }
+        .banner-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1s; }
+        .banner-img.active { opacity: 1; }
+        .banner-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); }
+        .banner-content { position: absolute; bottom: 25px; left: 0; width: 100%; text-align: center; color: white; z-index: 2; }
+        .dday-num { font-size: 3.5rem; font-weight: 800; font-family: 'Georgia', serif; line-height: 1; margin-bottom: 5px; }
 
-        .edit-badge { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.95); padding: 8px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; border: none; z-index: 10; display: flex; align-items: center; gap: 5px; box-shadow: var(--shadow-sm); }
+        .widget-card { border-radius: var(--radius-md); padding: 20px; margin-bottom: 20px; background: white; border: 1px solid rgba(0,0,0,0.03); }
+        .widget-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         
-        .widget-card { border-radius: var(--radius-md); padding: 25px; margin-bottom: 25px; }
-        .widget-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 20px; display: flex; justify-content: space-between; }
-        .profile-flex { display: flex; justify-content: space-around; align-items: center; }
-        .profile-pic { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-light); margin-bottom: 10px; }
+        /* Mood Widget */
+        .mood-wrap { display: flex; justify-content: space-around; align-items: center; padding: 10px 0; }
+        .mood-item { text-align: center; cursor: pointer; }
+        .mood-emoji { font-size: 2.5rem; display: block; margin-bottom: 5px; transition: 0.2s; }
+        .mood-item:hover .mood-emoji { transform: scale(1.1); }
+        .mood-name { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); }
 
-        .timeline-box { max-height: 300px; overflow-y: auto; padding-right: 10px; }
-        .tl-item { display: flex; gap: 15px; margin-bottom: 20px; position: relative; }
-        .tl-line { position: absolute; left: 5px; top: 25px; bottom: -20px; width: 2px; background: var(--border-light); }
+        .timeline-box { max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .tl-item { display: flex; gap: 15px; margin-bottom: 15px; position: relative; }
+        .tl-line { position: absolute; left: 5px; top: 25px; bottom: -15px; width: 2px; background: var(--primary-light); }
         .tl-item:last-child .tl-line { display: none; }
-        .tl-dot { width: 12px; height: 12px; background: var(--primary); border-radius: 50%; z-index: 2; margin-top: 5px; border: 3px solid var(--surface); }
-        .tl-content { flex-grow: 1; background: #FFF; padding: 15px; border-radius: 12px; border: 1px solid var(--border-light); }
+        .tl-dot { width: 12px; height: 12px; background: var(--primary); border-radius: 50%; z-index: 2; margin-top: 5px; }
+        .tl-content { flex: 1; background: #F9FAFB; padding: 12px; border-radius: 12px; font-size: 0.95rem; }
 
-        /* 캘린더 (실물 달력 UI & 인라인 확장) */
-        .cal-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 10px; }
-        .cal-month-title { font-size: 1.6rem; font-weight: 800; font-family: 'Georgia', serif; }
-        .cal-nav-btn { background: var(--surface); border: 1px solid var(--border-light); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 15px; border-radius: var(--radius-lg); touch-action: pan-y; }
-        .cal-day-name { text-align: center; font-weight: 700; font-size: 0.85rem; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); }
-        .cal-cell { aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 6px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: 0.2s; position: relative; }
-        .cal-cell:hover { background: #F3F4F6; }
-        .cal-cell.today { background: var(--primary-light); color: var(--primary); font-weight: 800; }
-        .cal-cell.selected { border: 2px solid var(--primary); }
-        .cal-cell.holiday { color: #E53E3E; } /* 빨간색 공휴일 */
-        .cal-cell.saturday { color: #3182CE; } /* 파란색 토요일 */
-        .cal-indicators { display: flex; gap: 4px; margin-top: 4px; }
-        .dot-diary { width: 5px; height: 5px; background: var(--primary); border-radius: 50%; }
-        .dot-schedule { width: 5px; height: 5px; background: var(--secondary); border-radius: 50%; }
-
-        /* 인라인 캘린더 데이 뷰 */
-        .cal-inline-view { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s ease, opacity 0.4s ease; margin-top: 10px; background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border-light); }
-        .cal-inline-view.active { max-height: 500px; opacity: 1; padding: 20px; box-shadow: var(--shadow-soft); }
-        .day-entry-item { background: #F9FAFB; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid var(--primary); cursor: pointer; }
-        .day-entry-item.schedule { border-left-color: var(--secondary); }
-
-        /* 스토리 (게시판) */
-        .board-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-        .board-tab { background: none; border: none; font-size: 1.05rem; font-weight: 700; color: var(--text-muted); cursor: pointer; padding: 8px 4px; position: relative; white-space: nowrap; }
-        .board-tab.active { color: var(--primary); }
-        .board-tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 3px 3px 0 0; }
-
-        .post-list { display: flex; flex-direction: column; gap: 15px; }
-        .post-card { border-radius: var(--radius-md); padding: 20px; cursor: pointer; border: 1px solid var(--border-light); display: flex; gap: 15px; align-items: flex-start; }
-        .post-text-wrap { flex-grow: 1; overflow: hidden; }
-        .post-cat-badge { background: var(--primary-light); color: var(--primary-dark); padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; }
-        .post-title { font-size: 1.2rem; font-weight: 800; margin: 8px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .post-preview { font-size: 0.95rem; color: #718096; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .post-timestamp { font-size: 0.8rem; color: #CBD5E0; margin-top: 10px; }
-
-        .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .gallery-item { border-radius: var(--radius-md); overflow: hidden; cursor: pointer; position: relative; aspect-ratio: 1/1; }
-        .gallery-item img, .gallery-item video { width: 100%; height: 100%; object-fit: cover; }
-        .gallery-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: flex-end; padding: 15px; color: white; font-weight: 700; opacity: 0; transition: 0.3s; }
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
-
-        /* 인라인 댓글 & 페이지네이션 */
-        .inline-comments { background: #F8F9FA; padding: 15px; border-radius: 12px; margin-top: 15px; border-top: 1px dashed var(--border-light); }
-        .inline-comment-item { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; }
-        .inline-comment-author { font-weight: 700; color: var(--primary); margin-right: 8px; }
-        .inline-comment-time { font-size: 0.75rem; color: var(--text-muted); }
+        /* 다가오는 일정 알림 (인앱 토스트) */
+        .upcoming-toast { position: absolute; bottom: 20px; left: 20px; right: 20px; background: var(--primary); color: white; padding: 15px 20px; border-radius: 16px; display: none; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(255,130,130,0.4); z-index: 40; animation: slideUp 0.5s ease; }
+        .upcoming-toast.show { display: flex; }
         
-        .inline-comment-input-wrap { display: flex; gap: 8px; margin-top: 10px; }
-        .inline-comment-input-wrap input { flex-grow: 1; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 8px; outline: none; }
-        .inline-comment-input-wrap button { padding: 10px 15px; background: var(--text-main); color: white; border: none; border-radius: 8px; font-weight: 700; }
+        .cal-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 10px; }
+        .cal-month-title { font-size: 1.4rem; font-weight: 800; }
+        .cal-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border-light); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 15px; background: white; border-radius: var(--radius-lg); border: 1px solid rgba(0,0,0,0.03); }
+        .cal-day-name { text-align: center; font-weight: 700; font-size: 0.8rem; padding-bottom: 8px; border-bottom: 1px solid #eee; margin-bottom: 5px; }
+        
+        .cal-cell { min-height: 50px; display: flex; flex-direction: column; align-items: center; padding: 5px 2px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; position: relative; border: 1px solid transparent; }
+        .cal-cell.today { background: var(--primary-light); color: var(--primary-dark); }
+        .cal-cell.selected { border-color: var(--primary); background: #FAFAFA; }
+        .cal-cell.holiday { color: #E53E3E !important; }
+        .cal-cell.saturday { color: #3182CE; }
+        
+        .event-mini-label { font-size: 0.6rem; font-weight: 700; color: white; border-radius: 4px; padding: 1px 4px; margin-top: 2px; width: 90%; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        
+        .cal-inline-view { max-height: 0; overflow: hidden; opacity: 0; transition: 0.4s ease; margin-top: 10px; background: white; border-radius: var(--radius-md); border: 1px solid var(--border-light); }
+        .cal-inline-view.active { max-height: 600px; opacity: 1; padding: 20px; box-shadow: var(--shadow-soft); }
+        
+        .day-entry-item { background: #F9FAFB; padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border-left: 4px solid #ccc; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .day-entry-item:hover { background: #F3F4F6; }
 
-        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 25px; }
-        .page-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border-light); color: var(--text-muted); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        /* 컬러 팔레트 */
+        .color-picker { display: flex; gap: 10px; margin-top: 10px; }
+        .color-opt { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .color-opt.active { border-color: #333; transform: scale(1.1); }
 
-        /* 미디어 렌더링 (비디오/오디오) */
-        .media-player-wrap { width: 100%; margin-bottom: 20px; border-radius: 12px; overflow: hidden; }
+        .board-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .board-tab { background: none; border: none; font-size: 1rem; font-weight: 700; color: var(--text-muted); cursor: pointer; padding: 5px 10px; position: relative; white-space: nowrap; transition: 0.2s; }
+        .board-tab.active { color: var(--primary); }
+        .board-tab.active::after { content: ''; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); width: 80%; height: 3px; background: var(--primary); border-radius: 3px; }
 
-        /* 모달 세부 */
-        .modal-nav-btns { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border-light); }
-        .modal-nav-btns button { background: #F3F4F6; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; color: var(--text-main); }
-        .modal-nav-btns button:disabled { opacity: 0.3; }
+        .post-card { background: white; border-radius: var(--radius-md); padding: 20px; margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.03); cursor: pointer; }
+        .post-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 8px; }
+        .post-preview { font-size: 0.95rem; color: #666; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 15px; }
+        
+        .fab { position: absolute; bottom: 90px; right: 20px; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 5px 20px rgba(255,130,130,0.5); border: none; z-index: 90; cursor: pointer; }
 
-        /* 글쓰기 FAB */
-        .fab { position: absolute; bottom: calc(var(--nav-height) + 20px); right: 20px; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 10px 25px rgba(255, 130, 130, 0.4); cursor: pointer; border: none; z-index: 90; }
-
-        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 4000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
-        #lightbox img, #lightbox video { max-width: 95vw; max-height: 95vh; border-radius: 12px; object-fit: contain; }
+        .detail-img-wrap img { width: 100%; border-radius: 12px; margin-bottom: 15px; }
+        .detail-content { font-size: 1.05rem; line-height: 1.7; white-space: pre-wrap; margin-bottom: 20px; }
+        
+        /* 공통 유틸 */
+        .badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
     </style>
 </head>
-<body>
-    <!-- 동적 랩퍼 (하이브리드 앱 모드) -->
-    <div id="app-wrapper">
+<body class="mobile-frame-mode">
 
-        <!-- 토스트 & 커스텀 Confirm -->
-        <div id="toast" class="toast"><i class="fa-solid fa-heart"></i> <span id="toastMsg">메시지</span></div>
-        <div class="modal-overlay" id="confirmModal" style="z-index: 5000;">
-            <div class="modal-content glass" style="max-width: 320px; text-align: center; padding: 30px;">
-                <i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; color: #FC8181; margin-bottom: 15px;"></i>
-                <h3 style="font-size: 1.1rem; margin-bottom: 20px;" id="confirmMsg"></h3>
-                <div style="display: flex; gap: 10px; width: 100%;">
-                    <button class="btn-primary" id="confirmBtnYes" style="background: #FC8181; flex: 1;">확인</button>
-                    <button class="btn-primary" id="confirmBtnNo" style="background: #E2E8F0; color: var(--text-main); flex: 1;">취소</button>
+    <!-- 토스트 메시지 (전역) -->
+    <div id="toast" class="toast"><i class="fa-solid fa-circle-info"></i> <span id="toastMsg"></span></div>
+
+    <!-- 확인 모달 (Confirm) -->
+    <div class="modal-overlay" id="confirmModal" style="z-index: 5000;">
+        <div class="modal-content" style="max-width: 300px; text-align: center; padding: 25px;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;"></i>
+            <h3 style="font-size: 1.1rem; margin-bottom: 20px;" id="confirmMsg">정말 삭제할까요?</h3>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-primary" style="flex:1;" id="confirmBtnYes">확인</button>
+                <button class="btn-outline" style="flex:1; padding:15px; border-radius:12px;" id="confirmBtnNo">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-wrapper">
+        
+        <!-- 1. 로그인 (비밀번호) 화면 -->
+        <div id="auth-wall">
+            <div class="auth-box glass">
+                <i class="fa-solid fa-heart" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px; animation: pulseAlert 2s infinite;"></i>
+                <h1 style="font-size:1.5rem; margin-bottom:10px;">Our Secret Space</h1>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:25px;">우리만의 암호를 입력하세요.</p>
+                <div class="input-wrap"><i class="fa-solid fa-lock"></i><input type="password" class="form-input" id="l_pw" placeholder="비밀번호" onkeydown="if(event.key==='Enter') submitLogin()"></div>
+                <button class="btn-primary" style="margin-top:20px;" onclick="submitLogin()">입장하기</button>
+            </div>
+        </div>
+
+        <!-- 2. 역할 (작성자) 선택 팝업 -->
+        <div class="modal-overlay" id="roleModal" style="z-index: 4500;">
+            <div class="modal-content glass" style="max-width: 350px; padding: 30px; text-align: center;">
+                <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:10px;">당신은 누구인가요?</h2>
+                <p style="color:var(--text-muted); font-size:0.9rem;">글 작성 시 표시될 역할을 선택해주세요.</p>
+                <div class="role-btn-wrap">
+                    <div class="role-btn" onclick="setAuthorName('남자친구')">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop" alt="Boy">
+                        <span>남자친구</span>
+                    </div>
+                    <div class="role-btn" onclick="setAuthorName('여자친구')">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="Girl">
+                        <span>여자친구</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 1. 시크릿 로그인 화면 -->
-        <div id="auth-wall">
-            <div class="auth-box glass">
-                <i class="fa-solid fa-heart"></i>
-                <h1>Secret Place</h1>
-                <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:30px;">우리만의 암호를 입력해 주세요.</p>
-                <input type="text" class="form-input auth" id="l_id" placeholder="아이디">
-                <input type="password" class="form-input auth" id="l_pw" placeholder="비밀번호" onkeydown="if(event.key==='Enter') submitLogin()">
-                <button class="btn-primary" onclick="submitLogin()">입장하기</button>
-            </div>
-        </div>
-
-        <!-- 2. 작성자 이름 설정 팝업 -->
-        <div class="modal-overlay" id="authorSelectModal" style="z-index:4000;">
-            <div class="modal-content glass" style="max-width: 350px; text-align: center; padding: 40px 30px;">
-                <h3 style="margin-bottom:10px; font-size:1.4rem;">누가 접속했나요?</h3>
-                <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">이름을 적어주세요. (예: 영재, 수진)</p>
-                <input type="text" id="authorNameInput" class="form-input auth" placeholder="이름 입력" onkeydown="if(event.key==='Enter') setAuthorName()">
-                <button class="btn-primary" onclick="setAuthorName()">시작하기</button>
-            </div>
-        </div>
-
-        <!-- 메인 앱 컨테이너 -->
-        <div id="app-container">
+        <!-- 3. 메인 앱 영역 -->
+        <div id="app-container" style="display: none;">
+            
             <header class="app-header glass">
-                <div class="header-title"><i class="fa-solid fa-heart" style="font-size:1.1rem;"></i> Our Story</div>
-                <div class="header-clock" id="top-clock">00:00:00</div>
-                <div class="header-actions">
-                    <button class="icon-btn" onclick="showModal('settingsModal')" title="설정"><i class="fa-solid fa-gear"></i></button>
-                    <button class="icon-btn" onclick="handleLogout()" title="잠그기"><i class="fa-solid fa-lock"></i></button>
+                <div class="header-title"><i class="fa-solid fa-heart" style="color:var(--primary);"></i> Our Story</div>
+                <div style="display:flex; gap:15px;">
+                    <button class="btn-close" onclick="showModal('settingsModal')"><i class="fa-solid fa-gear"></i></button>
+                    <button class="btn-close" onclick="handleLogout()"><i class="fa-solid fa-lock"></i></button>
                 </div>
             </header>
 
-            <nav class="bottom-nav glass">
-                <a class="nav-item active" onclick="switchView('home', this)"><i class="fa-solid fa-house"></i><span>홈</span></a>
-                <a class="nav-item" onclick="switchView('calendar', this)"><i class="fa-regular fa-calendar-check"></i><span>캘린더</span></a>
-                <a class="nav-item" onclick="switchView('board', this)"><i class="fa-regular fa-images"></i><span>스토리</span></a>
-            </nav>
-
-            <!-- View 1: 홈 (Home) -->
             <main class="view-section active" id="view-home">
                 <div class="container">
-                    <div class="banner-wrap fade-up" onclick="openLightbox(document.querySelector('.banner-img.active').src)">
-                        <div id="slideTrack">
-                            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1000&auto=format&fit=crop" class="banner-img active" id="bgImg1">
-                            <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop" class="banner-img" id="bgImg2">
-                        </div>
+                    <!-- 배너 -->
+                    <div class="banner-wrap fade-up">
+                        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=800&auto=format&fit=crop" class="banner-img active">
+                        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=800&auto=format&fit=crop" class="banner-img">
                         <div class="banner-overlay"></div>
-                        <button class="edit-badge edit-mode-only" onclick="event.stopPropagation(); triggerSiteImgUpload('banner_1')" style="left:15px; right:auto;"><i class="fa-solid fa-camera"></i> 사진1 교체</button>
-                        <button class="edit-badge edit-mode-only" onclick="event.stopPropagation(); triggerSiteImgUpload('banner_2')" style="left:120px; right:auto;"><i class="fa-solid fa-camera"></i> 사진2 교체</button>
-                        
                         <div class="banner-content">
-                            <div class="dday-badge">우리 만난 지</div>
-                            <div class="dday-num" id="ddayText">D+♥</div>
-                            <div class="couple-name" id="coupleNamesText">Boy & Girl</div>
+                            <div style="font-size:1rem; font-weight:700; margin-bottom:5px;">함께한 지</div>
+                            <div class="dday-num" id="ddayText">D+1</div>
+                            <div style="font-weight:700; font-size:1.1rem;" id="coupleNamesText">Boy & Girl</div>
                         </div>
                     </div>
 
-                    <div class="widget-card glass fade-up">
-                        <div class="widget-title">Our Profile</div>
-                        <div class="profile-flex">
-                            <div class="profile-item" style="position:relative;">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" class="profile-pic" id="profile1">
-                                <button class="edit-badge edit-mode-only" onclick="triggerSiteImgUpload('profile_1')" style="top:auto; bottom:-10px; right:-10px; padding:6px; border-radius:50%;"><i class="fa-solid fa-camera"></i></button>
-                                <br><span>Her</span>
+                    <!-- 무드 위젯 (추가 기능) -->
+                    <div class="widget-card fade-up">
+                        <div class="widget-title">Today's Mood ☁️</div>
+                        <div class="mood-wrap">
+                            <div class="mood-item" onclick="changeMood('남자친구')">
+                                <span class="mood-emoji" id="mood-boy">😎</span>
+                                <span class="mood-name">남자친구</span>
                             </div>
-                            <i class="fa-solid fa-heart" style="color:var(--primary); font-size:1.8rem; animation: pulseAlert 2s infinite;"></i>
-                            <div class="profile-item" style="position:relative;">
-                                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop" class="profile-pic" id="profile2">
-                                <button class="edit-badge edit-mode-only" onclick="triggerSiteImgUpload('profile_2')" style="top:auto; bottom:-10px; right:-10px; padding:6px; border-radius:50%;"><i class="fa-solid fa-camera"></i></button>
-                                <br><span>Him</span>
+                            <div style="width:1px; height:40px; background:var(--border-light);"></div>
+                            <div class="mood-item" onclick="changeMood('여자친구')">
+                                <span class="mood-emoji" id="mood-girl">🥰</span>
+                                <span class="mood-name">여자친구</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="widget-card glass fade-up">
-                        <div class="widget-title">Milestones <button class="icon-btn edit-mode-only-inline" onclick="showModal('addTimelineModal')" style="width:28px; height:28px;"><i class="fa-solid fa-plus"></i></button></div>
+                    <!-- 타임라인 -->
+                    <div class="widget-card fade-up">
+                        <div class="widget-title">
+                            Milestones 
+                            <button class="btn-close edit-mode-only-inline" style="font-size:1.2rem;" onclick="showModal('addTimelineModal')"><i class="fa-solid fa-circle-plus"></i></button>
+                        </div>
                         <div class="timeline-box" id="timelineList"></div>
                     </div>
                 </div>
+
+                <!-- 다가오는 일정 알림 토스트 -->
+                <div id="upcomingToast" class="upcoming-toast">
+                    <i class="fa-regular fa-bell" style="font-size:1.5rem;"></i>
+                    <div style="flex:1;">
+                        <div style="font-size:0.8rem; opacity:0.9;">다가오는 일정</div>
+                        <div style="font-weight:700;" id="upcomingText">내일: 1주년 기념일</div>
+                    </div>
+                    <button style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;" onclick="closeUpcomingToast()"><i class="fa-solid fa-xmark"></i></button>
+                </div>
             </main>
 
-            <!-- View 2: 캘린더 (Calendar) -->
             <main class="view-section" id="view-calendar">
                 <div class="container">
                     <div class="cal-header-row fade-up">
@@ -303,239 +290,198 @@
                         <button class="cal-nav-btn" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                     
-                    <div class="cal-grid glass fade-up" id="calendar-days">
-                        <!-- JS Rendering -->
-                    </div>
+                    <!-- 달력 그리드 -->
+                    <div class="cal-grid fade-up" id="calendar-days"></div>
                     
-                    <!-- 달력 하단 인라인 데이 뷰 (다이렉트 표시) -->
+                    <!-- 달력 하단 상세 보기 (인라인) -->
                     <div class="cal-inline-view" id="calInlineView">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <h4 id="inlineViewTitle" style="color:var(--primary); font-size:1.1rem; font-weight:800;">날짜</h4>
-                            <button onclick="closeInlineView()" style="background:none; border:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+                            <h4 id="inlineViewTitle" style="color:var(--text-main); font-size:1.2rem; font-weight:800;">날짜</h4>
+                            <button onclick="closeInlineView()" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                         <div id="inlineEntryList"></div>
-                        <div style="display:flex; gap:10px; margin-top:15px;">
-                            <button class="btn-primary" style="background:var(--secondary); padding:10px; font-size:0.9rem;" onclick="openWriteModal('일정', document.getElementById('inlineViewDateHdn').value)">+ 일정</button>
-                            <button class="btn-primary" style="padding:10px; font-size:0.9rem;" onclick="openWriteModal('다이어리', document.getElementById('inlineViewDateHdn').value)">+ 다이어리</button>
+                        <div style="display:flex; gap:10px; margin-top:20px;">
+                            <button class="btn-primary" style="padding:10px; font-size:0.95rem; background:var(--secondary);" onclick="openWriteModal('일정', document.getElementById('inlineDateHdn').value)"><i class="fa-solid fa-thumbtack"></i> 일정 추가</button>
+                            <button class="btn-primary" style="padding:10px; font-size:0.95rem;" onclick="openWriteModal('다이어리', document.getElementById('inlineDateHdn').value)"><i class="fa-solid fa-book"></i> 다이어리</button>
                         </div>
-                        <input type="hidden" id="inlineViewDateHdn">
-                    </div>
-                    
-                    <div class="fade-up" style="margin-top:20px; display:flex; gap:15px; justify-content:center; font-size:0.85rem; font-weight:700; color:var(--text-muted);">
-                        <span><span style="display:inline-block; width:8px; height:8px; background:var(--primary); border-radius:50%; margin-right:4px;"></span>다이어리</span>
-                        <span><span style="display:inline-block; width:8px; height:8px; background:var(--secondary); border-radius:50%; margin-right:4px;"></span>일정</span>
-                        <span><span style="color:#E53E3E; margin-right:4px;">빨강</span>휴일/기념일</span>
+                        <input type="hidden" id="inlineDateHdn">
                     </div>
                 </div>
             </main>
 
-            <!-- View 3: 스토리 (Board) -->
             <main class="view-section" id="view-board">
                 <div class="container">
                     <div class="board-tabs fade-up">
-                        <button class="board-tab active" onclick="setBoardCategory('전체', this)">전체보기</button>
-                        <button class="board-tab" onclick="setBoardCategory('갤러리', this)">갤러리</button>
-                        <button class="board-tab" onclick="setBoardCategory('편지함', this)">비밀 편지함</button>
-                        <button class="board-tab" onclick="setBoardCategory('일상', this)">자유 일상</button>
+                        <button class="board-tab active" onclick="setBoardCategory('전체', this)">전체 스토리</button>
+                        <button class="board-tab" onclick="setBoardCategory('갤러리', this)">사진 갤러리</button>
+                        <button class="board-tab" onclick="setBoardCategory('편지함', this)">비밀 편지</button>
                     </div>
                     <div id="boardList" class="fade-up"></div>
-                    <div class="pagination fade-up" id="paginationArea"></div>
                 </div>
-                <button class="fab fade-up" onclick="openWriteModal('', '')"><i class="fa-solid fa-pen"></i></button>
+                <button class="fab fade-up" onclick="openWriteModal('일상')"><i class="fa-solid fa-pen"></i></button>
             </main>
+
+            <!-- 하단 네비게이션 고정 -->
+            <nav class="bottom-nav">
+                <a class="nav-item active" onclick="switchView('home', this)"><i class="fa-solid fa-house"></i><span>홈</span></a>
+                <a class="nav-item" onclick="switchView('calendar', this)"><i class="fa-regular fa-calendar"></i><span>캘린더</span></a>
+                <a class="nav-item" onclick="switchView('board', this)"><i class="fa-solid fa-layer-group"></i><span>스토리</span></a>
+            </nav>
         </div>
     </div>
 
-    <!-- 히든 업로드 -->
-    <input type="file" id="siteImgFileInput" accept="image/*,video/*" class="hidden" style="display:none;" onchange="handleSiteImgSelected(event)">
-
-    <!-- 모달: 글쓰기 (날짜 숨김/보임 자동화) -->
+    <!-- 글쓰기 모달 -->
     <div class="modal-overlay" id="writeModal">
-        <div class="modal-content glass" style="max-width: 600px;">
+        <div class="modal-content" style="max-height: 85vh; width: 95%;">
             <div class="modal-header">
-                <h3 class="modal-title">새로운 기록 남기기</h3>
+                <h3 style="font-weight:800; font-size:1.2rem;">새로운 기록 ✨</h3>
                 <button class="btn-close" onclick="hideModal('writeModal')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">카테고리</label>
-                    <select id="postCategory" class="form-select" onchange="toggleDateInput()">
-                        <option value="일상">일상 (자유)</option>
-                        <option value="갤러리">갤러리 (사진/영상 필수)</option>
-                        <option value="편지함">비밀 편지함</option>
-                        <option value="다이어리">다이어리 (캘린더 연동)</option>
-                        <option value="일정">일정 (약속/기념일)</option>
-                    </select>
+                    <div class="input-wrap">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <select id="postCategory" class="form-select" onchange="toggleDateInput()">
+                            <option value="일상">일상 스토리</option>
+                            <option value="갤러리">갤러리 (사진 필수)</option>
+                            <option value="편지함">비밀 편지함</option>
+                            <option value="다이어리">다이어리 (달력 연동)</option>
+                            <option value="일정">일정 (달력 연동)</option>
+                        </select>
+                    </div>
                 </div>
-                <!-- 일정/다이어리 선택 시에만 나타나는 날짜칸 -->
+                
                 <div class="form-group" id="dateInputWrap" style="display:none;">
-                    <label class="form-label">날짜 지정</label>
-                    <input type="date" id="postDate" class="form-input">
+                    <div class="input-wrap"><i class="fa-regular fa-calendar-days"></i><input type="date" id="postDate" class="form-input"></div>
+                    
+                    <!-- 캘린더 색상 지정 옵션 -->
+                    <div style="margin-top:10px; font-size:0.85rem; font-weight:700; color:var(--text-muted);">라벨 색상 지정</div>
+                    <div class="color-picker" id="eventColorPicker">
+                        <div class="color-opt active" style="background:var(--primary);" data-color="#FF8282" onclick="selectColor(this)"></div>
+                        <div class="color-opt" style="background:#4299E1;" data-color="#4299E1" onclick="selectColor(this)"></div>
+                        <div class="color-opt" style="background:#48BB78;" data-color="#48BB78" onclick="selectColor(this)"></div>
+                        <div class="color-opt" style="background:#ECC94B;" data-color="#ECC94B" onclick="selectColor(this)"></div>
+                        <div class="color-opt" style="background:#9F7AEA;" data-color="#9F7AEA" onclick="selectColor(this)"></div>
+                    </div>
+                    <input type="hidden" id="postColor" value="#FF8282">
                 </div>
+
                 <div class="form-group">
-                    <input type="text" id="postTitle" class="form-input" placeholder="제목을 적어주세요.">
+                    <div class="input-wrap"><i class="fa-solid fa-heading"></i><input type="text" id="postTitle" class="form-input" placeholder="제목을 적어주세요."></div>
                 </div>
+                
+                <div class="form-group" style="background:white; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:0 15px;">
+                    <textarea id="postContent" class="form-textarea" placeholder="여기에 내용을 작성하세요..."></textarea>
+                </div>
+                
                 <div class="form-group">
-                    <textarea id="postContent" class="form-textarea" rows="5" placeholder="자유롭게 적어주세요..."></textarea>
+                    <label style="font-size:0.9rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:5px;"><i class="fa-solid fa-camera"></i> 사진 첨부</label>
+                    <input type="file" id="postImage" accept="image/*" class="form-input" style="padding:10px; border:1px solid #eee; border-radius:8px;">
                 </div>
-                <div class="form-group">
-                    <label class="form-label"><i class="fa-regular fa-image"></i> 미디어 첨부 (사진/음성/영상)</label>
-                    <input type="file" id="postImage" accept="image/*,video/*,audio/*" class="form-input" style="padding:10px;">
-                </div>
+                
                 <button class="btn-primary" onclick="submitPost()">저장하기</button>
             </div>
         </div>
     </div>
 
-    <!-- 모달: 글 상세 -->
+    <!-- 상세 보기 모달 -->
     <div class="modal-overlay" id="detailModal">
-        <div class="modal-content glass" style="max-width: 650px;">
+        <div class="modal-content" style="max-height: 85vh; width: 95%;">
             <div class="modal-header">
-                <span class="post-cat-badge" id="modalCategory" style="background:var(--primary-light); color:var(--primary-dark); padding:4px 10px; border-radius:10px; font-weight:700; font-size:0.85rem;">다이어리</span>
-                <div style="display:flex; gap:10px; align-items:center;">
-                    <button class="btn-close" id="btnEditPost" onclick="openEditFromDetail()" title="수정"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button class="btn-close" id="btnDelPost" onclick="deleteFromDetail()" style="color:#FC8181;" title="삭제"><i class="fa-solid fa-trash-can"></i></button>
+                <span class="badge" id="modalCategory" style="background:var(--primary-light); color:var(--primary-dark);">카테고리</span>
+                <div style="display:flex; gap:15px;">
+                    <button class="btn-close" id="btnDelPost" onclick="deleteActivePost()" style="color:#FC8181; font-size:1.2rem;"><i class="fa-regular fa-trash-can"></i></button>
                     <button class="btn-close" onclick="hideModal('detailModal')"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             </div>
             <div class="modal-body">
-                <h2 class="detail-title" id="modalTitle" style="font-size:1.6rem; font-weight:800; margin-bottom:10px;">제목</h2>
-                <div class="detail-meta-row" style="display:flex; justify-content:space-between; margin-bottom:20px; border-bottom:1px solid var(--border-light); padding-bottom:10px;">
-                    <span class="detail-author" id="modalAuthor" style="font-weight:700; color:var(--primary);">작성자</span>
-                    <span class="detail-date" id="modalDateMeta" style="font-size:0.85rem; color:var(--text-muted);"></span>
+                <h2 id="modalTitle" style="font-size:1.4rem; font-weight:800; margin-bottom:10px;">제목</h2>
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-muted); margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid #eee;">
+                    <span id="modalAuthor" style="font-weight:700; color:var(--primary);">작성자</span>
+                    <span id="modalDateMeta">날짜</span>
                 </div>
-                <div id="modalImageWrap" style="margin-bottom:20px;"></div>
-                <div class="detail-content" id="modalContent" style="font-size:1.05rem; line-height:1.7; white-space:pre-wrap; margin-bottom:30px;">내용</div>
                 
-                <div class="comment-section" style="background:#F8F9FA; padding:15px; border-radius:16px;">
-                    <div class="comment-title" id="modalCommentsHeader" style="font-weight:800; margin-bottom:10px; font-size:0.95rem;">댓글</div>
-                    <div class="comment-list" id="modalCommentsList" style="display:flex; flex-direction:column; gap:10px; margin-bottom:15px;"></div>
-                    <div class="comment-input-row" style="display:flex; gap:8px;">
-                        <input type="text" id="modal-comment-input" class="form-input" style="padding:10px; margin:0;" placeholder="따뜻한 한마디..." onkeydown="if(event.key==='Enter') submitComment()">
-                        <button class="btn-primary" style="width:auto; padding:10px 15px;" onclick="submitComment()">등록</button>
-                    </div>
-                </div>
-
-                <div class="modal-nav-btns" id="modalNavArea" style="display:none; justify-content:space-between; margin-top:20px; padding-top:15px; border-top:1px solid var(--border-light);">
-                    <button id="btnPrevPost" onclick="goPrevPost()"><i class="fa-solid fa-arrow-left"></i> 이전</button>
-                    <button id="btnNextPost" onclick="goNextPost()">다음 <i class="fa-solid fa-arrow-right"></i></button>
-                </div>
+                <div class="detail-img-wrap" id="modalImageWrap"></div>
+                <div class="detail-content" id="modalContent">내용</div>
             </div>
         </div>
     </div>
 
-    <!-- 모달: 글 수정 -->
-    <div class="modal-overlay" id="editModal">
-        <div class="modal-content glass">
-            <div class="modal-header">
-                <h3 class="modal-title">기록 수정</h3>
-                <button class="btn-close" onclick="hideModal('editModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="editPostId"><input type="hidden" id="editAuthorMeta"><input type="hidden" id="editCategory"><input type="hidden" id="editKeepImage"><input type="hidden" id="editDateStr">
-                <div class="form-group"><input type="text" id="editTitle" class="form-input" placeholder="제목"></div>
-                <div class="form-group"><textarea id="editContent" class="form-textarea" rows="5"></textarea></div>
-                <div class="form-group">
-                    <label class="form-label">새 미디어로 변경</label>
-                    <input type="file" id="editImage" accept="image/*,video/*,audio/*" class="form-input" style="padding:10px;">
-                </div>
-                <button class="btn-primary" onclick="submitEdit()">수정 완료</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 모달: 종합 설정 -->
+    <!-- 설정 모달 -->
     <div class="modal-overlay" id="settingsModal">
-        <div class="modal-content glass" style="max-width: 450px;">
+        <div class="modal-content" style="width: 90%; max-width: 400px;">
             <div class="modal-header">
-                <h3 class="modal-title">앱 설정 ⚙️</h3>
+                <h3 style="font-weight:800;"><i class="fa-solid fa-gear"></i> 설정</h3>
                 <button class="btn-close" onclick="hideModal('settingsModal')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">하이브리드 앱 모드 (PC 화면 고정)</label>
-                    <button id="hybridToggleBtn" onclick="toggleHybridMode()" style="padding:8px 15px; border-radius:20px; border:1px solid var(--border-light); background:white; cursor:pointer;">현재: OFF</button>
+                    <label style="font-weight:700; font-size:0.9rem; margin-bottom:5px; display:block;">편집 모드 (삭제/추가 관리)</label>
+                    <button onclick="toggleEditMode()" class="btn-outline" style="width:100%; padding:10px; border-radius:8px;">ON / OFF 전환</button>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">편집 모드 (관리 기능 활성화)</label>
-                    <button onclick="toggleEditMode(); hideModal('settingsModal');" style="padding:8px 15px; border-radius:20px; border:1px solid var(--border-light); background:white; cursor:pointer;">ON / OFF</button>
+                    <label style="font-weight:700; font-size:0.9rem; margin-bottom:5px; display:block;">처음 만난 날 (D-Day)</label>
+                    <div class="input-wrap"><input type="date" id="settingDday" class="form-input"></div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">처음 만난 날</label>
-                    <input type="date" id="settingDday" class="form-input">
+                    <label style="font-weight:700; font-size:0.9rem; margin-bottom:5px; display:block;">커스텀 휴일 (예: 12-25, 05-01)</label>
+                    <div class="input-wrap"><input type="text" id="settingHolidays" class="form-input" placeholder="쉼표로 구분하여 입력"></div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">메인 타이틀</label>
-                    <input type="text" id="settingNames" class="form-input" placeholder="Boy & Girl">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">커스텀 휴일 (빨간날 지정, 쉼표 구분 MM-DD)</label>
-                    <input type="text" id="settingHolidays" class="form-input" placeholder="예: 12-25, 05-05, 10-04">
-                </div>
-                <button class="btn-primary" onclick="saveSettings()">모두 저장</button>
+                <button class="btn-primary" style="margin-top:10px;" onclick="saveSettings()">설정 저장</button>
             </div>
         </div>
     </div>
 
-    <!-- 모달: 타임라인 추가 -->
+    <!-- 타임라인 추가 모달 -->
     <div class="modal-overlay" id="addTimelineModal">
-        <div class="modal-content glass" style="max-width: 400px;">
+        <div class="modal-content" style="width: 90%; max-width: 400px;">
             <div class="modal-header">
-                <h3 class="modal-title">역사 추가</h3>
+                <h3 style="font-weight:800;">마일스톤 추가</h3>
                 <button class="btn-close" onclick="hideModal('addTimelineModal')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <div class="form-group"><label class="form-label">날짜</label><input type="date" id="tlDate" class="form-input"></div>
-                <div class="form-group"><label class="form-label">내용</label><input type="text" id="tlDesc" class="form-input" placeholder="무슨 일이 있었나요?"></div>
-                <button class="btn-primary" onclick="addTimelineItem()">기록 추가</button>
+                <div class="form-group"><div class="input-wrap"><input type="date" id="tlDate" class="form-input"></div></div>
+                <div class="form-group"><div class="input-wrap"><input type="text" id="tlDesc" class="form-input" placeholder="기억하고 싶은 사건은?"></div></div>
+                <button class="btn-primary" onclick="addTimeline()">추가하기</button>
             </div>
         </div>
     </div>
 
-    <!-- 이미지 뷰어 (Lightbox) -->
-    <div id="lightbox" onclick="closeLightbox()">
-        <span style="position:absolute; top:30px; right:30px; color:white; font-size:2.5rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></span>
-        <div id="lightboxContent" style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"></div>
-    </div>
-
     <script>
-        /* =========================================================
-           1. 상태 관리 & 유틸
-           ========================================================= */
-        let user = null;
-        let authorName = localStorage.getItem('couple_author') || '';
-        let postsData = []; let commentsData = []; let timelineData = []; let customHolidays = [];
-        let siteSettings = {};
+        // 전역 상태 변수
+        let currentUser = null;
+        let authorName = localStorage.getItem('app_author') || '';
+        let postsData = JSON.parse(localStorage.getItem('app_posts') || '[]');
+        let timelineData = JSON.parse(localStorage.getItem('app_timeline') || '[{"date":"2026-01-01", "desc":"우리의 시작 💖"}]');
+        let settings = JSON.parse(localStorage.getItem('app_settings') || '{"dday":"2026-01-01", "holidays":""}');
+        let moodData = JSON.parse(localStorage.getItem('app_mood') || '{"남자친구":"😎", "여자친구":"🥰"}');
         
-        let currentBoardTab = '전체'; 
-        let currentFilteredPosts = [];
-        let currentPage = 1;
-        const postsPerPage = 5; 
-        let activePostIndex = -1;
-        let pendingConfirmAction = null;
-        let isHybridMode = localStorage.getItem('hybrid_mode') === 'true';
+        let currentBoardTab = '전체';
+        let activePostId = null;
+        let confirmAction = null;
 
-        // 앱 껍데기 적용
-        if(isHybridMode) document.body.classList.add('mobile-frame-mode');
+        // 2026년 기준 대한민국 법정 공휴일 (양력 기준 및 음력 변환 수치 하드코딩)
+        const koreanHolidays2026 = [
+            "01-01", // 신정
+            "02-16", "02-17", "02-18", // 설날 연휴 (2/17이 설날)
+            "03-01", "03-02", // 3.1절 및 대체공휴일(3.1이 일요일)
+            "05-05", // 어린이날
+            "05-24", // 부처님오신날
+            "06-06", // 현충일
+            "08-15", "08-17", // 광복절 및 대체공휴일(8.15 토요일)
+            "09-24", "09-25", "09-26", // 추석 연휴
+            "10-03", // 개천절
+            "10-09", // 한글날
+            "12-25"  // 기독탄신일
+        ];
 
+        /* 유틸리티 및 UI 컨트롤 */
         function showToast(msg) {
-            const toast = document.getElementById('toast');
+            const t = document.getElementById('toast');
             document.getElementById('toastMsg').innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
         }
-
-        function customConfirm(msg, action) {
-            document.getElementById('confirmMsg').innerText = msg;
-            pendingConfirmAction = action;
-            showModal('confirmModal');
-        }
-
-        document.getElementById('confirmBtnYes').addEventListener('click', () => {
-            if(pendingConfirmAction) pendingConfirmAction();
-            hideModal('confirmModal');
-        });
-        document.getElementById('confirmBtnNo').addEventListener('click', () => hideModal('confirmModal'));
 
         function showModal(id) { 
             const el = document.getElementById(id);
@@ -544,584 +490,373 @@
         function hideModal(id) { 
             const el = document.getElementById(id);
             el.classList.remove('active');
-            setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 300);
-        }
-        
-        function openLightbox(url) {
-            const ext = url.split('.').pop().toLowerCase();
-            let html = '';
-            if(['mp4','webm','ogg'].includes(ext)) {
-                html = `<video src="${url}" controls autoplay style="max-width:95vw; max-height:95vh; border-radius:12px;"></video>`;
-            } else {
-                html = `<img src="${url}" style="max-width:95vw; max-height:95vh; border-radius:12px; object-fit:contain;">`;
-            }
-            document.getElementById('lightboxContent').innerHTML = html;
-            const lb = document.getElementById('lightbox');
-            lb.style.display = 'flex';
-            setTimeout(() => lb.style.opacity = '1', 10);
-        }
-        function closeLightbox() {
-            const lb = document.getElementById('lightbox');
-            lb.style.opacity = '0';
-            document.getElementById('lightboxContent').innerHTML = ''; // 미디어 정지
-            setTimeout(() => lb.style.display = 'none', 300);
+            setTimeout(() => el.style.display = 'none', 300);
         }
 
-        function formatDate(date) {
-            const d = new Date(date);
-            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+        function customConfirm(msg, callback) {
+            document.getElementById('confirmMsg').innerText = msg;
+            confirmAction = callback;
+            showModal('confirmModal');
         }
+        document.getElementById('confirmBtnYes').onclick = () => { if(confirmAction) confirmAction(); hideModal('confirmModal'); };
+        document.getElementById('confirmBtnNo').onclick = () => hideModal('confirmModal');
 
-        function getMediaHTML(url) {
-            if(!url) return '';
-            const ext = url.split('.').pop().toLowerCase();
-            if(['mp4', 'webm', 'ogg'].includes(ext)) {
-                return `<video controls src="${url}" class="detail-image"></video>`;
-            } else if(['mp3', 'wav', 'm4a'].includes(ext)) {
-                return `<audio controls src="${url}" style="width:100%; margin-bottom:20px;"></audio>`;
-            } else {
-                return `<img src="${url}" class="detail-image" style="cursor:zoom-in;" onclick="openLightbox('${url}')">`;
-            }
-        }
-
-        /* =========================================================
-           2. 인증 & 진입
-           ========================================================= */
-        document.addEventListener('DOMContentLoaded', () => {
-            try { user = JSON.parse(localStorage.getItem('couple_user') || 'null'); } catch(e){}
-            
-            if(user) {
+        window.onload = () => {
+            currentUser = localStorage.getItem('app_auth');
+            if(currentUser === 'true') {
                 document.getElementById('auth-wall').style.display = 'none';
                 document.getElementById('app-container').style.display = 'flex';
-                if(!authorName) showModal('authorSelectModal'); 
+                if(!authorName) showModal('roleModal');
                 else initApp();
-            } else {
-                document.getElementById('auth-wall').style.opacity = '1';
             }
-            bindEvents();
-        });
+        };
 
-        // Mock Fetch for frontend testing (Replace with real logic if worker available)
-        async function mockFetch(endpoint, options = {}) {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    let res = { success: true };
-                    if(endpoint === '/api/login') {
-                        const b = JSON.parse(options.body);
-                        if(b.username === 'ourlove' && b.password === '1004') res = { username: 'ourlove', isAdmin: true };
-                        else return resolve({ ok: false, json: () => Promise.resolve({error: '암호가 틀렸습니다.'}) });
-                    }
-                    resolve({ ok: true, json: () => Promise.resolve(res) });
-                }, 200);
-            });
-        }
-
-        async function submitLogin() {
-            const id = document.getElementById('l_id').value.trim(); const pw = document.getElementById('l_pw').value.trim();
-            // In real env, use fetch('/api/login', ...)
-            const res = await mockFetch('/api/login', { body: JSON.stringify({username:id, password:pw}) });
-            if(res.ok) {
-                user = await res.json(); localStorage.setItem('couple_user', JSON.stringify(user));
+        function submitLogin() {
+            const pw = document.getElementById('l_pw').value;
+            // 간단한 시크릿 번호 시뮬레이션 (ex: 1004)
+            if(pw === '1004') {
+                localStorage.setItem('app_auth', 'true');
                 document.getElementById('auth-wall').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('auth-wall').style.display = 'none';
                     document.getElementById('app-container').style.display = 'flex';
-                    if(!authorName) showModal('authorSelectModal'); else initApp();
+                    if(!authorName) showModal('roleModal'); else initApp();
                 }, 500);
-            } else { const d = await res.json(); showToast(d.error); }
+            } else {
+                showToast('암호가 틀렸습니다.');
+            }
         }
 
-        function setAuthorName() {
-            const name = document.getElementById('authorNameInput').value.trim();
-            if(!name) return showToast('이름을 입력해주세요!');
-            authorName = name; localStorage.setItem('couple_author', name);
-            hideModal('authorSelectModal'); initApp(); showToast(`${name}님 환영합니다! 💖`);
+        function setAuthorName(name) {
+            authorName = name;
+            localStorage.setItem('app_author', name);
+            hideModal('roleModal');
+            initApp();
+            showToast(`${name}님 환영합니다!`);
         }
 
-        function handleLogout() { localStorage.removeItem('couple_user'); location.reload(); }
+        function handleLogout() {
+            localStorage.removeItem('app_auth'); location.reload();
+        }
 
         function initApp() {
-            startClock(); loadLocalData(); setupScrollAnimations(); startBannerSlider();
-            document.querySelector('.nav-item').click(); // 홈 탭
+            applySettings();
+            renderTimeline();
+            updateMoodUI();
+            checkUpcomingEvents();
             
-            // 하이브리드 버튼 상태 렌더링
-            document.getElementById('hybridToggleBtn').innerText = `현재: ${isHybridMode ? 'ON' : 'OFF'}`;
-        }
-
-        /* =========================================================
-           3. 레이아웃 & 뷰 (SPA)
-           ========================================================= */
-        function switchView(viewId, btnElement) {
-            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            if(btnElement) btnElement.classList.add('active');
-            
-            document.querySelectorAll('.view-section').forEach(sec => {
-                sec.classList.remove('active'); sec.style.animation = 'none'; void sec.offsetWidth;
-            });
-            const target = document.getElementById(`view-${viewId}`);
-            if(target) { target.classList.add('active'); target.style.animation = 'fadeIn 0.4s ease'; }
-            
-            if(viewId === 'calendar') { renderCalendar(); closeInlineView(); }
-            if(viewId === 'board') processFilteredPosts();
-            
-            // 스크롤 상단 복구
-            const container = document.body.classList.contains('mobile-frame-mode') ? document.getElementById('app-container') : window;
-            container.scrollTo(0,0);
-        }
-
-        function startClock() {
+            // 배너 슬라이더
             setInterval(() => {
-                const now = new Date(); const days = ['일','월','화','수','목','금','토'];
-                document.getElementById('top-clock').innerText = `${now.getFullYear()}. ${String(now.getMonth()+1).padStart(2,'0')}. ${String(now.getDate()).padStart(2,'0')} (${days[now.getDay()]}) ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-            }, 1000);
+                const banners = document.querySelectorAll('.banner-img');
+                const activeIdx = Array.from(banners).findIndex(b => b.classList.contains('active'));
+                banners[activeIdx].classList.remove('active');
+                banners[(activeIdx + 1) % banners.length].classList.add('active');
+            }, 5000);
         }
 
         function toggleEditMode() {
-            const body = document.body;
-            body.classList.toggle('edit-mode');
-            if(body.classList.contains('edit-mode')) showToast("편집 모드 ON ⚙️");
-            else showToast("편집 모드 OFF");
+            document.body.classList.toggle('edit-mode');
+            hideModal('settingsModal');
+            showToast(document.body.classList.contains('edit-mode') ? "편집 모드 켜짐" : "편집 모드 꺼짐");
         }
 
-        function toggleHybridMode() {
-            isHybridMode = !isHybridMode;
-            localStorage.setItem('hybrid_mode', isHybridMode);
-            if(isHybridMode) document.body.classList.add('mobile-frame-mode');
-            else document.body.classList.remove('mobile-frame-mode');
-            document.getElementById('hybridToggleBtn').innerText = `현재: ${isHybridMode ? 'ON' : 'OFF'}`;
-            showToast("화면 모드가 변경되었습니다.");
-        }
-
-        let currentSlide = 0; const banners = document.querySelectorAll('.banner-img');
-        function nextSlide() { currentSlide = (currentSlide + 1) % banners.length; updateSlide(); }
-        function updateSlide() { banners.forEach(b => b.classList.remove('active')); if(banners[currentSlide]) banners[currentSlide].classList.add('active'); }
-        function startBannerSlider() { setInterval(nextSlide, 6000); }
-
-        function setupScrollAnimations() {
-            const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
-            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-            setTimeout(() => document.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible')), 200);
-        }
-
-        /* =========================================================
-           4. 데이터 로컬 시뮬레이션 (원래 백엔드 로직 대체)
-           ========================================================= */
-        function loadLocalData() {
-            siteSettings = JSON.parse(localStorage.getItem('couple_settings') || '{}');
-            timelineData = JSON.parse(localStorage.getItem('couple_timeline') || '[{"date":"2026-01-01", "desc":"우리의 첫 만남"}]');
-            postsData = JSON.parse(localStorage.getItem('couple_posts') || '[]');
-            commentsData = JSON.parse(localStorage.getItem('couple_comments') || '[]');
+        function switchView(viewId, btnEl) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            btnEl.classList.add('active');
             
-            applySettings(); renderTimeline();
-            if(document.getElementById('view-calendar').classList.contains('active')) renderCalendar();
-            if(document.getElementById('view-board').classList.contains('active')) processFilteredPosts();
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.remove('active'); el.style.animation = 'none'; void el.offsetWidth;
+            });
+            const target = document.getElementById(`view-${viewId}`);
+            target.classList.add('active');
+            
+            if(viewId === 'calendar') { renderCalendar(); closeInlineView(); }
+            if(viewId === 'board') renderBoard();
+            
+            // 맨 위로 스크롤 복구
+            target.scrollTo(0,0);
         }
 
-        function saveData() {
-            localStorage.setItem('couple_settings', JSON.stringify(siteSettings));
-            localStorage.setItem('couple_timeline', JSON.stringify(timelineData));
-            localStorage.setItem('couple_posts', JSON.stringify(postsData));
-            localStorage.setItem('couple_comments', JSON.stringify(commentsData));
-        }
-
-        /* =========================================================
-           5. 설정 & 프로필
-           ========================================================= */
         function applySettings() {
-            const names = siteSettings.couple_names || "Boy & Girl";
-            document.getElementById('coupleNamesText').innerText = names;
-            document.getElementById('settingNames').value = names;
-
-            if(siteSettings.dday_date) {
-                document.getElementById('settingDday').value = siteSettings.dday_date;
-                const start = new Date(siteSettings.dday_date); const now = new Date();
-                const diffDays = Math.ceil(Math.abs(now - start) / (1000 * 60 * 60 * 24)); 
-                document.getElementById('ddayText').innerText = `D+${diffDays}`;
-            }
-
-            if(siteSettings.custom_holidays) {
-                document.getElementById('settingHolidays').value = siteSettings.custom_holidays;
-                customHolidays = siteSettings.custom_holidays.split(',').map(s=>s.trim()).filter(s=>s);
+            document.getElementById('settingDday').value = settings.dday || '';
+            document.getElementById('settingHolidays').value = settings.holidays || '';
+            
+            if(settings.dday) {
+                const diff = Math.ceil(Math.abs(new Date() - new Date(settings.dday)) / (1000 * 60 * 60 * 24));
+                document.getElementById('ddayText').innerText = `D+${diff}`;
             }
         }
 
         function saveSettings() {
-            siteSettings.dday_date = document.getElementById('settingDday').value;
-            siteSettings.couple_names = document.getElementById('settingNames').value;
-            siteSettings.custom_holidays = document.getElementById('settingHolidays').value;
-            saveData(); hideModal('settingsModal'); applySettings(); showToast("설정이 저장되었습니다.");
+            settings.dday = document.getElementById('settingDday').value;
+            settings.holidays = document.getElementById('settingHolidays').value;
+            localStorage.setItem('app_settings', JSON.stringify(settings));
+            hideModal('settingsModal'); applySettings(); showToast("설정 저장됨");
             if(document.getElementById('view-calendar').classList.contains('active')) renderCalendar();
         }
 
+        function updateMoodUI() {
+            document.getElementById('mood-boy').innerText = moodData['남자친구'];
+            document.getElementById('mood-girl').innerText = moodData['여자친구'];
+        }
+
+        function changeMood(who) {
+            if(authorName !== who && !document.body.classList.contains('edit-mode')) {
+                return showToast('본인의 기분만 바꿀 수 있어요!');
+            }
+            const emojis = ['🥰','😍','😎','😴','😥','😡','🥳','🤒'];
+            let currentIdx = emojis.indexOf(moodData[who]);
+            moodData[who] = emojis[(currentIdx + 1) % emojis.length];
+            localStorage.setItem('app_mood', JSON.stringify(moodData));
+            updateMoodUI();
+        }
+
         function renderTimeline() {
+            const list = document.getElementById('timelineList');
             timelineData.sort((a,b) => new Date(b.date) - new Date(a.date));
-            document.getElementById('timelineList').innerHTML = timelineData.map((t, idx) => `
+            list.innerHTML = timelineData.map((t, i) => `
                 <div class="tl-item">
                     <div class="tl-line"></div><div class="tl-dot"></div>
                     <div class="tl-content">
-                        <div class="tl-date">${t.date}</div>
-                        <div class="tl-desc">${t.desc} <button class="edit-mode-only-inline btn-close" style="font-size:1rem; padding-left:5px; color:#FC8181;" onclick="customConfirm('기록을 삭제할까요?', () => deleteTimelineItem(${idx}))"><i class="fa-solid fa-xmark"></i></button></div>
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:700;">${t.date}</div>
+                        <div style="font-weight:700;">${t.desc} <button class="edit-mode-only-inline" style="background:none; border:none; color:#FC8181; margin-left:5px;" onclick="customConfirm('삭제할까요?', ()=>deleteTimeline(${i}))"><i class="fa-solid fa-xmark"></i></button></div>
                     </div>
                 </div>
             `).join('');
         }
-
-        function addTimelineItem() {
-            const date = document.getElementById('tlDate').value; const desc = document.getElementById('tlDesc').value;
-            if(!date || !desc) return showToast('모두 입력해주세요.');
-            timelineData.push({date, desc}); saveData();
-            hideModal('addTimelineModal'); document.getElementById('tlDate').value=''; document.getElementById('tlDesc').value=''; renderTimeline(); showToast("역사가 기록되었습니다.");
+        function addTimeline() {
+            const d = document.getElementById('tlDate').value; const desc = document.getElementById('tlDesc').value;
+            if(!d || !desc) return showToast('모두 입력하세요.');
+            timelineData.push({date:d, desc:desc}); localStorage.setItem('app_timeline', JSON.stringify(timelineData));
+            hideModal('addTimelineModal'); renderTimeline(); showToast('추가되었습니다.');
         }
-        function deleteTimelineItem(idx) { timelineData.splice(idx, 1); saveData(); renderTimeline(); showToast("삭제되었습니다."); }
+        function deleteTimeline(idx) { timelineData.splice(idx,1); localStorage.setItem('app_timeline', JSON.stringify(timelineData)); renderTimeline(); }
 
-        function triggerSiteImgUpload(key) { showToast(`${key} 교체 (테스트 모드: 로컬 파일 사용 안함)`); }
-
-        /* =========================================================
-           6. 캘린더 & 이벤트 (스와이프/인라인)
-           ========================================================= */
-        let currentCalDate = new Date();
-        
-        function renderCalendar() {
-            const year = currentCalDate.getFullYear(); const month = currentCalDate.getMonth();
-            document.getElementById('cal-month-year').innerText = `${year}. ${String(month+1).padStart(2,'0')}`;
+        function checkUpcomingEvents() {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
             
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const upcoming = postsData.filter(p => {
+                if(p.category !== '일정' || !p.date) return false;
+                const pDate = new Date(p.date);
+                return pDate >= today && pDate <= nextWeek;
+            }).sort((a,b) => new Date(a.date) - new Date(b.date));
+
+            if(upcoming.length > 0) {
+                const ev = upcoming[0];
+                const diff = Math.ceil((new Date(ev.date) - today) / (1000 * 3600 * 24));
+                const dText = diff === 0 ? '오늘' : diff === 1 ? '내일' : `${diff}일 뒤`;
+                document.getElementById('upcomingText').innerText = `${dText}: ${ev.title}`;
+                document.getElementById('upcomingToast').classList.add('show');
+            }
+        }
+        function closeUpcomingToast() { document.getElementById('upcomingToast').classList.remove('show'); }
+
+        let currentCalDate = new Date();
+
+        function renderCalendar() {
+            const y = currentCalDate.getFullYear(); const m = currentCalDate.getMonth();
+            document.getElementById('cal-month-year').innerText = `${y}. ${String(m+1).padStart(2,'0')}`;
+            
+            const firstDay = new Date(y, m, 1).getDay();
+            const daysInMonth = new Date(y, m + 1, 0).getDate();
             const grid = document.getElementById('calendar-days');
             
             const daysArr = ['일','월','화','수','목','금','토'];
             let html = daysArr.map((d,i) => `<div class="cal-day-name" style="${i===0?'color:#E53E3E':(i===6?'color:#3182CE':'')}">${d}</div>`).join('');
-            const todayStr = new Date().toISOString().split('T')[0];
-
-            for(let i=0; i<firstDay; i++) html += `<div class="cal-cell empty"></div>`;
             
+            for(let i=0; i<firstDay; i++) html += `<div></div>`;
+            
+            const userHolidays = settings.holidays ? settings.holidays.split(',').map(s=>s.trim()) : [];
+            const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+
             for(let d=1; d<=daysInMonth; d++) {
-                const mmdd = `${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-                const dateStr = `${year}-${mmdd}`;
-                
-                const hasDiary = postsData.some(p => p.category === '다이어리' && p.date === dateStr);
-                const hasSchedule = postsData.some(p => p.category === '일정' && p.date === dateStr);
+                const mmdd = `${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const dateStr = `${y}-${mmdd}`;
+                const dayOfWeek = new Date(y, m, d).getDay();
                 
                 let classes = ['cal-cell'];
                 if(dateStr === todayStr) classes.push('today');
                 
-                // 일/토/커스텀 휴일 색상
-                const dayOfWeek = new Date(year, month, d).getDay();
-                if(dayOfWeek === 0 || customHolidays.includes(mmdd)) classes.push('holiday');
+                // 휴일 로직 (일요일, 법정공휴일, 커스텀휴일)
+                if(dayOfWeek === 0 || koreanHolidays2026.includes(mmdd) || userHolidays.includes(mmdd)) classes.push('holiday');
                 else if(dayOfWeek === 6) classes.push('saturday');
 
-                let indicators = '';
-                if(hasDiary) indicators += `<div class="dot-diary"></div>`;
-                if(hasSchedule) indicators += `<div class="dot-schedule"></div>`;
+                // 해당 날짜 이벤트 검색
+                const dayEvents = postsData.filter(p => (p.category === '일정' || p.category === '다이어리') && p.date === dateStr);
                 
-                html += `<div class="${classes.join(' ')}" data-date="${dateStr}" onclick="openInlineView(this, '${dateStr}')">${d}<div class="cal-indicators">${indicators}</div></div>`;
+                // 마커 생성 (최대 2개까지만 텍스트 표시)
+                let markerHtml = '';
+                dayEvents.slice(0,2).forEach(ev => {
+                    const bg = ev.color || (ev.category==='일정'?'#48BB78':'#4299E1');
+                    markerHtml += `<div class="event-mini-label" style="background:${bg};">${ev.title}</div>`;
+                });
+                if(dayEvents.length > 2) markerHtml += `<div style="font-size:0.6rem; color:#999;">+${dayEvents.length-2}</div>`;
+
+                html += `<div class="${classes.join(' ')}" onclick="openInlineView(this, '${dateStr}')">
+                            <span style="z-index:2;">${d}</span>
+                            <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:2px; margin-top:2px;">${markerHtml}</div>
+                         </div>`;
             }
             grid.innerHTML = html;
         }
 
-        function changeMonth(offset) { 
-            currentCalDate.setMonth(currentCalDate.getMonth() + offset); 
-            renderCalendar(); closeInlineView(); 
+        function changeMonth(offset) {
+            currentCalDate.setMonth(currentCalDate.getMonth() + offset);
+            renderCalendar(); closeInlineView();
         }
 
-        // 인라인 확장 뷰
         function openInlineView(cellEl, dateStr) {
             document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
             cellEl.classList.add('selected');
 
-            const view = document.getElementById('calInlineView');
-            document.getElementById('inlineViewDateHdn').value = dateStr;
-            const parts = dateStr.split('-');
-            document.getElementById('inlineViewTitle').innerText = `${parts[0]}년 ${parts[1]}월 ${parts[2]}일`;
+            document.getElementById('inlineDateHdn').value = dateStr;
+            const p = dateStr.split('-');
+            document.getElementById('inlineViewTitle').innerText = `${p[0]}년 ${p[1]}월 ${p[2]}일`;
             
-            const dayPosts = postsData.filter(p => (p.category === '다이어리' || p.category === '일정') && p.date === dateStr);
-            const listEl = document.getElementById('inlineEntryList');
+            const dayEvents = postsData.filter(e => (e.category === '일정' || e.category === '다이어리') && e.date === dateStr);
+            const list = document.getElementById('inlineEntryList');
             
-            if(dayPosts.length === 0) {
-                listEl.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px 0;">등록된 기록이 없습니다.</p>`;
+            if(dayEvents.length === 0) {
+                list.innerHTML = `<div style="text-align:center; color:#999; padding:20px 0;">기록이 없습니다.</div>`;
             } else {
-                listEl.innerHTML = dayPosts.map(p => `
-                    <div class="day-entry-item ${p.category==='일정'?'schedule':''}" onclick="openDetailById(${p.id})">
-                        <span class="entry-cat">${p.category}</span>
-                        <div class="entry-title">${p.title}</div>
+                // onclick 시 event propagation 중단을 위해 상세 함수 호출 방식 수정
+                list.innerHTML = dayEvents.map(e => {
+                    const bg = e.color || (e.category==='일정'?'#48BB78':'#4299E1');
+                    return `
+                    <div class="day-entry-item" style="border-left-color:${bg};" onclick="event.stopPropagation(); openDetail('${e.id}')">
+                        <span class="badge" style="background:${bg}30; color:${bg}; margin-right:10px;">${e.category}</span>
+                        <div style="font-weight:700; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${e.title}</div>
+                        <i class="fa-solid fa-chevron-right" style="color:#ccc; font-size:0.8rem;"></i>
                     </div>
-                `).join('');
+                `}).join('');
             }
-            view.classList.add('active');
+            document.getElementById('calInlineView').classList.add('active');
         }
-
         function closeInlineView() {
             document.getElementById('calInlineView').classList.remove('active');
             document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
         }
 
-        // --- 이벤트 바인딩 (키보드, 스와이프, 외부 클릭) ---
-        function bindEvents() {
-            // 외부 클릭 시 인라인 뷰 닫기
-            document.addEventListener('click', (e) => {
-                const calView = document.getElementById('view-calendar');
-                if(!calView.classList.contains('active')) return;
-                const isClickInsideGrid = document.getElementById('calendar-days').contains(e.target);
-                const isClickInsideInline = document.getElementById('calInlineView').contains(e.target);
-                const isClickPrevNext = e.target.closest('.cal-nav-btn');
-                
-                if(!isClickInsideGrid && !isClickInsideInline && !isClickPrevNext) {
-                    closeInlineView();
-                }
-            });
-
-            // 키보드 방향키
-            document.addEventListener('keydown', (e) => {
-                if(document.getElementById('view-calendar').classList.contains('active')) {
-                    if(e.key === 'ArrowLeft') changeMonth(-1);
-                    if(e.key === 'ArrowRight') changeMonth(1);
-                }
-            });
-
-            // 스와이프 (달력)
-            let touchStartX = 0;
-            const calView = document.getElementById('view-calendar');
-            calView.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
-            calView.addEventListener('touchend', e => {
-                let touchEndX = e.changedTouches[0].screenX;
-                if(touchEndX < touchStartX - 50) changeMonth(1); // 왼쪽으로 스와이프 -> 다음달
-                if(touchEndX > touchStartX + 50) changeMonth(-1); // 오른쪽으로 스와이프 -> 이전달
-            }, {passive: true});
-        }
-
-        /* =========================================================
-           7. 글쓰기 폼 UI (다이어리/일정 날짜 분리)
-           ========================================================= */
         function toggleDateInput() {
-            const cat = document.getElementById('postCategory').value;
-            const dateWrap = document.getElementById('dateInputWrap');
-            if(cat === '다이어리' || cat === '일정') dateWrap.style.display = 'block';
-            else dateWrap.style.display = 'none';
+            const c = document.getElementById('postCategory').value;
+            document.getElementById('dateInputWrap').style.display = (c==='다이어리'||c==='일정') ? 'block' : 'none';
         }
 
-        function openWriteModal(catDefault, dateDefault) { 
-            closeInlineView();
-            document.getElementById('postCategory').value = catDefault || '일상';
-            document.getElementById('postDate').value = dateDefault || new Date().toISOString().split('T')[0];
+        function selectColor(el) {
+            document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('postColor').value = el.getAttribute('data-color');
+        }
+
+        function openWriteModal(cat, dateStr) {
+            document.getElementById('postCategory').value = cat || '일상';
+            document.getElementById('postDate').value = dateStr || new Date().toLocaleDateString('en-CA');
             document.getElementById('postTitle').value = '';
             document.getElementById('postContent').value = '';
-            toggleDateInput(); // 초기 상태 셋팅
-            showModal('writeModal'); 
-        }
-
-        /* =========================================================
-           8. 통합 게시판 (스토리 & 갤러리)
-           ========================================================= */
-        function setBoardCategory(cat, btnEl) { 
-            currentBoardTab = cat; currentPage = 1;
-            document.querySelectorAll('.board-tab').forEach(b => b.classList.remove('active')); btnEl.classList.add('active'); 
-            processFilteredPosts(); 
+            document.getElementById('postImage').value = '';
+            toggleDateInput();
+            showModal('writeModal');
         }
 
         function submitPost() {
-            const cat = document.getElementById('postCategory').value; 
-            const title = document.getElementById('postTitle').value.trim(); 
-            const content = document.getElementById('postContent').value.trim(); 
-            const dateStr = document.getElementById('postDate').value || new Date().toISOString().split('T')[0];
-            // 테스트 모드 파일명(url) 임의 지정
-            const fakeUrl = document.getElementById('postImage').files.length > 0 ? 'https://via.placeholder.com/600x400?text=Uploaded+Media' : '';
+            const cat = document.getElementById('postCategory').value;
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            const date = document.getElementById('postDate').value;
+            const color = document.getElementById('postColor').value;
+            // 간단 이미지 URL 모의 (실제 서비스는 서버 업로드 필요)
+            const hasImg = document.getElementById('postImage').files.length > 0;
+            const imgUrl = hasImg ? 'https://images.unsplash.com/photo-1518199268839-497c413d806a?q=80&w=800&auto=format&fit=crop' : '';
 
-            if(!title) return showToast('제목을 입력하세요.');
-            
+            if(!title) return showToast('제목을 입력하세요!');
+
             const newPost = {
-                id: Date.now(),
-                author: authorName || '우리',
-                title: title,
+                id: Date.now().toString(),
+                author: authorName,
                 category: cat,
-                date: (cat==='다이어리'||cat==='일정') ? dateStr : '',
+                title: title,
                 content: content,
-                image_url: fakeUrl,
-                created_at: formatDate(new Date())
+                date: (cat==='다이어리'||cat==='일정') ? date : '',
+                color: color,
+                image: imgUrl,
+                created_at: new Date().toLocaleDateString()
             };
+
+            postsData.unshift(newPost);
+            localStorage.setItem('app_posts', JSON.stringify(postsData));
+            hideModal('writeModal'); showToast('기록되었습니다 💖');
             
-            postsData.unshift(newPost); saveData();
-            hideModal('writeModal'); loadLocalData(); showToast("저장되었습니다! 💖");
+            if(document.getElementById('view-calendar').classList.contains('active')) { renderCalendar(); closeInlineView(); checkUpcomingEvents(); }
+            if(document.getElementById('view-board').classList.contains('active')) renderBoard();
         }
 
-        function processFilteredPosts() {
-            const list = document.getElementById('boardList'); const pageArea = document.getElementById('paginationArea');
-            list.innerHTML = ''; pageArea.innerHTML = '';
-            
-            currentFilteredPosts = postsData.filter(p => {
+        function setBoardCategory(cat, btn) {
+            currentBoardTab = cat;
+            document.querySelectorAll('.board-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderBoard();
+        }
+
+        function renderBoard() {
+            const list = document.getElementById('boardList');
+            const filtered = postsData.filter(p => {
                 if(currentBoardTab === '전체') return p.category !== '다이어리' && p.category !== '일정';
                 return p.category === currentBoardTab;
             });
-            
-            if(currentFilteredPosts.length === 0) { list.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:50px 0;">등록된 기록이 없습니다.</p>`; list.className=''; return; }
 
-            const totalPages = Math.ceil(currentFilteredPosts.length / postsPerPage);
-            const startIndex = (currentPage - 1) * postsPerPage;
-            const paginatedPosts = currentFilteredPosts.slice(startIndex, startIndex + postsPerPage);
+            if(filtered.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:50px 0; color:#999;">작성된 글이 없어요.</div>`;
+                return;
+            }
 
             if(currentBoardTab === '갤러리') {
-                list.className = 'gallery-grid';
-                paginatedPosts.forEach((p, index) => {
-                    const actualIndex = startIndex + index;
-                    list.innerHTML += `
-                        <div class="gallery-item glass" onclick="openDetailByIndex(${actualIndex})">
-                            ${getMediaHTML(p.image_url)}
-                            <div class="gallery-overlay"><span>${p.title}</span></div>
-                        </div>`;
-                });
+                list.style.display = 'grid'; list.style.gridTemplateColumns = '1fr 1fr'; list.style.gap = '10px';
+                list.innerHTML = filtered.map(p => `
+                    <div style="border-radius:12px; overflow:hidden; aspect-ratio:1; cursor:pointer;" onclick="openDetail('${p.id}')">
+                        <img src="${p.image || 'https://via.placeholder.com/400'}" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                `).join('');
             } else {
-                list.className = 'post-list';
-                paginatedPosts.forEach((p, index) => {
-                    const actualIndex = startIndex + index;
-                    const postComments = commentsData.filter(c => c.post_id === p.id);
-                    const previewComments = postComments.slice(-3);
-                    let inlineHtml = previewComments.map(c => `
-                        <div class="inline-comment-item">
-                            <div><span class="inline-comment-author">${c.author}</span><span style="color:var(--text-main);">${c.content}</span></div>
-                            <span class="inline-comment-time">${(c.created_at||'').slice(5,16)}</span>
-                        </div>
-                    `).join('');
-                    if(!inlineHtml) inlineHtml = `<div style="font-size:0.85rem; color:var(--text-muted);">첫 댓글을 남겨보세요.</div>`;
-
-                    list.innerHTML += `
-                        <div class="post-card glass">
-                            <div class="post-content-flex">
-                                <div onclick="openDetailByIndex(${actualIndex})">
-                                    <div class="post-top-meta"><span class="post-cat-badge">${p.category}</span></div>
-                                    <div class="post-title">${p.title}</div>
-                                    <div class="post-preview">${p.content}</div>
-                                    <div class="post-timestamp">${p.created_at || ''} · ${p.author}</div>
-                                </div>
-                                <div class="inline-comments">
-                                    <div style="font-size:0.85rem; font-weight:700; color:var(--primary); margin-bottom:8px;"><i class="fa-regular fa-comment-dots"></i> 댓글 (${postComments.length})</div>
-                                    ${inlineHtml}
-                                    <div class="inline-comment-input-wrap">
-                                        <input type="text" id="inline-comment-${p.id}" placeholder="따뜻한 한마디..." onkeydown="if(event.key==='Enter') submitInlineComment(${p.id})">
-                                        <button onclick="submitInlineComment(${p.id})">등록</button>
-                                    </div>
-                                </div>
-                            </div>
-                            ${p.image_url ? `<div style="width:120px; height:120px; flex-shrink:0;">${getMediaHTML(p.image_url)}</div>` : ''}
-                        </div>`;
-                });
-            }
-
-            if (totalPages > 1) {
-                let pageHtml = '';
-                for(let i=1; i<=totalPages; i++) {
-                    pageHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
-                }
-                pageArea.innerHTML = pageHtml;
+                list.style.display = 'block';
+                list.innerHTML = filtered.map(p => `
+                    <div class="post-card" onclick="openDetail('${p.id}')">
+                        <span class="badge" style="background:var(--primary-light); color:var(--primary-dark); margin-bottom:8px; display:inline-block;">${p.category}</span>
+                        <div class="post-title">${p.title}</div>
+                        <div class="post-preview">${p.content}</div>
+                        <div style="font-size:0.8rem; color:#A0AEC0;">${p.created_at} · ${p.author}</div>
+                    </div>
+                `).join('');
             }
         }
 
-        function goToPage(num) {
-            currentPage = num; processFilteredPosts();
-            const container = document.body.classList.contains('mobile-frame-mode') ? document.getElementById('app-container') : window;
-            container.scrollTo({top:0, behavior:'smooth'});
-        }
-
-        function submitInlineComment(postId) {
-            const input = document.getElementById(`inline-comment-${postId}`); const content = input.value.trim();
-            if (!content) return;
-            commentsData.push({ id: Date.now(), post_id: postId, author: authorName || '우리', content: content, created_at: formatDate(new Date()) });
-            saveData(); processFilteredPosts(); showToast('댓글이 등록되었습니다.');
-        }
-
-        /* =========================================================
-           9. 상세 모달 & 이전/다음 네비게이션
-           ========================================================= */
-        function openDetailByIndex(index) {
-            if(index < 0 || index >= currentFilteredPosts.length) return;
-            activePostIndex = index; const p = currentFilteredPosts[index];
-            renderDetailModal(p);
-            
-            const navArea = document.getElementById('modalNavArea'); navArea.style.display = 'flex';
-            document.getElementById('btnPrevPost').disabled = (index === 0); document.getElementById('btnNextPost').disabled = (index === currentFilteredPosts.length - 1);
-        }
-
-        function openDetailById(id) {
-            const p = postsData.find(item => item.id === id); if(!p) return;
-            activePostIndex = -1; renderDetailModal(p);
-            document.getElementById('modalNavArea').style.display = 'none';
-        }
-
-        function goPrevPost() { if (activePostIndex > 0) openDetailByIndex(activePostIndex - 1); }
-        function goNextPost() { if (activePostIndex < currentFilteredPosts.length - 1) openDetailByIndex(activePostIndex + 1); }
-
-        function renderDetailModal(p) {
-            activePost = p;
+        function openDetail(id) {
+            const p = postsData.find(x => x.id === id); if(!p) return;
+            activePostId = id;
             document.getElementById('modalCategory').innerText = p.category;
-            document.getElementById('modalDateMeta').innerText = p.date ? `${p.date} / ${p.created_at||''}` : p.created_at||'';
-            document.getElementById('modalAuthor').innerText = p.author;
             document.getElementById('modalTitle').innerText = p.title;
+            document.getElementById('modalAuthor').innerText = p.author;
+            document.getElementById('modalDateMeta').innerText = (p.date ? p.date + " / " : "") + p.created_at;
             document.getElementById('modalContent').innerText = p.content;
-            document.getElementById('modalImageWrap').innerHTML = getMediaHTML(p.image_url);
+            document.getElementById('modalImageWrap').innerHTML = p.image ? `<img src="${p.image}">` : '';
             
-            // 본인 또는 편집모드면 버튼 노출
-            if(isEditMode || p.author === authorName) {
-                document.getElementById('btnEditPost').style.display = 'inline-block';
-                document.getElementById('btnDelPost').style.display = 'inline-block';
-            } else {
-                document.getElementById('btnEditPost').style.display = 'none';
-                document.getElementById('btnDelPost').style.display = 'none';
-            }
-
-            renderComments(); showModal('detailModal');
+            const canEdit = document.body.classList.contains('edit-mode') || p.author === authorName;
+            document.getElementById('btnDelPost').style.display = canEdit ? 'inline-block' : 'none';
+            
+            showModal('detailModal');
         }
 
-        function renderComments() {
-            if(!activePost) return;
-            const postComments = commentsData.filter(c => c.post_id === activePost.id);
-            document.getElementById('modalCommentsHeader').innerHTML = `댓글 <span style="color:var(--primary);">${postComments.length}</span>`;
-            document.getElementById('modalCommentsList').innerHTML = postComments.map(c => `
-                <div style="display:flex; justify-content:space-between; font-size:0.95rem; border-bottom:1px solid #eee; padding-bottom:10px;">
-                    <div><b style="color:var(--text-main); margin-right:8px;">${c.author}</b> <span style="color:#4A5568;">${c.content}</span><br><span style="font-size:0.75rem; color:#A0AEC0;">${c.created_at||''}</span></div>
-                    ${(isEditMode || c.author === authorName) ? `<button style="background:none; border:none; color:#FC8181; cursor:pointer; padding:5px;" onclick="customConfirm('댓글을 삭제할까요?', () => deleteComment(${c.id}))"><i class="fa-solid fa-xmark"></i></button>` : ''}
-                </div>
-            `).join('');
-            document.getElementById('modal-comment-input').value = '';
-        }
-
-        function submitComment() {
-            if(!activePost) return;
-            const content = document.getElementById('modal-comment-input').value.trim(); if (!content) return;
-            commentsData.push({ id: Date.now(), post_id: activePost.id, author: authorName || '우리', content: content, created_at: formatDate(new Date()) });
-            saveData(); renderComments();
-            if(document.getElementById('view-board').classList.contains('active')) processFilteredPosts();
-        }
-        
-        function deleteComment(id) {
-            commentsData = commentsData.filter(c => c.id !== id); saveData(); renderComments();
-            if(document.getElementById('view-board').classList.contains('active')) processFilteredPosts(); showToast('삭제되었습니다.');
-        }
-
-        function openEditFromDetail() {
-            hideModal('detailModal'); if(!activePost) return;
-            document.getElementById('editPostId').value = activePost.id; 
-            document.getElementById('editTitle').value = activePost.title; 
-            document.getElementById('editContent').value = activePost.content; 
-            document.getElementById('editCategory').value = activePost.category; 
-            document.getElementById('editDateStr').value = activePost.date || ''; 
-            showModal('editModal');
-        }
-
-        function submitEdit() {
-            const id = parseInt(document.getElementById('editPostId').value); const p = postsData.find(x => x.id === id);
-            if(p) {
-                p.title = document.getElementById('editTitle').value.trim();
-                p.content = document.getElementById('editContent').value.trim();
-                saveData(); hideModal('editModal'); loadLocalData(); showToast("수정 완료!");
-            }
-        }
-
-        function deleteFromDetail() {
-            customConfirm("기록을 완전히 삭제하시겠습니까?", () => {
-                postsData = postsData.filter(p => p.id !== activePost.id);
-                commentsData = commentsData.filter(c => c.post_id !== activePost.id);
-                saveData(); hideModal('detailModal'); loadLocalData(); showToast("삭제되었습니다.");
+        function deleteActivePost() {
+            customConfirm('기록을 완전히 삭제하시겠습니까?', () => {
+                postsData = postsData.filter(p => p.id !== activePostId);
+                localStorage.setItem('app_posts', JSON.stringify(postsData));
+                hideModal('detailModal'); showToast('삭제되었습니다.');
+                
+                if(document.getElementById('view-calendar').classList.contains('active')) { renderCalendar(); closeInlineView(); checkUpcomingEvents(); }
+                if(document.getElementById('view-board').classList.contains('active')) renderBoard();
             });
         }
-
     </script>
 </body>
 </html>
