@@ -1,3 +1,7 @@
+/*
+ * 커플 프라이빗 페이지 Backend (_worker.js)
+ * - 설정(D-Day, 사진) 관리, 게시물/댓글 CRUD, 암호화 로그인 통신
+ */
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -33,16 +37,23 @@ export default {
       } catch (e) { return new Response(JSON.stringify({ error: e.message }), { status: 500 }); }
     }
 
-    // 3. [인증 API] 커플 전용 고정 아이디/비밀번호 (가입 불가)
+    // 3. [인증 API] 커플 전용 고정 비밀번호 및 정체성 선택
     if (url.pathname === "/api/login" && request.method === "POST") {
       try {
-        const { username, password } = await request.json();
+        const { username, password, customName } = await request.json();
         
-        // 🔐 고정 접속 정보: 아이디 ourlove / 비밀번호 1004
-        if (username === "ourlove" && password === "1004") {
-          return Response.json({ success: true, username: "ourlove", fullName: "우리", isAdmin: true, status: "approved" });
+        // 🔐 공통 암호는 1004 입니다. username은 'him' 또는 'her' 로 프론트에서 전송됩니다.
+        if (password === "1004") {
+            const displayName = customName || (username === "her" ? "Her" : "Him");
+            return Response.json({ 
+                success: true, 
+                username: username, 
+                fullName: displayName, 
+                isAdmin: true, 
+                status: "approved" 
+            });
         }
-        return new Response(JSON.stringify({ error: "아이디 또는 비밀번호가 틀렸습니다. 우리만의 암호를 입력해 주세요." }), { status: 401 });
+        return new Response(JSON.stringify({ error: "비밀번호가 틀렸습니다. 우리만의 암호를 확인해주세요." }), { status: 401 });
       } catch (e) { return new Response(JSON.stringify({ error: e.message }), { status: 500 }); }
     }
 
@@ -53,10 +64,13 @@ export default {
     }
     if (url.pathname === "/api/posts" && request.method === "POST") {
       const formData = await request.formData();
-      const author = formData.get("author") || "익명"; const username = formData.get("username") || "ourlove";
-      const title = formData.get("title") || "무제"; const category = formData.get("category") || "데이트록";
-      const dateStr = formData.get("date") || ""; // 다이어리용 날짜 데이터 추가
-      const content = formData.get("content") || ""; const image = formData.get("image");
+      const author = formData.get("author") || "익명"; 
+      const username = formData.get("username") || "ourlove";
+      const title = formData.get("title") || "무제"; 
+      const category = formData.get("category") || "데이트록";
+      const dateStr = formData.get("date") || ""; // 다이어리/일정용 날짜
+      const content = formData.get("content") || ""; 
+      const image = formData.get("image");
       
       let imageUrl = "";
       if (image && typeof image === "object" && image.size > 0 && image.name) {
@@ -72,10 +86,14 @@ export default {
     }
     if (url.pathname === "/api/posts" && request.method === "PUT") {
       const formData = await request.formData();
-      const id = formData.get("id"); const title = formData.get("title") || "무제"; const category = formData.get("category") || "데이트록";
-      const content = formData.get("content") || ""; const dateStr = formData.get("date") || ""; 
+      const id = formData.get("id"); 
+      const title = formData.get("title") || "무제"; 
+      const category = formData.get("category") || "데이트록";
+      const content = formData.get("content") || ""; 
+      const dateStr = formData.get("date") || ""; 
       const authorMeta = formData.get("authorMeta"); // 이름|아이디
-      const keepImage = formData.get("keepImage") || ""; const image = formData.get("image");
+      const keepImage = formData.get("keepImage") || ""; 
+      const image = formData.get("image");
       
       let imageUrl = keepImage;
       if (image && typeof image === "object" && image.size > 0 && image.name) {
