@@ -265,15 +265,17 @@
         </div>
     </div>
 
-    <!-- 2. 로그인 후 작성자 선택 팝업 (남친/여친 버튼) -->
+   <!-- 2. 로그인 후 작성자 선택 팝업 (남친/여친 버튼) -->
     <div class="modal-overlay" id="authorSelectModal">
         <div class="modal-content" style="max-width: 400px; text-align: center; padding: 40px 30px;">
             <i class="fa-solid fa-face-smile-wink" style="font-size:3.5rem; color:var(--primary); margin-bottom:20px;"></i>
             <h3 style="margin-bottom:10px; font-size:1.6rem; color:var(--text-main);">누가 접속했나요?</h3>
             <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:25px;">앞으로 남길 추억에 기록될 프로필을 선택해주세요.</p>
             <div style="display: flex; gap: 15px; justify-content: center;">
-                <button class="btn-submit" style="flex:1; background:#FF8E8B;" onclick="setAuthorName('히니')"><i class="fa-solid fa-mars"></i> 남자친구</button>
-                <button class="btn-submit" style="flex:1; background:#8DA9C4;" onclick="setAuthorName('효니')"><i class="fa-solid fa-venus"></i> 여자친구</button>
+                <!-- 여자친구 버튼을 앞으로 이동, 이름 히니로 변경 -->
+                <button class="btn-submit" style="flex:1; background:#8DA9C4;" onclick="setAuthorName('히니')"><i class="fa-solid fa-venus"></i> 여자친구</button>
+                <!-- 남자친구 버튼을 뒤로 이동, 이름 효니로 변경 -->
+                <button class="btn-submit" style="flex:1; background:#FF8E8B;" onclick="setAuthorName('효니')"><i class="fa-solid fa-mars"></i> 남자친구</button>
             </div>
         </div>
     </div>
@@ -323,7 +325,7 @@
                     <div class="banner-content fade-up">
                         <div class="dday-badge">우리 만난 지</div>
                         <div class="dday-num" id="ddayText">D+♥</div>
-                        <div class="couple-name" id="coupleNamesText">Boy & Girl</div>
+                        <div class="couple-name" id="coupleNamesText">정희원 & 정효재</div>
                         <button class="edit-mode-only" onclick="showModal('settingsModal')" style="margin-top:15px; background:rgba(255,255,255,0.3); color:white; border:1px solid rgba(255,255,255,0.5); padding:6px 16px; border-radius:20px; cursor:pointer;"><i class="fa-solid fa-pen"></i> 디데이 설정</button>
                     </div>
                 </div>
@@ -332,15 +334,15 @@
                     <div class="widget-title">Our Profile</div>
                     <div class="profile-flex">
                         <div class="profile-item" style="position:relative;">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" class="profile-pic" id="profile1">
+                            <img src="blob:https://dash.cloudflare.com/99493894-bbae-48c3-8402-c82df7e33120" class="profile-pic" id="profile1">
                             <button class="edit-badge" onclick="triggerSiteImgUpload('profile_1')" style="top:auto; bottom:-10px; right:-10px; padding:6px; border-radius:50%;"><i class="fa-solid fa-camera"></i></button>
-                            <br><span>Her</span>
+                            <br><span>정희원</span>
                         </div>
                         <i class="fa-solid fa-heart" style="color:var(--primary); font-size:2rem; animation: pulseAlert 2s infinite;"></i>
                         <div class="profile-item" style="position:relative;">
-                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop" class="profile-pic" id="profile2">
+                            <img src="blob:https://dash.cloudflare.com/4c60a0cd-62bf-4951-86c9-16d2f8cc9d56" class="profile-pic" id="profile2">
                             <button class="edit-badge" onclick="triggerSiteImgUpload('profile_2')" style="top:auto; bottom:-10px; right:-10px; padding:6px; border-radius:50%;"><i class="fa-solid fa-camera"></i></button>
-                            <br><span>Him</span>
+                            <br><span>정효재</span>
                         </div>
                     </div>
                 </div>

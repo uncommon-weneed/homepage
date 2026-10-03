@@ -52,8 +52,8 @@ if (url.pathname === "/api/login" && request.method === "POST") {
   try {
     const { username, password } = await request.json();
     
-    // 🔐 고정 접속 정보: 아이디 ourlove / 비밀번호 1004
-    if (username === "ourlove" && password === "1004") {
+    // 🔐 고정 접속 정보: 아이디 ourlove / 비밀번호 0709 (수정된 부분)
+    if (username === "ourlove" && password === "0709") { // 기존 "1004"에서 "0709"로 변경
       return Response.json({ 
           success: true, 
           username: "ourlove", 
