@@ -951,8 +951,9 @@
             border-bottom: 1px solid var(--border-light);
         }
         .cal-cell {
-            height: 72px; /* 모바일에서 캘린더 전체가 한눈에 들어오는 안정적인 고정 높이 */
-            max-height: 72px;
+            min-height: 84px;
+            height: auto;
+            max-height: 125px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -966,19 +967,19 @@
             border: 2px solid transparent;
             background: #FAFAFD;
             box-sizing: border-box;
-            overflow: hidden; /* 제목 길이나 일정 개수에 상관없이 칸이 늘어나 화면 밖으로 나가는 현상 원천 차단 */
+            overflow: hidden;
         }
         @media (min-width: 600px) {
             .cal-cell {
-                height: 90px;
-                max-height: 90px;
+                min-height: 98px;
+                max-height: 140px;
                 padding: 7px 4px 6px;
             }
         }
         @media (min-width: 900px) {
             .cal-cell {
-                height: 105px;
-                max-height: 105px;
+                min-height: 112px;
+                max-height: 155px;
                 padding: 8px 6px 6px;
             }
         }
@@ -3651,27 +3652,34 @@
                 
                 const isHoliday = krHolidays.includes(dateMD) || dayOfWeek === 0;
                 // [요구사항 5]: 최신 등록된 글이 먼저 보이도록 역순 정렬
-                const dayPosts = postsData.filter(p => (p.author || '').split('|')[4] === dateStr).reverse();
+                // [수정 완료]: 해당 날짜의 모든 기록을 최신순으로 추출
+                const dayPosts = postsData.filter(p => (p.author || '').split('|')[4] === dateStr).slice().reverse();
                 let previews = '';
                 
-                // 캘린더 칸이 넘치지 않으면서도 가장 최근에 쓴 글 제목이 바로 보이도록 최대 2개 선별
-                const maxPreviews = 2;
+                // [해결]: 오늘 적은 글의 기록이 누락 없이 다 보이도록 최대 4개까지 제목과 카테고리별 아이콘 표시!
+                const maxPreviews = 4;
                 const visiblePosts = dayPosts.slice(0, maxPreviews);
                 visiblePosts.forEach(p => {
                     const prts = (p.author || '').split('|');
                     const postTitle = prts[2] || '기록';
-                    if (prts[3] === '다이어리') {
+                    const cat = prts[3] || '일상';
+                    
+                    if (cat === '다이어리') {
                         previews += `<span class="cal-pill" title="${postTitle}" style="color:var(--primary-dark); background:var(--primary-light);">📝 ${postTitle}</span>`;
-                    } else if (prts[3] === '일정') {
+                    } else if (cat === '일정') {
                         const customColor = prts[5] || 'var(--secondary)';
                         previews += `<span class="cal-pill" title="${postTitle}" style="color:white; background:${customColor};">📅 ${postTitle}</span>`;
+                    } else if (cat === '갤러리') {
+                        previews += `<span class="cal-pill" title="${postTitle}" style="color:#7B341E; background:#FEEBC8;">📸 ${postTitle}</span>`;
                     } else {
-                        previews += `<span class="cal-pill" title="${postTitle}" style="color:var(--text-sub); background:#EDF2F7;">💬 ${postTitle}</span>`;
+                        // 일상 (자유)
+                        previews += `<span class="cal-pill" title="${postTitle}" style="color:#22543D; background:#C6F6D5;">🌿 ${postTitle}</span>`;
                     }
                 });
-                // 이전 기록이 추가로 있을 경우에만 단정한 미니 뱃지 표시
+                
+                // 4개를 초과하는 극단적으로 많은 글이 있을 때만 정직하게 추가 개수 배지 표시
                 if (dayPosts.length > maxPreviews) {
-                    previews += `<span class="cal-more-badge" title="총 ${dayPosts.length}개의 기록 (탭하여 전체 보기)">+${dayPosts.length - maxPreviews}개 더보기</span>`;
+                    previews += `<span class="cal-more-badge">+${dayPosts.length - maxPreviews}개 더보기</span>`;
                 }
                 
                 const isTodayClass = dateStr === todayStr ? 'today' : '';
@@ -3679,7 +3687,7 @@
                 const isSelectedClass = dateStr === currentSelectedCalDate ? 'selected' : '';
                 
                 html += `
-                    <div class="cal-cell ${isTodayClass} ${holidayClass} ${isSelectedClass}" data-date="${dateStr}" onclick="openDayView('${dateStr}')">
+                    <div class="cal-cell ${isTodayClass} ${holidayClass} ${isSelectedClass} ${holidayClass} ${isSelectedClass}" data-date="${dateStr}" onclick="openDayView('${dateStr}')">
                         <span style="margin-bottom:2px;">${d}</span>
                         <div class="cal-preview">${previews}</div>
                     </div>
@@ -3730,10 +3738,11 @@
             const dayOfWeekName = ['일', '월', '화', '수', '목', '금', '토'][new Date(parts[0], parts[1] - 1, parts[2]).getDay()];
             document.getElementById('calSlideTitle').innerText = `${parts[0]}년 ${parts[1]}월 ${parts[2]}일 (${dayOfWeekName})`;
             
+            // [해결]: 해당 일자에 작성된 모든 글(다이어리, 일정, 일상, 갤러리)을 누락 없이 최신순으로 추출
             const dayPosts = postsData.filter(p => { 
                 const prts = (p.author || '').split('|'); 
-                return (prts[3] === '다이어리' || prts[3] === '일정') && prts[4] === dateStr; 
-            });
+                return prts[4] === dateStr; 
+            }).slice().reverse();
 
             const subtitleEl = document.getElementById('calSlideSubtitle');
             const listEl = document.getElementById('calSlideEntryList');
@@ -3751,12 +3760,35 @@
                 subtitleEl.innerText = `총 ${dayPosts.length}개의 기록`;
                 listEl.innerHTML = dayPosts.map(p => {
                     const prts = (p.author || '').split('|');
-                    const cat = prts[3];
-                    const title = prts[2] || '무제';
                     const author = prts[0] || '익명';
-                    const color = (cat === '일정' && prts[5]) ? prts[5] : (cat === '일정' ? 'var(--secondary)' : 'var(--primary)');
-                    const badgeBg = cat === '일정' ? color : 'var(--primary-light)';
-                    const badgeColor = cat === '일정' ? 'white' : 'var(--primary-dark)';
+                    const title = prts[2] || '무제';
+                    const cat = prts[3] || '일상';
+                    let color = 'var(--primary)';
+                    let badgeBg = 'var(--primary-light)';
+                    let badgeColor = 'var(--primary-dark)';
+                    let icon = 'fa-pen-nib';
+
+                    if (cat === '일정') {
+                        color = prts[5] || 'var(--secondary)';
+                        badgeBg = color;
+                        badgeColor = 'white';
+                        icon = 'fa-calendar-check';
+                    } else if (cat === '다이어리') {
+                        color = 'var(--primary)';
+                        badgeBg = 'var(--primary-light)';
+                        badgeColor = 'var(--primary-dark)';
+                        icon = 'fa-book-open';
+                    } else if (cat === '갤러리') {
+                        color = '#ED8936';
+                        badgeBg = '#FEEBC8';
+                        badgeColor = '#7B341E';
+                        icon = 'fa-camera-retro';
+                    } else {
+                        color = '#38A169';
+                        badgeBg = '#C6F6D5';
+                        badgeColor = '#22543D';
+                        icon = 'fa-seedling';
+                    }
                     const timeDisplay = formatPostDateTime(prts[4], prts[6]);
 
                     return `
