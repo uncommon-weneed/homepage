@@ -243,6 +243,146 @@
         .edit-mode-only { display: none !important; }
         body.edit-mode .edit-mode-only { display: inline-block !important; }
         body.edit-mode .edit-mode-only-flex { display: flex !important; }
+
+        /* 캘린더 아래 슬라이드 인라인 패널 */
+        .cal-slide-panel {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-12px);
+            transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 0.35s ease, 
+                        transform 0.35s ease,
+                        margin-top 0.35s ease;
+            margin-top: 0;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .cal-slide-panel.open {
+            max-height: 1200px;
+            opacity: 1;
+            transform: translateY(0);
+            margin-top: 20px;
+        }
+
+        .cal-slide-content {
+            padding: 25px 22px;
+        }
+
+        .cal-slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .cal-slide-date-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cal-slide-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .cal-slide-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .cal-slide-entries {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .cal-slide-item {
+            background: #F8F9FA;
+            border-radius: 14px;
+            padding: 16px 18px;
+            border-left: 5px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .cal-slide-item:hover {
+            background: var(--primary-light);
+            transform: translateX(4px);
+        }
+
+        .cal-slide-item-left {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .cal-slide-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .cal-slide-item-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cal-slide-item-snippet {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cal-slide-item-thumb {
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-left: 12px;
+            flex-shrink: 0;
+        }
+
+        .cal-slide-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* 캘린더 날짜 선택 하이라이트 */
+        .cal-cell.selected {
+            background: var(--primary-light) !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 4px 12px rgba(255, 142, 139, 0.35);
+            transform: scale(1.04);
+            z-index: 5;
+        }
     </style>
 </head>
 <body>
@@ -256,11 +396,14 @@
             <i class="fa-solid fa-heart"></i>
             <h1>Secret Place</h1>
             <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:30px;">우리만의 암호를 입력해 주세요.</p>
-            <!-- 아이디 입력란 삭제 후 비밀번호 입력창만 유지 -->
-<div class="input-with-icon" style="margin-bottom: 15px;">
-    <i class="fa-solid fa-lock"></i>
-    <input type="password" class="auth-input" id="l_pw" placeholder="암호를 입력해주세요" style="margin-bottom:0;" onkeydown="if(event.key==='Enter') submitLogin()">
-</div>
+            <div class="input-with-icon" style="margin-bottom: 15px;">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" class="auth-input" id="l_id" placeholder="아이디" style="margin-bottom:0;">
+            </div>
+            <div class="input-with-icon" style="margin-bottom: 15px;">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" class="auth-input" id="l_pw" placeholder="비밀번호" style="margin-bottom:0;" onkeydown="if(event.key==='Enter') submitLogin()">
+            </div>
             <button class="btn-auth" onclick="submitLogin()">입장하기</button>
         </div>
     </div>
@@ -373,6 +516,29 @@
                 
                 <div class="cal-grid fade-up" id="calendar-days">
                     <!-- 요일 및 일자 동적 생성 -->
+                </div>
+
+                <!-- 캘린더 아래 슬라이드 인라인 패널 -->
+                <div id="calDaySlidePanel" class="cal-slide-panel">
+                    <div class="cal-slide-content">
+                        <div class="cal-slide-header">
+                            <div class="cal-slide-date-info">
+                                <i class="fa-regular fa-calendar-days" style="color:var(--primary); font-size:1.4rem;"></i>
+                                <div>
+                                    <h3 class="cal-slide-title" id="calSlideTitle">2026. 10. 15</h3>
+                                    <p class="cal-slide-subtitle" id="calSlideSubtitle">기록 목록</p>
+                                </div>
+                            </div>
+                            <button class="icon-btn" onclick="closeCalSlidePanel()" title="접기"><i class="fa-solid fa-chevron-up"></i></button>
+                        </div>
+                        
+                        <div id="calSlideEntryList" class="cal-slide-entries"></div>
+
+                        <div class="cal-slide-actions">
+                            <button class="btn-submit" style="background:var(--secondary); flex:1;" onclick="openWriteModal('일정', currentSelectedCalDate)"><i class="fa-solid fa-calendar-plus"></i> 일정 추가</button>
+                            <button class="btn-submit" style="flex:1;" onclick="openWriteModal('다이어리', currentSelectedCalDate)"><i class="fa-solid fa-book"></i> 다이어리 쓰기</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -615,27 +781,14 @@
         }
 
         async function submitLogin() {
-    const pw = document.getElementById('l_pw').value.trim();
-    if(!pw) return showToast("비밀번호를 입력해주세요.");
-
-    const res = await fetch('/api/login', { 
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({ password: pw }) 
-    });
-    
-    if(res.ok) {
-        user = await res.json(); 
-        document.getElementById('auth-wall').style.opacity = '0';
-        setTimeout(() => { 
-            document.getElementById('auth-wall').style.display = 'none'; 
-            showModal('authorSelectModal'); 
-        }, 500);
-    } else { 
-        const d = await res.json(); 
-        showToast(d.error); 
-    }
-}
+            const id = document.getElementById('l_id').value.trim(); const pw = document.getElementById('l_pw').value.trim();
+            const res = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:id, password:pw}) });
+            if(res.ok) {
+                user = await res.json(); 
+                document.getElementById('auth-wall').style.opacity = '0';
+                setTimeout(() => { document.getElementById('auth-wall').style.display = 'none'; showModal('authorSelectModal'); }, 500);
+            } else { const d = await res.json(); showToast(d.error); }
+        }
 
         function setAuthorName(name) {
             user.fullName = name;
@@ -789,6 +942,7 @@
         }
 
         let currentCalDate = new Date();
+        let currentSelectedCalDate = '';
         
         function renderCalendar() {
             const year = currentCalDate.getFullYear(); const month = currentCalDate.getMonth();
@@ -828,31 +982,106 @@
                 
                 const isTodayClass = dateStr === todayStr ? 'today' : '';
                 const holidayClass = isHoliday ? 'holiday' : '';
+                const isSelectedClass = dateStr === currentSelectedCalDate ? 'selected' : '';
                 
-                html += `<div class="cal-cell ${isTodayClass} ${holidayClass}" onclick="openDayView('${dateStr}')"><span style="margin-bottom:2px;">${d}</span><div class="cal-preview">${previews}</div></div>`;
+                html += `<div class="cal-cell ${isTodayClass} ${holidayClass} ${isSelectedClass}" data-date="${dateStr}" onclick="openDayView('${dateStr}')"><span style="margin-bottom:2px;">${d}</span><div class="cal-preview">${previews}</div></div>`;
             }
             grid.innerHTML = html;
+
+            // 만약 현재 열려있는 슬라이드가 있다면 데이터 갱신
+            if (currentSelectedCalDate) {
+                updateCalSlideContent(currentSelectedCalDate);
+            }
         }
 
-        function changeMonth(offset) { currentCalDate.setMonth(currentCalDate.getMonth() + offset); renderCalendar(); }
+        function changeMonth(offset) { 
+            currentCalDate.setMonth(currentCalDate.getMonth() + offset); 
+            closeCalSlidePanel();
+            renderCalendar(); 
+        }
         
+        // 🌟 캘린더 날짜 클릭 시 슬라이드 다운 토글 🌟
         function openDayView(dateStr) {
-            document.getElementById('dayViewDateHdn').value = dateStr;
-            const parts = dateStr.split('-');
-            document.getElementById('dayViewTitle').innerText = `${parts[0]}. ${parts[1]}. ${parts[2]}`;
+            const panel = document.getElementById('calDaySlidePanel');
             
-            const dayPosts = postsData.filter(p => { const prts = (p.author||'').split('|'); return (prts[3] === '다이어리' || prts[3] === '일정') && prts[4] === dateStr; });
-            const listEl = document.getElementById('dayEntryList');
-            if(dayPosts.length === 0) { listEl.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:30px 0;">등록된 기록이 없습니다.</p>`; } 
-            else {
+            // 동일 날짜 클릭 시 토글 접기
+            if (currentSelectedCalDate === dateStr && panel.classList.contains('open')) {
+                closeCalSlidePanel();
+                return;
+            }
+
+            currentSelectedCalDate = dateStr;
+
+            // 셀 선택 스타일 갱신
+            document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
+            const targetCell = document.querySelector(`.cal-cell[data-date="${dateStr}"]`);
+            if (targetCell) targetCell.classList.add('selected');
+
+            updateCalSlideContent(dateStr);
+
+            // 슬라이드 펼치기
+            panel.classList.add('open');
+
+            // 화면에서 자연스럽게 보이도록 부드럽게 스크롤
+            setTimeout(() => {
+                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function updateCalSlideContent(dateStr) {
+            const parts = dateStr.split('-');
+            const dayOfWeekName = ['일', '월', '화', '수', '목', '금', '토'][new Date(parts[0], parts[1] - 1, parts[2]).getDay()];
+            document.getElementById('calSlideTitle').innerText = `${parts[0]}년 ${parts[1]}월 ${parts[2]}일 (${dayOfWeekName})`;
+            
+            const dayPosts = postsData.filter(p => { 
+                const prts = (p.author||'').split('|'); 
+                return (prts[3] === '다이어리' || prts[3] === '일정') && prts[4] === dateStr; 
+            });
+
+            const subtitleEl = document.getElementById('calSlideSubtitle');
+            const listEl = document.getElementById('calSlideEntryList');
+
+            if (dayPosts.length === 0) {
+                subtitleEl.innerText = '등록된 기록 없음';
+                listEl.innerHTML = `
+                    <div style="text-align:center; padding:30px 15px; color:var(--text-muted);">
+                        <i class="fa-regular fa-calendar-xmark" style="font-size:2rem; margin-bottom:8px; opacity:0.5;"></i>
+                        <p style="font-size:0.95rem; font-weight:600;">등록된 일정이나 다이어리가 없습니다.</p>
+                        <p style="font-size:0.8rem; margin-top:4px;">아래 버튼을 눌러 오늘을 기록해보세요!</p>
+                    </div>
+                `;
+            } else {
+                subtitleEl.innerText = `총 ${dayPosts.length}개의 기록`;
                 listEl.innerHTML = dayPosts.map(p => {
                     const prts = (p.author||'').split('|');
-                    const colorStyle = prts[3] === '일정' && prts[5] ? `border-left-color:${prts[5]};` : (prts[3] === '일정' ? 'border-left-color:var(--secondary);' : '');
-                    // DayView 모달 내에서 Detail 열 때 DayView 닫기 추가
-                    return `<div class="day-entry-item" style="${colorStyle}" onclick="hideModal('dayViewModal'); setTimeout(()=>openDetail(${p.id}), 300);"><span class="entry-cat">${prts[3]}</span><div class="entry-title">${prts[2]}</div></div>`;
+                    const cat = prts[3];
+                    const title = prts[2] || '무제';
+                    const author = prts[0] || '익명';
+                    const color = (cat === '일정' && prts[5]) ? prts[5] : (cat === '일정' ? 'var(--secondary)' : 'var(--primary)');
+                    const badgeBg = cat === '일정' ? color : 'var(--primary-light)';
+                    const badgeColor = cat === '일정' ? 'white' : 'var(--primary-dark)';
+
+                    return `
+                        <div class="cal-slide-item" style="border-left-color:${color};" onclick="openDetail(${p.id})">
+                            <div class="cal-slide-item-left">
+                                <span class="cal-slide-badge" style="background:${badgeBg}; color:${badgeColor};">
+                                    <i class="fa-solid ${cat === '일정' ? 'fa-clock' : 'fa-pen-nib'}"></i> ${cat} · ${author}
+                                </span>
+                                <div class="cal-slide-item-title">${title}</div>
+                                ${p.content ? `<div class="cal-slide-item-snippet">${p.content}</div>` : ''}
+                            </div>
+                            ${p.image_url ? `<img src="${p.image_url}" class="cal-slide-item-thumb">` : ''}
+                        </div>
+                    `;
                 }).join('');
             }
-            showModal('dayViewModal');
+        }
+
+        function closeCalSlidePanel() {
+            const panel = document.getElementById('calDaySlidePanel');
+            if (panel) panel.classList.remove('open');
+            currentSelectedCalDate = '';
+            document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
         }
 
         function toggleScheduleColor(selectEl) {
@@ -1041,6 +1270,41 @@
                 } catch(e) {}
             }, 30000); 
         }
+
+        // 🌟 빈 곳(바깥 영역) 클릭 시 창 닫기 & ESC 키 지원 🌟
+        document.addEventListener('click', (e) => {
+            // 1. 모달 팝업 바깥 배경 클릭 시 모달 닫기
+            if (e.target.classList.contains('modal-overlay')) {
+                // 프로필 선택창(authorSelectModal) 외 모든 팝업은 바깥 클릭 시 닫기
+                if (e.target.id !== 'authorSelectModal') {
+                    hideModal(e.target.id);
+                }
+            }
+
+            // 2. 캘린더 슬라이드 패널 바깥 클릭 시 닫기
+            const calPanel = document.getElementById('calDaySlidePanel');
+            if (calPanel && calPanel.classList.contains('open')) {
+                // 클릭 대상이 캘린더 날짜 셀(.cal-cell)이나 슬라이드 패널 내부가 아니면 슬라이드 닫기
+                if (!calPanel.contains(e.target) && !e.target.closest('.cal-cell') && !e.target.closest('.cal-nav-btn')) {
+                    closeCalSlidePanel();
+                }
+            }
+        });
+
+        // ESC 키로 열린 팝업 또는 캘린더 슬라이드 닫기
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const activeModals = Array.from(document.querySelectorAll('.modal-overlay.active'));
+                if (activeModals.length > 0) {
+                    const topModal = activeModals[activeModals.length - 1];
+                    if (topModal.id !== 'authorSelectModal') {
+                        hideModal(topModal.id);
+                    }
+                } else {
+                    closeCalSlidePanel();
+                }
+            }
+        });
     </script>
 </body>
 </html>

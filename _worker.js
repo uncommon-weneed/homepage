@@ -2,6 +2,18 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // OPTIONS 사전 요청(CORS) 지원
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Max-Age": "86400"
+        }
+      });
+    }
+
     // 공통 캐시 방지 JSON 응답 헬퍼
     const jsonResponse = (data, status = 200) => {
       return new Response(JSON.stringify(data), {
@@ -10,7 +22,8 @@ export default {
           "Content-Type": "application/json; charset=UTF-8",
           "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
           "Pragma": "no-cache",
-          "Expires": "0"
+          "Expires": "0",
+          "Access-Control-Allow-Origin": "*"
         }
       });
     };
@@ -60,28 +73,29 @@ export default {
       }
     }
 
-    // 3. [인증 API] 커플 전용 고정 아이디/비밀번호 (가입 불가)
+    // 3. [인증 API] 커플 전용 비밀번호 인증 (0709)
     if (url.pathname === "/api/login" && request.method === "POST") {
-  try {
-    const { password } = await request.json();
-    
-    // 비밀번호만 확인
-    if (password === "0709") {
-      return jsonResponse({ 
-          success: true, 
-          username: "ourlove", // 내부 데이터 호환용 고정값 유지
-          fullName: "우리",
-          isAdmin: true, 
-          status: "approved" 
-      });
+      try {
+        const reqData = await request.json().catch(() => ({}));
+        const inputPw = String(reqData.password || reqData.pw || "").trim();
+        
+        // 비밀번호 0709 확인 (공백 제거 후 비교, username 유무 무관)
+        if (inputPw === "0709") {
+          return jsonResponse({ 
+              success: true, 
+              username: "ourlove", 
+              fullName: "우리", // '우리'로 설정해야 index.html에서 작성자 선택 팝업(히니/효니)이 뜹니다.
+              isAdmin: true, 
+              status: "approved" 
+          });
+        }
+        return jsonResponse({ error: "비밀번호가 올바르지 않습니다. 다시 입력해 주세요." }, 401);
+      } catch (e) { 
+        return jsonResponse({ error: e.message }, 500); 
+      }
     }
-    return jsonResponse({ error: "비밀번호가 올바르지 않습니다. 다시 입력해 주세요." }, 401);
-  } catch (e) { 
-    return jsonResponse({ error: e.message }, 500); 
-  }
-}
 
-    // 4. [게시글 & 캘린더 다이어리 API] - 영상/음성 확장 지원
+    // 4. [게시글 & 캘린더 다이어리 API]
     if (url.pathname === "/api/posts" && request.method === "GET") {
       try {
         const { results } = await env.DB.prepare("SELECT * FROM posts ORDER BY id DESC").all();
@@ -98,8 +112,8 @@ export default {
           const username = formData.get("username") || "ourlove";
           const title = formData.get("title") || "무제"; 
           const category = formData.get("category") || "데이트록";
-          const dateStr = formData.get("date") || ""; // 다이어리/일정용 날짜
-          const exactTime = formData.get("exactTime") || new Date().toISOString(); // 일정 색상 또는 시간
+          const dateStr = formData.get("date") || ""; 
+          const exactTime = formData.get("exactTime") || new Date().toISOString(); 
           const content = formData.get("content") || ""; 
           const file = formData.get("image"); 
           
@@ -131,7 +145,7 @@ export default {
           const content = formData.get("content") || ""; 
           const dateStr = formData.get("date") || ""; 
           const exactTime = formData.get("exactTime") || new Date().toISOString();
-          const authorMeta = formData.get("authorMeta"); // 이름|아이디
+          const authorMeta = formData.get("authorMeta"); 
           const keepImage = formData.get("keepImage") || ""; 
           const file = formData.get("image");
           
@@ -168,7 +182,7 @@ export default {
       }
     }
 
-    // 5. [댓글 API] - 컬럼 누락 방지 Fallback 적용
+    // 5. [댓글 API] - 컬럼 누락 방지 Fallback
     if (url.pathname === "/api/comments" && request.method === "GET") {
       try {
         const { results } = await env.DB.prepare("SELECT * FROM comments ORDER BY id ASC").all();
@@ -181,12 +195,10 @@ export default {
     if (url.pathname === "/api/comments" && request.method === "POST") {
       try {
         const { postId, author, content, exactTime } = await request.json();
-        // comments 테이블에 created_at 컬럼 유무와 무관하게 안전하게 처리
         try {
           await env.DB.prepare("INSERT INTO comments (post_id, author, content, created_at) VALUES (?, ?, ?, ?)")
               .bind(postId, author, content, exactTime || new Date().toISOString()).run();
         } catch (colErr) {
-          // created_at 컬럼이 없는 스키마용 Fallback
           await env.DB.prepare("INSERT INTO comments (post_id, author, content) VALUES (?, ?, ?)")
               .bind(postId, author, content).run();
         }
@@ -206,7 +218,7 @@ export default {
       }
     }
 
-    // 6. [R2 버킷 미디어 서빙] - 영상, 음성, 이미지 모두 지원
+    // 6. [R2 버킷 미디어 서빙]
     if (url.pathname.startsWith("/api/images/") && request.method === "GET") {
       const fileName = url.pathname.replace("/api/images/", "");
       const object = await env.BUCKET.get(fileName);
