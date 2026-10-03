@@ -2,15 +2,28 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // 공통 캐시 방지 JSON 응답 헬퍼
+    const jsonResponse = (data, status = 200) => {
+      return new Response(JSON.stringify(data), {
+        status,
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0"
+        }
+      });
+    };
+
     // 1. [설정 API] D-Day, 이름, 타임라인, 휴일 등 공통 설정 관리
     if (url.pathname === "/api/settings" && request.method === "GET") {
       try {
         const { results } = await env.DB.prepare("SELECT key, value FROM site_settings").all();
         const settings = {};
         (results || []).forEach(r => { settings[r.key] = r.value; });
-        return Response.json(settings);
+        return jsonResponse(settings);
       } catch (e) { 
-        return Response.json({}); 
+        return jsonResponse({}); 
       }
     }
     
@@ -19,9 +32,9 @@ export default {
         const { key, value } = await request.json();
         await env.DB.prepare("INSERT INTO site_settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = ?")
             .bind(key, value, value).run();
-        return Response.json({ success: true });
+        return jsonResponse({ success: true });
       } catch (e) { 
-        return new Response(JSON.stringify({ error: e.message }), { status: 500 }); 
+        return jsonResponse({ error: e.message }, 500); 
       }
     }
 
@@ -31,7 +44,7 @@ export default {
         const formData = await request.formData();
         const key = formData.get("key"); 
         const file = formData.get("image");
-        if (!key || !file || file.size === 0) return new Response("No file", { status: 400 });
+        if (!key || !file || file.size === 0) return jsonResponse({ error: "No file provided" }, 400);
         
         const ext = file.name.split(".").pop(); 
         const fileName = `site-${key}-${Date.now()}.${ext}`;
@@ -41,37 +54,41 @@ export default {
         await env.DB.prepare("INSERT INTO site_settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = ?")
             .bind(key, fileUrl, fileUrl).run();
         
-        return Response.json({ success: true, imageUrl: fileUrl });
+        return jsonResponse({ success: true, imageUrl: fileUrl });
       } catch (e) { 
-        return new Response(JSON.stringify({ error: e.message }), { status: 500 }); 
+        return jsonResponse({ error: e.message }, 500); 
       }
     }
 
-   // 3. [인증 API] 커플 전용 고정 아이디/비밀번호 (가입 불가)
-if (url.pathname === "/api/login" && request.method === "POST") {
-  try {
-    const { username, password } = await request.json();
-    
-    // 🔐 고정 접속 정보: 아이디 ourlove / 비밀번호 0709 (수정된 부분)
-    if (username === "ourlove" && password === "0709") { // 기존 "1004"에서 "0709"로 변경
-      return Response.json({ 
-          success: true, 
-          username: "ourlove", 
-          fullName: "우리", // '우리'로 설정해야 index.html에서 작성자 선택 팝업이 뜹니다.
-          isAdmin: true, 
-          status: "approved" 
-      });
+    // 3. [인증 API] 커플 전용 고정 아이디/비밀번호 (가입 불가)
+    if (url.pathname === "/api/login" && request.method === "POST") {
+      try {
+        const { username, password } = await request.json();
+        
+        // 🔐 고정 접속 정보: 아이디 ourlove / 비밀번호 0709
+        if (username === "ourlove" && password === "0709") {
+          return jsonResponse({ 
+              success: true, 
+              username: "ourlove", 
+              fullName: "우리", // '우리'로 설정해야 index.html에서 작성자 선택 팝업이 뜹니다.
+              isAdmin: true, 
+              status: "approved" 
+          });
+        }
+        return jsonResponse({ error: "아이디 또는 비밀번호가 틀렸습니다. 우리만의 암호를 입력해 주세요." }, 401);
+      } catch (e) { 
+        return jsonResponse({ error: e.message }, 500); 
+      }
     }
-    return new Response(JSON.stringify({ error: "아이디 또는 비밀번호가 틀렸습니다. 우리만의 암호를 입력해 주세요." }), { status: 401 });
-  } catch (e) { 
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 }); 
-  }
-}
 
     // 4. [게시글 & 캘린더 다이어리 API] - 영상/음성 확장 지원
     if (url.pathname === "/api/posts" && request.method === "GET") {
-      const { results } = await env.DB.prepare("SELECT * FROM posts ORDER BY id DESC").all();
-      return Response.json(results || []);
+      try {
+        const { results } = await env.DB.prepare("SELECT * FROM posts ORDER BY id DESC").all();
+        return jsonResponse(results || []);
+      } catch (e) {
+        return jsonResponse([]);
+      }
     }
     
     if (url.pathname === "/api/posts" && request.method === "POST") {
@@ -82,9 +99,9 @@ if (url.pathname === "/api/login" && request.method === "POST") {
           const title = formData.get("title") || "무제"; 
           const category = formData.get("category") || "데이트록";
           const dateStr = formData.get("date") || ""; // 다이어리/일정용 날짜
-          const exactTime = formData.get("exactTime") || new Date().toISOString(); // 초단위 기록용
+          const exactTime = formData.get("exactTime") || new Date().toISOString(); // 일정 색상 또는 시간
           const content = formData.get("content") || ""; 
-          const file = formData.get("image"); // 이름은 image지만 video/audio 모두 가능
+          const file = formData.get("image"); 
           
           let fileUrl = "";
           if (file && typeof file === "object" && file.size > 0 && file.name) {
@@ -94,14 +111,14 @@ if (url.pathname === "/api/login" && request.method === "POST") {
             fileUrl = `/api/images/${fileName}`;
           }
           
-          // 저장 포맷: 이름|아이디|제목|카테고리|캘린더날짜|정확한시간
+          // 저장 포맷: 이름(0)|아이디(1)|제목(2)|카테고리(3)|캘린더날짜(4)|색상및시간(5)
           const authorMeta = `${author}|${username}|${title}|${category}|${dateStr}|${exactTime}`;
           await env.DB.prepare("INSERT INTO posts (author, content, image_url) VALUES (?, ?, ?)")
               .bind(authorMeta, content, fileUrl).run();
               
-          return new Response("OK", { status: 200 });
+          return jsonResponse({ success: true }, 200);
       } catch (e) {
-          return new Response(JSON.stringify({ error: e.message }), { status: 500 }); 
+          return jsonResponse({ error: e.message }, 500); 
       }
     }
     
@@ -130,41 +147,63 @@ if (url.pathname === "/api/login" && request.method === "POST") {
           await env.DB.prepare("UPDATE posts SET author = ?, content = ?, image_url = ? WHERE id = ?")
               .bind(newAuthorMeta, content, fileUrl, id).run();
               
-          return new Response("OK", { status: 200 });
+          return jsonResponse({ success: true }, 200);
       } catch (e) {
-          return new Response(JSON.stringify({ error: e.message }), { status: 500 }); 
+          return jsonResponse({ error: e.message }, 500); 
       }
     }
     
     if (url.pathname === "/api/posts" && request.method === "DELETE") {
-      const { id } = await request.json();
-      const post = await env.DB.prepare("SELECT image_url FROM posts WHERE id = ?").bind(id).first();
-      if (post && post.image_url) { 
-          try { await env.BUCKET.delete(post.image_url.replace("/api/images/", "")); } catch (err) {} 
+      try {
+        const { id } = await request.json();
+        const post = await env.DB.prepare("SELECT image_url FROM posts WHERE id = ?").bind(id).first();
+        if (post && post.image_url) { 
+            try { await env.BUCKET.delete(post.image_url.replace("/api/images/", "")); } catch (err) {} 
+        }
+        await env.DB.prepare("DELETE FROM posts WHERE id = ?").bind(id).run();
+        await env.DB.prepare("DELETE FROM comments WHERE post_id = ?").bind(id).run();
+        return jsonResponse({ success: true });
+      } catch (e) {
+        return jsonResponse({ error: e.message }, 500);
       }
-      await env.DB.prepare("DELETE FROM posts WHERE id = ?").bind(id).run();
-      await env.DB.prepare("DELETE FROM comments WHERE post_id = ?").bind(id).run();
-      return Response.json({ success: true });
     }
 
-    // 5. [댓글 API]
+    // 5. [댓글 API] - 컬럼 누락 방지 Fallback 적용
     if (url.pathname === "/api/comments" && request.method === "GET") {
-      const { results } = await env.DB.prepare("SELECT * FROM comments ORDER BY id ASC").all();
-      return Response.json(results || []);
+      try {
+        const { results } = await env.DB.prepare("SELECT * FROM comments ORDER BY id ASC").all();
+        return jsonResponse(results || []);
+      } catch (e) {
+        return jsonResponse([]);
+      }
     }
     
     if (url.pathname === "/api/comments" && request.method === "POST") {
-      const { postId, author, content, exactTime } = await request.json();
-      // comments 테이블에 created_at(시간) 정보도 함께 저장하도록 보완
-      await env.DB.prepare("INSERT INTO comments (post_id, author, content, created_at) VALUES (?, ?, ?, ?)")
-          .bind(postId, author, content, exactTime || new Date().toISOString()).run();
-      return Response.json({ success: true });
+      try {
+        const { postId, author, content, exactTime } = await request.json();
+        // comments 테이블에 created_at 컬럼 유무와 무관하게 안전하게 처리
+        try {
+          await env.DB.prepare("INSERT INTO comments (post_id, author, content, created_at) VALUES (?, ?, ?, ?)")
+              .bind(postId, author, content, exactTime || new Date().toISOString()).run();
+        } catch (colErr) {
+          // created_at 컬럼이 없는 스키마용 Fallback
+          await env.DB.prepare("INSERT INTO comments (post_id, author, content) VALUES (?, ?, ?)")
+              .bind(postId, author, content).run();
+        }
+        return jsonResponse({ success: true });
+      } catch (e) {
+        return jsonResponse({ error: e.message }, 500);
+      }
     }
     
     if (url.pathname === "/api/comments" && request.method === "DELETE") {
-      const { id } = await request.json();
-      await env.DB.prepare("DELETE FROM comments WHERE id = ?").bind(id).run();
-      return Response.json({ success: true });
+      try {
+        const { id } = await request.json();
+        await env.DB.prepare("DELETE FROM comments WHERE id = ?").bind(id).run();
+        return jsonResponse({ success: true });
+      } catch (e) {
+        return jsonResponse({ error: e.message }, 500);
+      }
     }
 
     // 6. [R2 버킷 미디어 서빙] - 영상, 음성, 이미지 모두 지원
@@ -176,13 +215,15 @@ if (url.pathname === "/api/login" && request.method === "POST") {
       const headers = new Headers(); 
       object.writeHttpMetadata(headers); 
       headers.set("etag", object.httpEtag);
-      
-      // 영상 파일 재생을 위한 범위 요청(Range) 처리를 간단히 허용
       headers.set("Accept-Ranges", "bytes");
+      headers.set("Cache-Control", "public, max-age=86400");
       
       return new Response(object.body, { headers });
     }
 
-    return env.ASSETS.fetch(request);
+    if (env.ASSETS) {
+      return env.ASSETS.fetch(request);
+    }
+    return new Response("Not found", { status: 404 });
   }
 };
