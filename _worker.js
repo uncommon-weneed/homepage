@@ -79,7 +79,7 @@ export default {
         const reqData = await request.json().catch(() => ({}));
         const inputPw = String(reqData.password || reqData.pw || "").trim();
         
-        // 비밀번호 0709 확인 (공백 제거 후 비교, username 유무 무관)
+        // 비밀번호 0709 확인 (아이디 유무 무관, 공백 제거 후 비교)
         if (inputPw === "0709") {
           return jsonResponse({ 
               success: true, 
@@ -113,7 +113,8 @@ export default {
           const title = formData.get("title") || "무제"; 
           const category = formData.get("category") || "데이트록";
           const dateStr = formData.get("date") || ""; 
-          const exactTime = formData.get("exactTime") || new Date().toISOString(); 
+          const exactTime = formData.get("exactTime") || ""; // 일정 컬러
+          const createdAt = formData.get("createdAt") || new Date().toISOString(); // 실제 작성 시간
           const content = formData.get("content") || ""; 
           const file = formData.get("image"); 
           
@@ -125,8 +126,8 @@ export default {
             fileUrl = `/api/images/${fileName}`;
           }
           
-          // 저장 포맷: 이름(0)|아이디(1)|제목(2)|카테고리(3)|캘린더날짜(4)|색상및시간(5)
-          const authorMeta = `${author}|${username}|${title}|${category}|${dateStr}|${exactTime}`;
+          // 저장 포맷: 이름(0)|아이디(1)|제목(2)|카테고리(3)|캘린더날짜(4)|일정색상(5)|작성일시(6)
+          const authorMeta = `${author}|${username}|${title}|${category}|${dateStr}|${exactTime}|${createdAt}`;
           await env.DB.prepare("INSERT INTO posts (author, content, image_url) VALUES (?, ?, ?)")
               .bind(authorMeta, content, fileUrl).run();
               
@@ -144,7 +145,8 @@ export default {
           const category = formData.get("category") || "데이트록";
           const content = formData.get("content") || ""; 
           const dateStr = formData.get("date") || ""; 
-          const exactTime = formData.get("exactTime") || new Date().toISOString();
+          const exactTime = formData.get("exactTime") || ""; 
+          const createdAt = formData.get("createdAt") || new Date().toISOString(); 
           const authorMeta = formData.get("authorMeta"); 
           const keepImage = formData.get("keepImage") || ""; 
           const file = formData.get("image");
@@ -157,7 +159,7 @@ export default {
             fileUrl = `/api/images/${fileName}`;
           }
           
-          const newAuthorMeta = `${authorMeta}|${title}|${category}|${dateStr}|${exactTime}`;
+          const newAuthorMeta = `${authorMeta}|${title}|${category}|${dateStr}|${exactTime}|${createdAt}`;
           await env.DB.prepare("UPDATE posts SET author = ?, content = ?, image_url = ? WHERE id = ?")
               .bind(newAuthorMeta, content, fileUrl, id).run();
               
@@ -182,7 +184,7 @@ export default {
       }
     }
 
-    // 5. [댓글 API] - 컬럼 누락 방지 Fallback
+    // 5. [댓글 API] - 작성 시간(created_at) 저장 및 Fallback
     if (url.pathname === "/api/comments" && request.method === "GET") {
       try {
         const { results } = await env.DB.prepare("SELECT * FROM comments ORDER BY id ASC").all();
@@ -195,12 +197,14 @@ export default {
     if (url.pathname === "/api/comments" && request.method === "POST") {
       try {
         const { postId, author, content, exactTime } = await request.json();
+        const commentTime = exactTime || new Date().toISOString();
         try {
           await env.DB.prepare("INSERT INTO comments (post_id, author, content, created_at) VALUES (?, ?, ?, ?)")
-              .bind(postId, author, content, exactTime || new Date().toISOString()).run();
+              .bind(postId, author, content, commentTime).run();
         } catch (colErr) {
+          // created_at 컬럼이 아직 없는 D1 스키마용 안전 Fallback (content 끝에 시간 메타데이터 포함)
           await env.DB.prepare("INSERT INTO comments (post_id, author, content) VALUES (?, ?, ?)")
-              .bind(postId, author, content).run();
+              .bind(postId, author, `${content}<!--time:${commentTime}-->`).run();
         }
         return jsonResponse({ success: true });
       } catch (e) {

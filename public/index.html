@@ -188,8 +188,8 @@
         .modal-content { 
     background: white; 
     width: 100%; 
-    max-width: 500px; 
-    max-height: 85dvh; /* 90vh에서 85dvh로 변경하여 키보드/하단바 대응 */
+    max-width: 550px; 
+    max-height: 88dvh; 
     border-radius: var(--radius-lg); 
     box-shadow: var(--shadow-lg); 
     display: flex; 
@@ -200,49 +200,12 @@
 }
         .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
         
-        .modal-header { padding: 25px 30px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); }
-        .modal-title { font-size: 1.4rem; font-weight: 800; color: var(--text-main); }
+        .modal-header { flex-shrink: 0; padding: 20px 25px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); }
+        .modal-title { font-size: 1.3rem; font-weight: 800; color: var(--text-main); }
         .btn-close { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
         .btn-close:hover { color: var(--primary); }
-        .modal-body { padding: 30px; overflow-y: auto; flex-grow: 1; }
-
-        .day-entry-item { background: #F8F9FA; padding: 20px; border-radius: 16px; margin-bottom: 15px; border-left: 4px solid var(--primary); cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm); }
-        .day-entry-item:hover { background: var(--primary-light); transform: translateX(5px); }
-        
-        .detail-meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 15px; }
-        .detail-author { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
-        .detail-date { font-size: 0.9rem; color: var(--text-muted); }
-        .detail-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; line-height: 1.4; }
-        .detail-content { font-size: 1.1rem; line-height: 1.8; color: #4A5568; white-space: pre-wrap; margin-bottom: 30px; }
-        .detail-image { width: 100%; border-radius: 16px; margin-bottom: 20px; cursor: zoom-in; }
-        
-        .comment-section { background: #F8F9FA; border-radius: 16px; padding: 20px; margin-top: 30px; }
-        .comment-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .comment-list { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-        .comment-box { display: flex; justify-content: space-between; font-size: 0.95rem; align-items: flex-start; }
-        .comment-box b { color: var(--text-main); margin-right: 8px; }
-        .comment-box span { color: #4A5568; word-break: break-all; line-height: 1.4; }
-        .comment-del-btn { background: none; border: none; color: #FC8181; cursor: pointer; padding-left: 10px; font-size: 1.1rem; }
-        
-        .comment-input-row { display: flex; gap: 10px; }
-        .comment-input-row input { flex-grow: 1; padding: 12px 15px; border: 1px solid var(--border-light); border-radius: 10px; outline: none; }
-        .comment-input-row button { padding: 12px 20px; background: var(--text-main); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
-
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(45, 55, 72, 0.95); backdrop-filter: blur(10px); color: white; padding: 15px 25px; border-radius: 30px; font-size: 1rem; font-weight: 600; opacity: 0; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); pointer-events: none; }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        .toast i { color: var(--primary); font-size: 1.2rem; }
-
-        /* 다가오는 일정 알림 (홈 바텀 토스트) */
-        .schedule-alert { position: fixed; bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 20px); left: 50%; transform: translateX(-50%) translateY(150px); background: white; color: var(--text-main); padding: 15px 25px; border-radius: 20px; box-shadow: var(--shadow-lg); border: 2px solid var(--primary); display: flex; align-items: center; gap: 15px; z-index: 1500; font-weight: 700; font-size: 1rem; width: 90%; max-width: 400px; opacity: 0; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .schedule-alert.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        .schedule-alert .close-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; margin-left: auto; font-size: 1.2rem; }
-
-        .edit-badge { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.9); color: var(--text-main); padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-sm); border: none; z-index: 10; display: none; align-items: center; gap: 5px; }
-        .edit-badge:hover { background: var(--primary); color: white; }
-        body.edit-mode .edit-badge { display: flex; }
-        .edit-mode-only { display: none !important; }
-        body.edit-mode .edit-mode-only { display: inline-block !important; }
-        body.edit-mode .edit-mode-only-flex { display: flex !important; }
+        .modal-body { padding: 25px; overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1 1 auto; }
+        .modal-footer { flex-shrink: 0; padding: 15px 25px calc(15px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border-light); background: white; z-index: 10; }
 
         /* 캘린더 아래 슬라이드 인라인 패널 */
         .cal-slide-panel {
@@ -269,15 +232,15 @@
         }
 
         .cal-slide-content {
-            padding: 25px 22px;
+            padding: 24px 20px;
         }
 
         .cal-slide-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
             border-bottom: 1px solid var(--border-light);
         }
 
@@ -333,13 +296,24 @@
             overflow: hidden;
         }
 
+        .cal-slide-badge-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
         .cal-slide-badge {
             display: inline-block;
             font-size: 0.75rem;
             font-weight: 700;
             padding: 3px 8px;
             border-radius: 8px;
-            margin-bottom: 6px;
+        }
+
+        .cal-slide-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
 
         .cal-slide-item-title {
@@ -383,6 +357,44 @@
             transform: scale(1.04);
             z-index: 5;
         }
+
+        .day-entry-item { background: #F8F9FA; padding: 20px; border-radius: 16px; margin-bottom: 15px; border-left: 4px solid var(--primary); cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm); }
+        .day-entry-item:hover { background: var(--primary-light); transform: translateX(5px); }
+        
+        .detail-meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 15px; }
+        .detail-author { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+        .detail-date { font-size: 0.9rem; color: var(--text-muted); }
+        .detail-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; line-height: 1.4; }
+        .detail-content { font-size: 1.1rem; line-height: 1.8; color: #4A5568; white-space: pre-wrap; margin-bottom: 30px; }
+        .detail-image { width: 100%; border-radius: 16px; margin-bottom: 20px; cursor: zoom-in; }
+        
+        .comment-section { background: #F8F9FA; border-radius: 16px; padding: 20px; margin-top: 30px; }
+        .comment-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .comment-list { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        .comment-box { display: flex; justify-content: space-between; font-size: 0.95rem; align-items: flex-start; }
+        .comment-box b { color: var(--text-main); margin-right: 8px; }
+        .comment-box span { color: #4A5568; word-break: break-all; line-height: 1.4; }
+        .comment-del-btn { background: none; border: none; color: #FC8181; cursor: pointer; padding-left: 10px; font-size: 1.1rem; }
+        
+        .comment-input-row { display: flex; gap: 10px; }
+        .comment-input-row input { flex-grow: 1; padding: 12px 15px; border: 1px solid var(--border-light); border-radius: 10px; outline: none; }
+        .comment-input-row button { padding: 12px 20px; background: var(--text-main); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
+
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(45, 55, 72, 0.95); backdrop-filter: blur(10px); color: white; padding: 15px 25px; border-radius: 30px; font-size: 1rem; font-weight: 600; opacity: 0; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); pointer-events: none; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast i { color: var(--primary); font-size: 1.2rem; }
+
+        /* 다가오는 일정 알림 (홈 바텀 토스트) */
+        .schedule-alert { position: fixed; bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 20px); left: 50%; transform: translateX(-50%) translateY(150px); background: white; color: var(--text-main); padding: 15px 25px; border-radius: 20px; box-shadow: var(--shadow-lg); border: 2px solid var(--primary); display: flex; align-items: center; gap: 15px; z-index: 1500; font-weight: 700; font-size: 1rem; width: 90%; max-width: 400px; opacity: 0; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .schedule-alert.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .schedule-alert .close-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; margin-left: auto; font-size: 1.2rem; }
+
+        .edit-badge { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.9); color: var(--text-main); padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-sm); border: none; z-index: 10; display: none; align-items: center; gap: 5px; }
+        .edit-badge:hover { background: var(--primary); color: white; }
+        body.edit-mode .edit-badge { display: flex; }
+        .edit-mode-only { display: none !important; }
+        body.edit-mode .edit-mode-only { display: inline-block !important; }
+        body.edit-mode .edit-mode-only-flex { display: flex !important; }
     </style>
 </head>
 <body>
@@ -396,13 +408,9 @@
             <i class="fa-solid fa-heart"></i>
             <h1>Secret Place</h1>
             <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:30px;">우리만의 암호를 입력해 주세요.</p>
-            <div class="input-with-icon" style="margin-bottom: 15px;">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" class="auth-input" id="l_id" placeholder="아이디" style="margin-bottom:0;">
-            </div>
-            <div class="input-with-icon" style="margin-bottom: 15px;">
+            <div class="input-with-icon" style="margin-bottom: 20px;">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" class="auth-input" id="l_pw" placeholder="비밀번호" style="margin-bottom:0;" onkeydown="if(event.key==='Enter') submitLogin()">
+                <input type="password" class="auth-input" id="l_pw" placeholder="암호를 입력해주세요" style="margin-bottom:0;" onkeydown="if(event.key==='Enter') submitLogin()" autofocus>
             </div>
             <button class="btn-auth" onclick="submitLogin()">입장하기</button>
         </div>
@@ -615,6 +623,8 @@
                     <i class="fa-regular fa-image"></i>
                     <input type="file" id="postImage" accept="image/*" class="form-input" style="padding:13px 16px 13px 45px;">
                 </div>
+            </div>
+            <div class="modal-footer">
                 <button class="btn-submit" onclick="submitPost()"><i class="fa-solid fa-check"></i> 기록 저장하기</button>
             </div>
         </div>
@@ -689,6 +699,8 @@
                     <i class="fa-regular fa-image"></i>
                     <input type="file" id="editImage" accept="image/*" class="form-input" style="padding:13px 16px 13px 45px;" placeholder="새 사진으로 변경">
                 </div>
+            </div>
+            <div class="modal-footer">
                 <button class="btn-submit" onclick="submitEdit()">수정 완료</button>
             </div>
         </div>
@@ -780,14 +792,95 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
+        // 시간 포맷팅 헬퍼 함수들
+        function formatPostDateTime(dateStr, timeStr) {
+            if (timeStr) {
+                try {
+                    const d = new Date(timeStr);
+                    if (!isNaN(d.getTime())) {
+                        const m = String(d.getMonth() + 1).padStart(2, '0');
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const hours = d.getHours();
+                        const minutes = String(d.getMinutes()).padStart(2, '0');
+                        const ampm = hours >= 12 ? '오후' : '오전';
+                        const h12 = hours % 12 || 12;
+                        return `${m}.${day} ${ampm} ${h12}:${minutes}`;
+                    }
+                } catch(e) {}
+            }
+            return dateStr || '';
+        }
+
+        function formatPostDetailTime(dateStr, timeStr) {
+            let res = '';
+            if (dateStr) res += dateStr;
+            if (timeStr) {
+                try {
+                    const d = new Date(timeStr);
+                    if (!isNaN(d.getTime())) {
+                        const hours = d.getHours();
+                        const minutes = String(d.getMinutes()).padStart(2, '0');
+                        const ampm = hours >= 12 ? '오후' : '오전';
+                        const h12 = hours % 12 || 12;
+                        const timePart = `${ampm} ${h12}:${minutes}`;
+                        res = res ? `${res} ${timePart}` : timePart;
+                    }
+                } catch(e) {}
+            }
+            return res || dateStr || '';
+        }
+
+        function formatCommentTime(isoStr) {
+            if (!isoStr) return '';
+            try {
+                // <!--time:...--> 형태의 fallback 시간 추출 지원
+                if (isoStr.includes('<!--time:')) {
+                    const match = isoStr.match(/<!--time:(.*?)-->/);
+                    if (match) isoStr = match[1];
+                }
+                const d = new Date(isoStr);
+                if (isNaN(d.getTime())) return '';
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                const hours = d.getHours();
+                const minutes = String(d.getMinutes()).padStart(2, '0');
+                const ampm = hours >= 12 ? '오후' : '오전';
+                const h12 = hours % 12 || 12;
+                return `${m}.${day} ${ampm} ${h12}:${minutes}`;
+            } catch(e) { return ''; }
+        }
+
         async function submitLogin() {
-            const id = document.getElementById('l_id').value.trim(); const pw = document.getElementById('l_pw').value.trim();
-            const res = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:id, password:pw}) });
-            if(res.ok) {
-                user = await res.json(); 
-                document.getElementById('auth-wall').style.opacity = '0';
-                setTimeout(() => { document.getElementById('auth-wall').style.display = 'none'; showModal('authorSelectModal'); }, 500);
-            } else { const d = await res.json(); showToast(d.error); }
+            const pwInput = document.getElementById('l_pw');
+            const pw = pwInput ? pwInput.value.trim() : '';
+            if(!pw) return showToast("비밀번호를 입력해주세요.");
+
+            showToast("암호 확인 중...");
+            try {
+                const res = await fetch('/api/login', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ password: pw }) 
+                });
+                
+                if(res.ok) {
+                    user = await res.json(); 
+                    document.getElementById('auth-wall').style.opacity = '0';
+                    setTimeout(() => { 
+                        document.getElementById('auth-wall').style.display = 'none'; 
+                        showModal('authorSelectModal'); 
+                    }, 400);
+                } else { 
+                    let errMsg = "비밀번호가 올바르지 않습니다.";
+                    try {
+                        const d = await res.json(); 
+                        if (d && d.error) errMsg = d.error;
+                    } catch(e) {}
+                    showToast(errMsg); 
+                }
+            } catch(netErr) {
+                showToast("서버 연결에 실패했습니다.");
+            }
         }
 
         function setAuthorName(name) {
@@ -963,9 +1056,7 @@
                 const dateMD = `${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
                 const dayOfWeek = new Date(year, month, d).getDay();
                 
-                // 공휴일 & 일요일 체크
                 const isHoliday = krHolidays.includes(dateMD) || dayOfWeek === 0;
-
                 const dayPosts = postsData.filter(p => (p.author||'').split('|')[4] === dateStr);
                 let previews = '';
                 
@@ -988,7 +1079,6 @@
             }
             grid.innerHTML = html;
 
-            // 만약 현재 열려있는 슬라이드가 있다면 데이터 갱신
             if (currentSelectedCalDate) {
                 updateCalSlideContent(currentSelectedCalDate);
             }
@@ -1000,11 +1090,11 @@
             renderCalendar(); 
         }
         
-        // 🌟 캘린더 날짜 클릭 시 슬라이드 다운 토글 🌟
+        // 🌟 팝업 대신 캘린더 아래 슬라이드 인라인 전개 🌟
         function openDayView(dateStr) {
             const panel = document.getElementById('calDaySlidePanel');
             
-            // 동일 날짜 클릭 시 토글 접기
+            // 동일 날짜 클릭 시 접기 토글
             if (currentSelectedCalDate === dateStr && panel.classList.contains('open')) {
                 closeCalSlidePanel();
                 return;
@@ -1012,7 +1102,7 @@
 
             currentSelectedCalDate = dateStr;
 
-            // 셀 선택 스타일 갱신
+            // 하이라이트 스타일 업데이트
             document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
             const targetCell = document.querySelector(`.cal-cell[data-date="${dateStr}"]`);
             if (targetCell) targetCell.classList.add('selected');
@@ -1022,7 +1112,6 @@
             // 슬라이드 펼치기
             panel.classList.add('open');
 
-            // 화면에서 자연스럽게 보이도록 부드럽게 스크롤
             setTimeout(() => {
                 panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 100);
@@ -1045,7 +1134,7 @@
                 subtitleEl.innerText = '등록된 기록 없음';
                 listEl.innerHTML = `
                     <div style="text-align:center; padding:30px 15px; color:var(--text-muted);">
-                        <i class="fa-regular fa-calendar-xmark" style="font-size:2rem; margin-bottom:8px; opacity:0.5;"></i>
+                        <i class="fa-regular fa-calendar-xmark" style="font-size:2.2rem; margin-bottom:8px; opacity:0.5;"></i>
                         <p style="font-size:0.95rem; font-weight:600;">등록된 일정이나 다이어리가 없습니다.</p>
                         <p style="font-size:0.8rem; margin-top:4px;">아래 버튼을 눌러 오늘을 기록해보세요!</p>
                     </div>
@@ -1060,13 +1149,17 @@
                     const color = (cat === '일정' && prts[5]) ? prts[5] : (cat === '일정' ? 'var(--secondary)' : 'var(--primary)');
                     const badgeBg = cat === '일정' ? color : 'var(--primary-light)';
                     const badgeColor = cat === '일정' ? 'white' : 'var(--primary-dark)';
+                    const timeDisplay = formatPostDateTime(prts[4], prts[6]);
 
                     return `
                         <div class="cal-slide-item" style="border-left-color:${color};" onclick="openDetail(${p.id})">
                             <div class="cal-slide-item-left">
-                                <span class="cal-slide-badge" style="background:${badgeBg}; color:${badgeColor};">
-                                    <i class="fa-solid ${cat === '일정' ? 'fa-clock' : 'fa-pen-nib'}"></i> ${cat} · ${author}
-                                </span>
+                                <div class="cal-slide-badge-row">
+                                    <span class="cal-slide-badge" style="background:${badgeBg}; color:${badgeColor};">
+                                        <i class="fa-solid ${cat === '일정' ? 'fa-clock' : 'fa-pen-nib'}"></i> ${cat} · ${author}
+                                    </span>
+                                    ${timeDisplay ? `<span class="cal-slide-time"><i class="fa-regular fa-clock"></i> ${timeDisplay}</span>` : ''}
+                                </div>
                                 <div class="cal-slide-item-title">${title}</div>
                                 ${p.content ? `<div class="cal-slide-item-snippet">${p.content}</div>` : ''}
                             </div>
@@ -1108,19 +1201,31 @@
             const file = document.getElementById('postImage').files[0];
             const dateStr = document.getElementById('postDate').value || new Date().toISOString().split('T')[0];
             const color = cat === '일정' ? document.getElementById('postColor').value : '';
+            const nowIso = new Date().toISOString();
 
             if(!title) return showToast('제목을 입력하세요.');
             if(cat === '갤러리' && !file) return showToast('갤러리는 사진 첨부가 필수입니다!');
 
             const fd = new FormData(); 
-            fd.append('author', user.fullName); fd.append('username', user.username); 
-            fd.append('title', title); fd.append('category', cat); fd.append('date', dateStr); 
-            fd.append('exactTime', color); // color를 exactTime 필드에 덧붙여 전송 (worker 수정방지)
-            fd.append('content', content); if(file) fd.append('image', file);
+            fd.append('author', user.fullName); 
+            fd.append('username', user.username); 
+            fd.append('title', title); 
+            fd.append('category', cat); 
+            fd.append('date', dateStr); 
+            fd.append('exactTime', color); 
+            fd.append('createdAt', nowIso); // 작성 시각 전달
+            fd.append('content', content); 
+            if(file) fd.append('image', file);
             
             showToast("기록 저장 중...");
             const res = await fetch('/api/posts', { method: 'POST', body: fd });
-            if(res.ok) { hideModal('writeModal'); loadPosts(); showToast("저장되었습니다! 💖"); } else showToast('저장 실패');
+            if(res.ok) { 
+                hideModal('writeModal'); 
+                loadPosts(); 
+                showToast("저장되었습니다! 💖"); 
+            } else {
+                showToast('저장 실패');
+            }
         }
 
         function checkUpcomingSchedule() {
@@ -1175,7 +1280,26 @@
                 filtered.forEach(p => {
                     const parts = (p.author||'').split('|');
                     const ccount = commentsData.filter(c=>c.post_id===p.id).length;
-                    list.innerHTML += `<div class="post-card" onclick="openDetail(${p.id})"><div class="post-content-flex"><div><div class="post-top-meta"><span class="post-cat-badge">${parts[3]}</span><span class="post-date">${parts[4] || ''}</span></div><div class="post-title">${parts[2]}</div><div class="post-preview">${p.content}</div></div><div style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;"><i class="fa-solid fa-pen-nib"></i> ${parts[0]} <span style="margin-left:10px;"><i class="fa-regular fa-comment"></i> ${ccount}</span></div></div>${p.image_url ? `<img src="${p.image_url}" class="post-thumb">` : ''}</div>`;
+                    const timeDisplay = formatPostDateTime(parts[4], parts[6]);
+                    list.innerHTML += `
+                        <div class="post-card" onclick="openDetail(${p.id})">
+                            <div class="post-content-flex">
+                                <div>
+                                    <div class="post-top-meta">
+                                        <span class="post-cat-badge">${parts[3] || '일상'}</span>
+                                        <span class="post-date"><i class="fa-regular fa-clock"></i> ${timeDisplay}</span>
+                                    </div>
+                                    <div class="post-title">${parts[2] || '무제'}</div>
+                                    <div class="post-preview">${p.content}</div>
+                                </div>
+                                <div style="font-size:0.85rem; color:var(--text-muted); margin-top:10px;">
+                                    <i class="fa-solid fa-pen-nib"></i> ${parts[0]} 
+                                    <span style="margin-left:10px;"><i class="fa-regular fa-comment"></i> ${ccount}</span>
+                                </div>
+                            </div>
+                            ${p.image_url ? `<img src="${p.image_url}" class="post-thumb">` : ''}
+                        </div>
+                    `;
                 });
             }
         }
@@ -1184,8 +1308,8 @@
             activePost = postsData.find(p => p.id === id); if(!activePost) return;
             const parts = (activePost.author||'').split('|');
             document.getElementById('modalCategory').innerText = parts[3]||'기록';
-            let metaTxt = (parts[3] === '다이어리' || parts[3] === '일정') ? `[${parts[4]}] ${parts[0]}` : parts[0];
-            document.getElementById('modalDateMeta').innerText = metaTxt;
+            const detailTime = formatPostDetailTime(parts[4], parts[6]);
+            document.getElementById('modalDateMeta').innerHTML = `<i class="fa-regular fa-clock"></i> ${detailTime}`;
             document.getElementById('modalAuthor').innerText = parts[0];
             document.getElementById('modalTitle').innerText = parts[2]||'무제';
             document.getElementById('modalContent').innerText = activePost.content;
@@ -1197,15 +1321,46 @@
             if(!activePost) return;
             const postComments = commentsData.filter(c => c.post_id === activePost.id);
             document.getElementById('modalCommentsHeader').innerHTML = `댓글 <span style="color:var(--primary);">${postComments.length}</span>`;
-            document.getElementById('modalCommentsList').innerHTML = postComments.map(c => `<div class="comment-box"><div><b style="color:var(--primary);">${c.author}</b> <span>${c.content}</span></div><button class="comment-del-btn edit-mode-only-inline" onclick="deleteComment(${c.id})"><i class="fa-solid fa-xmark"></i></button></div>`).join('');
+            document.getElementById('modalCommentsList').innerHTML = postComments.map(c => {
+                let pureContent = c.content || '';
+                let timeStr = formatCommentTime(c.created_at);
+                if (!timeStr && pureContent.includes('<!--time:')) {
+                    const match = pureContent.match(/<!--time:(.*?)-->/);
+                    if (match) timeStr = formatCommentTime(match[1]);
+                }
+                pureContent = pureContent.replace(/<!--time:.*?-->/g, '');
+
+                return `
+                    <div class="comment-box" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+                        <div style="flex-grow:1;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                                <b style="color:var(--primary); font-size:0.9rem;">${c.author}</b>
+                                ${timeStr ? `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-regular fa-clock"></i> ${timeStr}</span>` : ''}
+                            </div>
+                            <span style="color:#4A5568; line-height:1.4;">${pureContent}</span>
+                        </div>
+                        <button class="comment-del-btn edit-mode-only-inline" onclick="deleteComment(${c.id})" title="삭제"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                `;
+            }).join('');
             document.getElementById('modal-comment-input').value = '';
         }
 
         async function submitComment() {
             if(!activePost) return;
-            const content = document.getElementById('modal-comment-input').value.trim(); if (!content) return;
-            const res = await fetch('/api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ postId: activePost.id, author: user.fullName, content }) });
-            if (res.ok) { commentsData = await (await fetch('/api/comments', { cache: 'no-store' })).json(); renderComments(); if(document.getElementById('view-board').classList.contains('active')) renderBoardList(); }
+            const content = document.getElementById('modal-comment-input').value.trim(); 
+            if (!content) return;
+            const nowIso = new Date().toISOString();
+            const res = await fetch('/api/comments', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ postId: activePost.id, author: user.fullName, content, exactTime: nowIso }) 
+            });
+            if (res.ok) { 
+                commentsData = await (await fetch('/api/comments', { cache: 'no-store' })).json(); 
+                renderComments(); 
+                if(document.getElementById('view-board').classList.contains('active')) renderBoardList(); 
+            }
         }
         
         function deleteComment(id) {
@@ -1221,19 +1376,21 @@
             const parts = (activePost.author || '').split('|');
             document.getElementById('editPostId').value = activePost.id; document.getElementById('editAuthorMeta').value = `${parts[0]}|${parts[1]}`; 
             document.getElementById('editCategory').value = parts[3] || '일상'; document.getElementById('editDate').value = parts[4] || ''; 
-            document.getElementById('editColor').value = parts[5] || ''; document.getElementById('editKeepImage').value = activePost.image_url || '';
+            document.getElementById('editColor').value = parts[6] || ''; document.getElementById('editKeepImage').value = activePost.image_url || '';
             document.getElementById('editTitle').value = parts[2] || ''; document.getElementById('editContent').value = activePost.content || ''; document.getElementById('editImage').value = '';
             showModal('editModal');
         }
 
         async function submitEdit() {
             const fd = new FormData(); 
-            const newMeta = `${document.getElementById('editAuthorMeta').value}|${document.getElementById('editTitle').value.trim()}|${document.getElementById('editCategory').value}|${document.getElementById('editDate').value}|${document.getElementById('editColor').value}`;
-            
-            fd.append('id', document.getElementById('editPostId').value); fd.append('authorMeta', document.getElementById('editAuthorMeta').value); 
-            fd.append('category', document.getElementById('editCategory').value); fd.append('date', document.getElementById('editDate').value); 
-            fd.append('exactTime', document.getElementById('editColor').value); // 컬러 유지
-            fd.append('keepImage', document.getElementById('editKeepImage').value); fd.append('title', document.getElementById('editTitle').value.trim()); 
+            fd.append('id', document.getElementById('editPostId').value); 
+            fd.append('authorMeta', document.getElementById('editAuthorMeta').value); 
+            fd.append('category', document.getElementById('editCategory').value); 
+            fd.append('date', document.getElementById('editDate').value); 
+            fd.append('exactTime', document.getElementById('editColor').value); 
+            fd.append('createdAt', new Date().toISOString()); 
+            fd.append('keepImage', document.getElementById('editKeepImage').value); 
+            fd.append('title', document.getElementById('editTitle').value.trim()); 
             fd.append('content', document.getElementById('editContent').value.trim()); 
             if (document.getElementById('editImage').files[0]) fd.append('image', document.getElementById('editImage').files[0]);
             
@@ -1270,7 +1427,6 @@
                 } catch(e) {}
             }, 30000); 
         }
-
         // 🌟 빈 곳(바깥 영역) 클릭 시 창 닫기 & ESC 키 지원 🌟
         document.addEventListener('click', (e) => {
             // 1. 모달 팝업 바깥 배경 클릭 시 모달 닫기
