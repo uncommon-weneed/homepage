@@ -211,6 +211,8 @@ export default {
         const reqData = await request.json().catch(() => ({}));
         const pId = parseInt(reqData.postId || reqData.post_id || 0, 10);
         const author = String(reqData.author || "우리").trim();
+        // comments.username NOT NULL 제약조건 완벽 대응
+        const username = String(reqData.username || (author === "효니" ? "hyoni" : (author === "히니" ? "hini" : "ourlove"))).trim();
         const content = String(reqData.content || "").trim();
         const commentTime = reqData.exactTime || reqData.created_at || new Date().toISOString();
 
@@ -221,27 +223,40 @@ export default {
           return jsonResponse({ error: "댓글 내용을 입력해 주세요." }, 400);
         }
 
-        // 테이블이 존재하지 않을 경우 자동 생성
+        // 테이블이 존재하지 않을 경우 자동 생성 (username 컬럼 포함)
         try {
           await env.DB.prepare(`
             CREATE TABLE IF NOT EXISTS comments (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               post_id INTEGER NOT NULL,
               author TEXT NOT NULL,
+              username TEXT NOT NULL DEFAULT 'ourlove',
               content TEXT NOT NULL,
               created_at TEXT
             )
           `).run();
         } catch(tblErr) {}
 
-        // 1차 시도: created_at 컬럼 포함 삽입
+        // 1차 시도: username, created_at 컬럼 모두 포함
         try {
-          await env.DB.prepare("INSERT INTO comments (post_id, author, content, created_at) VALUES (?, ?, ?, ?)")
-              .bind(pId, author, content, commentTime).run();
-        } catch (colErr) {
-          // 2차 시도: created_at 컬럼이 없는 스키마용 안전 Fallback (__time: 토큰 포함)
-          await env.DB.prepare("INSERT INTO comments (post_id, author, content) VALUES (?, ?, ?)")
-              .bind(pId, author, `${content}__time:${commentTime}__`).run();
+          await env.DB.prepare("INSERT INTO comments (post_id, author, username, content, created_at) VALUES (?, ?, ?, ?, ?)")
+              .bind(pId, author, username, content, commentTime).run();
+        } catch (colErr1) {
+          // 2차 시도: created_at 컬럼이 없는 스키마 (post_id, author, username, content)
+          try {
+            await env.DB.prepare("INSERT INTO comments (post_id, author, username, content) VALUES (?, ?, ?, ?)")
+                .bind(pId, author, username, `${content}__time:${commentTime}__`).run();
+          } catch (colErr2) {
+            // 3차 시도: username 컬럼이 없는 스키마 (post_id, author, content, created_at)
+            try {
+              await env.DB.prepare("INSERT INTO comments (post_id, author, content, created_at) VALUES (?, ?, ?, ?)")
+                  .bind(pId, author, content, commentTime).run();
+            } catch (colErr3) {
+              // 4차 시도: 최소 스키마 (post_id, author, content)
+              await env.DB.prepare("INSERT INTO comments (post_id, author, content) VALUES (?, ?, ?)")
+                  .bind(pId, author, `${content}__time:${commentTime}__`).run();
+            }
+          }
         }
         return jsonResponse({ success: true }, 200);
       } catch (e) {

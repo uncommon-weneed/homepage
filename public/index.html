@@ -2382,7 +2382,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title"><i class="fa-solid fa-pen-fancy" style="color: var(--primary);"></i> 새로운 기록 남기기</h3>
-                <button class="btn-close" onclick="hideModal('writeModal')"><i class="fa-solid fa-xmark"></i></button>
+                <button class="btn-close" onclick="resetWriteForm(); hideModal('writeModal')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <div class="form-group" style="display: flex; gap: 12px;">
@@ -2409,12 +2409,12 @@
 
                 <div class="form-group input-with-icon">
                     <i class="fa-solid fa-heading"></i>
-                    <input type="text" id="postTitle" class="form-input" placeholder="제목을 입력해 주세요.">
+                    <input type="text" id="postTitle" class="form-input" placeholder="제목을 입력해 주세요." autocomplete="off" spellcheck="false">
                 </div>
 
                 <div class="form-group input-with-icon" style="align-items: flex-start;">
                     <i class="fa-solid fa-pencil" style="top: 20px;"></i>
-                    <textarea id="postContent" class="form-textarea" rows="6" placeholder="오늘 어떤 행복한 일이 있었나요? 둘만의 이야기를 적어보세요."></textarea>
+                    <textarea id="postContent" class="form-textarea" rows="6" placeholder="오늘 어떤 행복한 일이 있었나요? 둘만의 이야기를 적어보세요." spellcheck="false"></textarea>
                 </div>
 
                 <div class="form-group input-with-icon">
@@ -2454,7 +2454,7 @@
                     <div class="comment-title" id="modalCommentsHeader">댓글</div>
                     <div class="comment-list" id="modalCommentsList"></div>
                     <div class="comment-input-row">
-                        <input type="text" id="modal-comment-input" placeholder="사랑이 담긴 댓글을 남겨주세요." onkeydown="if(event.key==='Enter') submitComment()">
+                        <input type="text" id="modal-comment-input" placeholder="사랑이 담긴 댓글을 남겨주세요." autocomplete="off" onkeydown="if(event.key==='Enter') submitComment()">
                         <button onclick="submitComment()">등록</button>
                     </div>
                 </div>
@@ -3375,6 +3375,16 @@
 
         // ================= [글쓰기 모달 열기 & 날짜 분기 처리] =================
         // 요구사항: 캘린더에서 작성 시 해당 날짜, 스토리/홈에서 작성 시 오늘 날짜로 자동 설정
+        // 글쓰기 입력 폼 완벽 초기화 (이전에 썼던 기록이나 잔여 텍스트 완전 제거)
+        function resetWriteForm() {
+            const titleEl = document.getElementById('postTitle');
+            const contentEl = document.getElementById('postContent');
+            const imgEl = document.getElementById('postImage');
+            if (titleEl) titleEl.value = '';
+            if (contentEl) contentEl.value = '';
+            if (imgEl) imgEl.value = '';
+        }
+
         function openWriteModal(catDefault, targetDate) {
             // targetDate가 명시적으로 전달되지 않았을 경우
             if (!targetDate) {
@@ -3387,9 +3397,7 @@
 
             document.getElementById('postCategory').value = catDefault || (currentView === 'calendar' ? '일정' : '일상');
             document.getElementById('postDate').value = targetDate;
-            document.getElementById('postTitle').value = '';
-            document.getElementById('postContent').value = '';
-            document.getElementById('postImage').value = '';
+            resetWriteForm();
             toggleScheduleColor(document.getElementById('postCategory'));
             showModal('writeModal');
         }
@@ -3504,6 +3512,8 @@
             try {
                 const res = await fetch('/api/posts', { method: 'POST', body: fd });
                 if (res.ok) {
+                    // [해결]: 등록 성공 시 이전에 썼던 기록/입력값이 남지 않도록 폼 완벽 초기화
+                    resetWriteForm();
                     hideModal('writeModal');
                     loadPosts();
                     showToast("둘만의 기록이 저장되었습니다! 💖");
@@ -3887,16 +3897,21 @@
                 return;
             }
 
-            // 작성자 결정 (user 객체나 로컬스토리지에서 안전하게 획득)
+            // 작성자 및 사용자 아이디 결정 (comments.username NOT NULL 완벽 대응)
             let authorName = '우리';
+            let userLoginId = 'ourlove';
             if (user && user.fullName) {
                 authorName = user.fullName;
+                if (user.username) userLoginId = user.username;
             } else {
                 try {
                     const saved = JSON.parse(localStorage.getItem('couple_user') || '{}');
                     if (saved.fullName) authorName = saved.fullName;
+                    if (saved.username) userLoginId = saved.username;
                 } catch(e) {}
             }
+            if (authorName === '효니') userLoginId = 'hyoni';
+            else if (authorName === '히니') userLoginId = 'hini';
 
             const nowIso = new Date().toISOString();
             showToast("댓글 저장 중...");
@@ -3909,6 +3924,7 @@
                         postId: Number(activePost.id),
                         post_id: Number(activePost.id),
                         author: authorName, 
+                        username: userLoginId,
                         content: content, 
                         exactTime: nowIso 
                     })
