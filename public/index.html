@@ -70,16 +70,17 @@
         .nav-item.active i { transform: translateY(-3px); filter: drop-shadow(0 2px 4px rgba(255,142,139,0.3)); }
         
         @media (min-width: 768px) {
-            .bottom-nav { top: 0; width: 250px; height: 100vh; flex-direction: column; justify-content: flex-start; padding-top: 80px; border-top: none; border-right: 1px solid var(--border-light); align-items: flex-start; padding-bottom: 0; }
-            .nav-item { width: 100%; height: 60px; flex-direction: row; justify-content: flex-start; padding-left: 40px; gap: 15px; }
-            .nav-item i { font-size: 1.2rem; margin-bottom: 0; }
-            .nav-item span { font-size: 1.05rem; }
-            .nav-item.active i { transform: none; }
-            .nav-item.active { background: var(--primary-light); border-right: 4px solid var(--primary); }
-            #app-container { flex-direction: row; }
-            .view-section { padding-left: 250px; padding-bottom: 40px; }
-            .app-header { left: 250px; width: calc(100% - 250px); }
-        }
+    .bottom-nav { top: 0; width: 250px; height: 100vh; flex-direction: column; justify-content: flex-start; padding-top: 80px; border-top: none; border-right: 1px solid var(--border-light); align-items: flex-start; padding-bottom: 0; }
+    .nav-item { width: 100%; height: 60px; flex-direction: row; justify-content: flex-start; padding-left: 40px; gap: 15px; }
+    .nav-item i { font-size: 1.2rem; margin-bottom: 0; }
+    .nav-item span { font-size: 1.05rem; }
+    .nav-item.active i { transform: none; }
+    .nav-item.active { background: var(--primary-light); border-right: 4px solid var(--primary); }
+    
+    #app-container { display: block; /* row에서 block으로 변경하여 레이아웃 충돌 방지 */ }
+    .view-section { padding-left: 250px; padding-bottom: 40px; }
+    .app-header { left: 250px; width: calc(100% - 250px); }
+}
 
         .home-container { max-width: 800px; margin: 0 auto; padding: 20px; }
         .banner-wrap { position: relative; width: 100%; height: 350px; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 30px; }
@@ -181,7 +182,19 @@
         #confirmModal { z-index: 2500; }
         #lightbox { z-index: 3000; background:rgba(0,0,0,0.95); }
 
-        .modal-content { background: white; width: 100%; max-width: 500px; max-height: 90vh; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden; transform: scale(0.95) translateY(20px); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .modal-content { 
+    background: white; 
+    width: 100%; 
+    max-width: 500px; 
+    max-height: 85dvh; /* 90vh에서 85dvh로 변경하여 키보드/하단바 대응 */
+    border-radius: var(--radius-lg); 
+    box-shadow: var(--shadow-lg); 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+    transform: scale(0.95) translateY(20px); 
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
         .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
         
         .modal-header { padding: 25px 30px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); }

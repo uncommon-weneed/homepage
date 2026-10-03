@@ -47,26 +47,26 @@ export default {
       }
     }
 
-    // 3. [인증 API] 커플 전용 고정 아이디/비밀번호 (가입 불가)
-    if (url.pathname === "/api/login" && request.method === "POST") {
-      try {
-        const { username, password } = await request.json();
-        
-        // 🔐 고정 접속 정보: 아이디 ourlove / 비밀번호 1004
-        if (username === "zenia" && password === "love") {
-          return Response.json({ 
-              success: true, 
-              username: "zenia", 
-              fullName: "히니", 
-              isAdmin: true, 
-              status: "approved" 
-          });
-        }
-        return new Response(JSON.stringify({ error: "아이디 또는 비밀번호가 틀렸습니다. 우리만의 암호를 입력해 주세요." }), { status: 401 });
-      } catch (e) { 
-        return new Response(JSON.stringify({ error: e.message }), { status: 500 }); 
-      }
+   // 3. [인증 API] 커플 전용 고정 아이디/비밀번호 (가입 불가)
+if (url.pathname === "/api/login" && request.method === "POST") {
+  try {
+    const { username, password } = await request.json();
+    
+    // 🔐 고정 접속 정보: 아이디 ourlove / 비밀번호 1004
+    if (username === "ourlove" && password === "1004") {
+      return Response.json({ 
+          success: true, 
+          username: "ourlove", 
+          fullName: "우리", // '우리'로 설정해야 index.html에서 작성자 선택 팝업이 뜹니다.
+          isAdmin: true, 
+          status: "approved" 
+      });
     }
+    return new Response(JSON.stringify({ error: "아이디 또는 비밀번호가 틀렸습니다. 우리만의 암호를 입력해 주세요." }), { status: 401 });
+  } catch (e) { 
+    return new Response(JSON.stringify({ error: e.message }), { status: 500 }); 
+  }
+}
 
     // 4. [게시글 & 캘린더 다이어리 API] - 영상/음성 확장 지원
     if (url.pathname === "/api/posts" && request.method === "GET") {
