@@ -2090,6 +2090,54 @@
             }
         }
 
+
+        /* 상세 모달 하단 고정 댓글 입력바 스타일 */
+        .detail-comment-footer {
+            padding: 14px 20px calc(14px + env(safe-area-inset-bottom)) !important;
+            background: white !important;
+            border-top: 1.5px solid var(--border-light) !important;
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+            position: relative;
+            z-index: 20;
+        }
+        .btn-comment-submit {
+            padding: 14px 20px;
+            background: var(--primary) !important;
+            color: white !important;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 800;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: all 0.2s var(--ease-spring);
+            flex-shrink: 0 !important; /* 버튼이 좁아지거나 밖으로 나가지 않도록 고정 */
+            white-space: nowrap !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+        .btn-comment-submit:hover {
+            background: var(--primary-dark) !important;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 600px) {
+            #detailModal .modal-content {
+                max-height: 92dvh;
+            }
+            .detail-comment-footer {
+                padding: 10px 14px calc(10px + env(safe-area-inset-bottom)) !important;
+            }
+            .comment-input-row input {
+                padding: 12px 14px;
+                font-size: 0.92rem;
+            }
+            .btn-comment-submit {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -2449,14 +2497,17 @@
                 <div id="modalImageWrap"></div>
                 <div class="detail-content" id="modalContent">내용</div>
                 
-                <!-- 댓글 섹션 -->
+                <!-- 댓글 섹션 (댓글 목록) -->
                 <div class="comment-section">
                     <div class="comment-title" id="modalCommentsHeader">댓글</div>
                     <div class="comment-list" id="modalCommentsList"></div>
-                    <div class="comment-input-row">
-                        <input type="text" id="modal-comment-input" placeholder="사랑이 담긴 댓글을 남겨주세요." autocomplete="off" onkeydown="if(event.key==='Enter') submitComment()">
-                        <button onclick="submitComment()">등록</button>
-                    </div>
+                </div>
+            </div>
+            <!-- [해결]: 모바일 키보드가 올라오거나 내용이 길어도 등록 버튼이 화면 밖으로 나가지 않도록 하단 고정 푸터로 배치 -->
+            <div class="modal-footer detail-comment-footer">
+                <div class="comment-input-row">
+                    <input type="text" id="modal-comment-input" placeholder="사랑이 담긴 댓글을 남겨주세요." autocomplete="off" onkeydown="if(event.key==='Enter') submitComment()" onfocus="handleCommentInputFocus(this)">
+                    <button class="btn-comment-submit" onclick="submitComment()"><i class="fa-solid fa-paper-plane"></i> 등록</button>
                 </div>
             </div>
         </div>
@@ -3831,6 +3882,14 @@
         }
 
         // ================= [댓글 시스템 & 시간 표시] =================
+
+        // 모바일 키보드가 올라올 때 댓글 입력창이 가려지지 않도록 뷰포트 보정
+        function handleCommentInputFocus(inputEl) {
+            setTimeout(() => {
+                inputEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+        }
+
         function renderComments() {
             if (!activePost) return;
             if (!Array.isArray(commentsData)) commentsData = [];
