@@ -5,7 +5,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Secret Space 💖</title>
     <!-- 폰트 및 아이콘 -->
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
@@ -466,8 +466,8 @@
             <div class="home-container">
                 <div class="banner-wrap">
                     <div id="slideTrack">
-                        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1000&auto=format&fit=crop" class="banner-img active" id="bgImg1">
-                        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop" class="banner-img" id="bgImg2">
+                        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1000&auto=format&fit=crop" class="banner-img active" id="bgImg1" alt="메인 배경 사진 1">
+                        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop" class="banner-img" id="bgImg2" alt="메인 배경 사진 2">
                     </div>
                     <div class="banner-overlay"></div>
                     <button class="edit-badge" onclick="triggerSiteImgUpload('banner_1')" style="left:15px; right:auto;"><i class="fa-solid fa-camera"></i> 사진1 교체</button>
@@ -485,13 +485,13 @@
                     <div class="widget-title">Our Profile</div>
                     <div class="profile-flex">
                         <div class="profile-item" style="position:relative;">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop" class="profile-pic" id="profile1">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop" class="profile-pic" id="profile1" alt="정희원 프로필">
                             <button class="edit-badge" onclick="triggerSiteImgUpload('profile_1')" style="top:auto; bottom:-10px; right:-10px; padding:6px; border-radius:50%;"><i class="fa-solid fa-camera"></i></button>
                             <br><span>정희원</span>
                         </div>
                         <i class="fa-solid fa-heart" style="color:var(--primary); font-size:2rem; animation: pulseAlert 2s infinite;"></i>
                         <div class="profile-item" style="position:relative;">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop" class="profile-pic" id="profile2">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop" class="profile-pic" id="profile2" alt="정효재 프로필">
                             <button class="edit-badge" onclick="triggerSiteImgUpload('profile_2')" style="top:auto; bottom:-10px; right:-10px; padding:6px; border-radius:50%;"><i class="fa-solid fa-camera"></i></button>
                             <br><span>정효재</span>
                         </div>
@@ -697,7 +697,7 @@
                 </div>
                 <div class="form-group input-with-icon">
                     <i class="fa-regular fa-image"></i>
-                    <input type="file" id="editImage" accept="image/*" class="form-input" style="padding:13px 16px 13px 45px;" placeholder="새 사진으로 변경">
+                    <input type="file" id="editImage" accept="image/*" class="form-input" style="padding:13px 16px 13px 45px;" >
                 </div>
             </div>
             <div class="modal-footer">
@@ -747,7 +747,7 @@
     <!-- 이미지 확대 -->
     <div id="lightbox" class="modal-overlay" onclick="closeLightbox()">
         <span style="position:absolute; top:30px; right:30px; color:white; font-size:2.5rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></span>
-        <img id="lightboxImg" src="">
+        <img id="lightboxImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="확대 이미지">
     </div>
 
     <script>
@@ -1163,7 +1163,7 @@
                                 <div class="cal-slide-item-title">${title}</div>
                                 ${p.content ? `<div class="cal-slide-item-snippet">${p.content}</div>` : ''}
                             </div>
-                            ${p.image_url ? `<img src="${p.image_url}" class="cal-slide-item-thumb">` : ''}
+                            ${p.image_url ? `<img src="${p.image_url}" class="cal-slide-item-thumb" alt="일정 사진">` : ''}
                         </div>
                     `;
                 }).join('');
@@ -1273,7 +1273,7 @@
                 list.className = 'gallery-grid';
                 filtered.forEach(p => {
                     const parts = (p.author||'').split('|');
-                    if(p.image_url) list.innerHTML += `<div class="gallery-item" onclick="openDetail(${p.id})"><img src="${p.image_url}"><div class="gallery-item-info"><div class="gallery-item-title">${parts[2]}</div></div></div>`;
+                    if(p.image_url) list.innerHTML += `<div class="gallery-item" onclick="openDetail(${p.id})"><img src="${p.image_url}" alt="갤러리 사진"><div class="gallery-item-info"><div class="gallery-item-title">${parts[2]}</div></div></div>`;
                 });
             } else {
                 list.className = '';
@@ -1297,7 +1297,7 @@
                                     <span style="margin-left:10px;"><i class="fa-regular fa-comment"></i> ${ccount}</span>
                                 </div>
                             </div>
-                            ${p.image_url ? `<img src="${p.image_url}" class="post-thumb">` : ''}
+                            ${p.image_url ? `<img src="${p.image_url}" class="post-thumb" alt="썸네일">` : ''}
                         </div>
                     `;
                 });
@@ -1313,7 +1313,7 @@
             document.getElementById('modalAuthor').innerText = parts[0];
             document.getElementById('modalTitle').innerText = parts[2]||'무제';
             document.getElementById('modalContent').innerText = activePost.content;
-            document.getElementById('modalImageWrap').innerHTML = activePost.image_url ? `<img src="${activePost.image_url}" class="detail-image" onclick="openLightbox('${activePost.image_url}')">` : '';
+            document.getElementById('modalImageWrap').innerHTML = activePost.image_url ? `<img src="${activePost.image_url}" class="detail-image" alt="상세 사진" onclick="openLightbox('${activePost.image_url}')">` : '';
             renderComments(); showModal('detailModal');
         }
 
