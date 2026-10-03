@@ -62,24 +62,24 @@ export default {
 
     // 3. [인증 API] 커플 전용 고정 아이디/비밀번호 (가입 불가)
     if (url.pathname === "/api/login" && request.method === "POST") {
-      try {
-        const { username, password } = await request.json();
-        
-        // 🔐 고정 접속 정보: 아이디 ourlove / 비밀번호 0709
-        if (username === "ourlove" && password === "0709") {
-          return jsonResponse({ 
-              success: true, 
-              username: "ourlove", 
-              fullName: "우리", // '우리'로 설정해야 index.html에서 작성자 선택 팝업이 뜹니다.
-              isAdmin: true, 
-              status: "approved" 
-          });
-        }
-        return jsonResponse({ error: "아이디 또는 비밀번호가 틀렸습니다. 우리만의 암호를 입력해 주세요." }, 401);
-      } catch (e) { 
-        return jsonResponse({ error: e.message }, 500); 
-      }
+  try {
+    const { password } = await request.json();
+    
+    // 비밀번호만 확인
+    if (password === "0709") {
+      return jsonResponse({ 
+          success: true, 
+          username: "ourlove", // 내부 데이터 호환용 고정값 유지
+          fullName: "우리",
+          isAdmin: true, 
+          status: "approved" 
+      });
     }
+    return jsonResponse({ error: "비밀번호가 올바르지 않습니다. 다시 입력해 주세요." }, 401);
+  } catch (e) { 
+    return jsonResponse({ error: e.message }, 500); 
+  }
+}
 
     // 4. [게시글 & 캘린더 다이어리 API] - 영상/음성 확장 지원
     if (url.pathname === "/api/posts" && request.method === "GET") {
