@@ -951,13 +951,13 @@
             border-bottom: 1px solid var(--border-light);
         }
         .cal-cell {
-            min-height: 76px;
-            height: auto;
+            height: 72px; /* 모바일에서 캘린더 전체가 한눈에 들어오는 안정적인 고정 높이 */
+            max-height: 72px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 6px 3px 5px;
+            padding: 5px 3px 4px;
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -966,18 +966,20 @@
             border: 2px solid transparent;
             background: #FAFAFD;
             box-sizing: border-box;
-            overflow: visible;
+            overflow: hidden; /* 제목 길이나 일정 개수에 상관없이 칸이 늘어나 화면 밖으로 나가는 현상 원천 차단 */
         }
         @media (min-width: 600px) {
             .cal-cell {
-                min-height: 94px;
-                padding: 8px 4px 6px;
+                height: 90px;
+                max-height: 90px;
+                padding: 7px 4px 6px;
             }
         }
         @media (min-width: 900px) {
             .cal-cell {
-                min-height: 110px;
-                padding: 10px 6px 8px;
+                height: 105px;
+                max-height: 105px;
+                padding: 8px 6px 6px;
             }
         }
         .cal-cell:hover {
@@ -1007,32 +1009,42 @@
             color: #FC8181;
         }
         .cal-preview {
-            margin-top: 3px;
+            margin-top: 2px;
             display: flex;
             flex-direction: column;
-            gap: 2.5px;
+            gap: 2px;
             width: 100%;
             align-items: stretch;
             box-sizing: border-box;
+            overflow: hidden;
         }
         .cal-pill {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 2px 4px;
+            text-overflow: ellipsis; /* 긴 제목은 단정하게 말줄임표(...) 처리 */
+            padding: 1.5px 3px;
             border-radius: 4px;
             width: 100%;
             font-weight: 700;
-            line-height: 1.25;
+            line-height: 1.2;
             display: block;
             box-sizing: border-box;
         }
         @media (max-width: 480px) {
             .cal-pill {
-                font-size: 0.62rem;
-                padding: 1.5px 3px;
+                font-size: 0.6rem;
+                padding: 1px 2.5px;
             }
+        }
+        .cal-more-badge {
+            font-size: 0.58rem;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-top: 1px;
+            letter-spacing: -0.3px;
         }
 
         /* 캘린더 아래 슬라이드 인라인 패널 */
@@ -2806,37 +2818,31 @@
             setTimeout(() => box.style.display = 'none', 300);
         }
 
-        // 글로벌 클릭 이벤트 핸들러: 최상위 레이어만 닫는 프로토콜
+        // 글로벌 클릭 이벤트 핸들러: 정밀 독립 레이어 디스미스 엔진
+        // [해결]: 게시글 상세 모달(detailModal) 등 팝업의 바깥 빈 영역을 눌렀을 때
+        // 오직 해당 모달만 닫히고, 아래에 열려있는 캘린더 슬라이드 패널(그 날의 일정 목록)은 절대 닫히지 않고 그대로 유지됩니다.
         document.addEventListener('click', (e) => {
-            // 1. 현재 화면에 열려있는 최상위 활성 모달 확인
-            const activeModals = Array.from(document.querySelectorAll('.modal-overlay.active'));
-            
-            // 모달이 열려있는 경우
-            if (activeModals.length > 0) {
-                // 클릭한 대상이 바로 모달 배경(.modal-overlay) 자체인 경우
-                if (e.target.classList.contains('modal-overlay')) {
-                    // authorSelectModal은 필수 선택창이므로 제외
-                    if (e.target.id !== 'authorSelectModal') {
-                        hideModal(e.target.id);
-                        // 최상위 모달만 닫고 아래 캘린더 슬라이드가 닫히지 않도록 여기서 즉시 종료!
-                        return;
-                    }
+            // 1. 클릭한 대상이 활성화된 모달의 어두운 배경(.modal-overlay)인 경우
+            if (e.target && e.target.classList.contains('modal-overlay') && e.target.classList.contains('active')) {
+                // authorSelectModal은 프로필 필수 선택창이므로 바깥 클릭 닫기 제외
+                if (e.target.id !== 'authorSelectModal') {
+                    hideModal(e.target.id);
+                    // 상세 모달만 닫고 이벤트 전파를 즉시 중단하여 아래 캘린더 패널 보존!
+                    e.stopPropagation();
+                    return;
                 }
-                // 모달 내부를 클릭한 경우에도 아래로 이벤트 전파 차단
+            }
+
+            // 2. 모달 내부(.modal-content)를 클릭한 경우에도 외부로 이벤트 전파 차단
+            if (e.target && e.target.closest('.modal-content')) {
                 return;
             }
 
-            // 2. 모달이 단 하나도 열려있지 않을 때만 캘린더 슬라이드 바깥 클릭 처리
-            const calPanel = document.getElementById('calDaySlidePanel');
-            if (calPanel && calPanel.classList.contains('open')) {
-                // 클릭한 대상이 슬라이드 내부, 캘린더 셀, 또는 네비 버튼이 아닐 때만 닫기
-                if (!calPanel.contains(e.target) && !e.target.closest('.cal-cell') && !e.target.closest('.cal-nav-btn')) {
-                    closeCalSlidePanel();
-                }
-            }
+            // 3. 캘린더 슬라이드 패널은 빈 공간 터치로 제멋대로 닫히지 않고,
+            // 오직 슬라이드 상단의 접기 버튼(^), 동일 날짜 셀 재클릭(토글), 또는 다른 날짜 탭 시에만 단정하게 제어됩니다.
         });
 
-        // ESC 키 바인딩: 가장 상위에 뜬 창부터 차례대로 1개씩만 닫기
+        // ESC 키 바인딩: 최상위 활성 팝업 1개만 순차적으로 닫기
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 const activeModals = Array.from(document.querySelectorAll('.modal-overlay.active'));
@@ -3114,16 +3120,23 @@
                 const dayPosts = postsData.filter(p => (p.author || '').split('|')[4] === dateStr);
                 let previews = '';
                 
-                dayPosts.forEach(p => {
+                // 캘린더 칸이 길어져 화면 밖으로 나가는 문제를 방지하기 위해 최대 2개까지만 노출
+                const maxPreviews = 2;
+                const visiblePosts = dayPosts.slice(0, maxPreviews);
+                visiblePosts.forEach(p => {
                     const prts = (p.author || '').split('|');
+                    const postTitle = prts[2] || '기록';
                     if (prts[3] === '다이어리') {
-                        previews += `<span class="cal-pill" style="color:var(--primary-dark); background:var(--primary-light);">📝 ${prts[2]}</span>`;
+                        previews += `<span class="cal-pill" title="${postTitle}" style="color:var(--primary-dark); background:var(--primary-light);">📝 ${postTitle}</span>`;
                     }
                     if (prts[3] === '일정') {
                         const customColor = prts[5] || 'var(--secondary)';
-                        previews += `<span class="cal-pill" style="color:white; background:${customColor};">📅 ${prts[2]}</span>`;
+                        previews += `<span class="cal-pill" title="${postTitle}" style="color:white; background:${customColor};">📅 ${postTitle}</span>`;
                     }
                 });
+                if (dayPosts.length > maxPreviews) {
+                    previews += `<span class="cal-more-badge">+${dayPosts.length - maxPreviews}개</span>`;
+                }
                 
                 const isTodayClass = dateStr === todayStr ? 'today' : '';
                 const holidayClass = isHoliday ? 'holiday' : '';
