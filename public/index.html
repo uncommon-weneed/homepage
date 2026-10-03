@@ -2031,6 +2031,65 @@
             cursor: not-allowed;
         }
 
+
+        /* 사이드바 프로필 사진 카메라 뱃지 스타일 */
+        .sidebar-profile-card {
+            cursor: pointer;
+            transition: all 0.25s var(--ease-spring);
+            position: relative;
+        }
+        .sidebar-profile-card:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        .sidebar-avatar-cam-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            font-size: 0.62rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+        }
+
+        /* [PC 화면 공간 활용 최적화: 와이드 스크린 3열 그리드 & 와이드 컨테이너] */
+        @media (min-width: 1200px) {
+            .home-container, .calendar-container, .board-container {
+                max-width: 1240px; /* 960px에서 1240px로 확장하여 가운데 빈 공간 제거 */
+                padding: 30px 35px;
+            }
+            .widgets-grid {
+                grid-template-columns: repeat(3, 1fr) !important; /* PC 와이드 화면에서 시원한 3열 배치 */
+                gap: 24px;
+            }
+            .grid-full-width {
+                grid-column: span 3 !important;
+            }
+            .banner-wrap {
+                height: 420px; /* 배너 높이도 시원하게 확대 */
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+            }
+        }
+        @media (min-width: 1500px) {
+            .home-container, .calendar-container, .board-container {
+                max-width: 1400px; /* 초대형 모니터 대응 */
+            }
+            .banner-wrap {
+                height: 450px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -2129,12 +2188,15 @@
                 <span>스토리</span>
             </a>
 
-            <!-- 데스크톱 사이드바 하단 프로필 요약 카드 -->
-            <div class="sidebar-profile-card">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop" class="sidebar-profile-avatar" id="sidebarAvatar" alt="프로필 아바타">
+            <!-- 데스크톱 사이드바 하단 프로필 요약 카드 (상대방 애칭 & 사진 동적 연동) -->
+            <div class="sidebar-profile-card" id="sidebarProfileCard" title="클릭하여 상대방 사진 변경">
+                <div style="position: relative; flex-shrink: 0;">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop" class="sidebar-profile-avatar" id="sidebarAvatar" alt="프로필 아바타">
+                    <div class="sidebar-avatar-cam-badge"><i class="fa-solid fa-camera"></i></div>
+                </div>
                 <div class="sidebar-profile-info">
-                    <h4 id="sidebarUserName">정희원 & 정효재</h4>
-                    <p id="sidebarDdayText">D+♥ 만나는 중</p>
+                    <h4 id="sidebarUserName">우리와 함께 💖</h4>
+                    <p id="sidebarDdayText">D+♥ 사랑하는 중</p>
                 </div>
             </div>
         </nav>
@@ -2686,6 +2748,7 @@
             hideModal('authorSelectModal');
             document.getElementById('app-container').style.display = 'flex';
             initApp();
+            updateSidebarProfile();
             showToast(`${name}님 환영합니다! 💖`);
         }
 
@@ -2695,6 +2758,63 @@
         }
 
         // ================= [앱 초기화 및 타이머] =================
+
+        // ================= [PC 사이드바: 남자친구/여자친구 진입 시 상대방 애칭 및 사진 동적 전환] =================
+        function updateSidebarProfile() {
+            if (!user || !user.fullName) return;
+            const sideName = document.getElementById('sidebarUserName');
+            const sideAvatar = document.getElementById('sidebarAvatar');
+            const sideDday = document.getElementById('sidebarDdayText');
+            const sideCard = document.getElementById('sidebarProfileCard');
+
+            // 접속자 확인: 남자친구(효니) or 여자친구(히니)
+            const isBoyfriend = (user.fullName === '효니' || user.fullName === '남자친구' || user.fullName.includes('효'));
+            const isGirlfriend = (user.fullName === '히니' || user.fullName === '여자친구' || user.fullName.includes('히'));
+
+            let partnerName = '우리와 함께';
+            let partnerPhoto = '';
+            let partnerDesc = '함께 만나는 중';
+            let targetPhotoKey = 'profile_1';
+
+            if (isBoyfriend) {
+                // 남자친구로 접속 시 -> 여자친구의 애칭(히니)과 사진이 표시됨!
+                partnerName = '히니와 함께 💖';
+                partnerPhoto = siteSettings.profile_1 || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop';
+                partnerDesc = '소중한 내 여자친구 💕';
+                targetPhotoKey = 'profile_1'; // 클릭 시 여자친구 사진 변경
+            } else if (isGirlfriend) {
+                // 여자친구로 접속 시 -> 남자친구의 애칭(효니)과 사진이 표시됨!
+                partnerName = '효니와 함께 💖';
+                partnerPhoto = siteSettings.profile_2 || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop';
+                partnerDesc = '든든한 내 남자친구 💖';
+                targetPhotoKey = 'profile_2'; // 클릭 시 남자친구 사진 변경
+            } else {
+                partnerName = `${user.fullName}와 함께 💖`;
+                partnerPhoto = siteSettings.profile_1 || siteSettings.profile_2 || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop';
+                partnerDesc = '함께 사랑하는 중 💕';
+                targetPhotoKey = 'profile_1';
+            }
+
+            if (sideName) sideName.innerText = partnerName;
+            if (sideAvatar && partnerPhoto) sideAvatar.src = partnerPhoto;
+
+            if (sideDday && siteSettings.dday_date) {
+                const start = new Date(siteSettings.dday_date);
+                const now = new Date();
+                start.setHours(0,0,0,0);
+                now.setHours(0,0,0,0);
+                const diffDays = Math.ceil((now - start) / (1000 * 60 * 60 * 24)) + 1;
+                const ddayStr = diffDays > 0 ? `D+${diffDays}` : `D${diffDays}`;
+                sideDday.innerText = `${ddayStr}일 · ${partnerDesc}`;
+            }
+
+            // 사이드바 카드를 클릭하면 상대방의 프로필 사진을 즉시 변경할 수 있도록 연결
+            if (sideCard) {
+                sideCard.onclick = () => triggerSiteImgUpload(targetPhotoKey);
+                sideCard.title = `클릭하여 ${partnerName} 사진 교체하기`;
+            }
+        }
+
         function initApp() {
             startClock();
             loadSettings();
@@ -2703,10 +2823,7 @@
             startBannerSlider();
             requestNotificationPermission();
             startNotificationPolling();
-            if (user && user.fullName) {
-                const sideName = document.getElementById('sidebarUserName');
-                if (sideName) sideName.innerText = `${user.fullName}와 함께`;
-            }
+            updateSidebarProfile(); // [상대방 애칭 & 사진 동적 연동]
         }
 
         function startClock() {
@@ -2882,6 +2999,7 @@
                 renderTimeline();
                 renderBucketList();
                 previewAnniversaries();
+                updateSidebarProfile();
             } catch(e) {}
         }
 
