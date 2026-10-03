@@ -104,22 +104,7 @@
             --bg-gradient: linear-gradient(135deg, #F0F6FD 0%, #F5F7FB 100%);
         }
 
-        /* 사생활 보호 블러 모드 */
-        body.privacy-mode .post-preview,
-        body.privacy-mode .detail-content,
-        body.privacy-mode .post-thumb,
-        body.privacy-mode .gallery-item img,
-        body.privacy-mode .cal-slide-item-thumb,
-        body.privacy-mode .banner-img {
-            filter: blur(8px) grayscale(20%);
-            transition: filter 0.3s ease;
-        }
-        body.privacy-mode .post-preview:hover,
-        body.privacy-mode .detail-content:hover,
-        body.privacy-mode .post-thumb:hover,
-        body.privacy-mode .gallery-item img:hover {
-            filter: none;
-        }
+        /* 사생활 보호 모드 제거됨 (사용자 요청에 따라 클린 UI 적용) */
 
         /* ==========================================================================
            [2. 기본 리셋 & 공통 스타일]
@@ -966,20 +951,34 @@
             border-bottom: 1px solid var(--border-light);
         }
         .cal-cell {
-            aspect-ratio: 1/1;
+            min-height: 76px;
+            height: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding-top: 8px;
+            padding: 6px 3px 5px;
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: all 0.2s ease;
             font-weight: 700;
             position: relative;
             border: 2px solid transparent;
-            overflow: hidden;
             background: #FAFAFD;
+            box-sizing: border-box;
+            overflow: visible;
+        }
+        @media (min-width: 600px) {
+            .cal-cell {
+                min-height: 94px;
+                padding: 8px 4px 6px;
+            }
+        }
+        @media (min-width: 900px) {
+            .cal-cell {
+                min-height: 110px;
+                padding: 10px 6px 8px;
+            }
         }
         .cal-cell:hover {
             background: white;
@@ -1008,12 +1007,32 @@
             color: #FC8181;
         }
         .cal-preview {
-            margin-top: 4px;
+            margin-top: 3px;
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            width: 92%;
-            align-items: center;
+            gap: 2.5px;
+            width: 100%;
+            align-items: stretch;
+            box-sizing: border-box;
+        }
+        .cal-pill {
+            font-size: 0.68rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 2px 4px;
+            border-radius: 4px;
+            width: 100%;
+            font-weight: 700;
+            line-height: 1.25;
+            display: block;
+            box-sizing: border-box;
+        }
+        @media (max-width: 480px) {
+            .cal-pill {
+                font-size: 0.62rem;
+                padding: 1.5px 3px;
+            }
         }
 
         /* 캘린더 아래 슬라이드 인라인 패널 */
@@ -1840,6 +1859,166 @@
             color: var(--primary);
             font-weight: 800;
         }
+
+        /* 홈 화면 상시 노출 임박 일정 카드 위젯 스타일 */
+        .upcoming-card {
+            background: linear-gradient(135deg, #FFF6F7 0%, #FFFFFF 100%) !important;
+            border: 1.5px solid rgba(255, 117, 130, 0.28) !important;
+            box-shadow: 0 8px 24px rgba(255, 117, 130, 0.08) !important;
+        }
+        .upcoming-count-badge {
+            background: var(--primary);
+            color: white;
+            font-size: 0.76rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            margin-left: 6px;
+        }
+        .upcoming-entries-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .upcoming-item-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px 18px;
+            border: 1px solid var(--border-light);
+            border-left: 5px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.25s var(--ease-spring);
+            box-shadow: var(--shadow-xs);
+        }
+        .upcoming-item-card:hover {
+            transform: translateX(4px);
+            border-color: rgba(255, 117, 130, 0.35);
+            background: var(--primary-light);
+        }
+        .upcoming-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        .upcoming-dday-chip {
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 800;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .upcoming-dday-chip.d-today {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px var(--primary-glow);
+            animation: pulseHeart 2s infinite ease-in-out;
+        }
+        .upcoming-dday-chip.d-tomorrow {
+            background: #FFA07A;
+            color: white;
+        }
+        .upcoming-dday-chip.d-soon {
+            background: var(--secondary-light);
+            color: var(--secondary);
+            border: 1px solid rgba(127, 169, 198, 0.3);
+        }
+        .upcoming-info {
+            overflow: hidden;
+        }
+        .upcoming-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .upcoming-date-sub {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .upcoming-empty-box {
+            text-align: center;
+            padding: 24px 16px;
+            color: var(--text-muted);
+        }
+
+        /* 스토리 게시판 10개 단위 페이지네이션 스타일 */
+        .board-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 35px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            min-width: 36px;
+            height: 36px;
+            padding: 0 10px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border-light);
+            background: white;
+            color: var(--text-sub);
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s var(--ease-spring);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+        .page-nav-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border-light);
+            background: white;
+            color: var(--text-sub);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .page-nav-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+        .page-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
     </style>
 </head>
 <body>
@@ -1916,10 +2095,10 @@
                     <i class="fa-regular fa-clock"></i>
                     <span id="top-clock">2026. 10. 03</span>
                 </div>
-                <button class="icon-btn" id="privacyBtn" onclick="togglePrivacyMode()" title="사생활 보호 모드"><i class="fa-solid fa-eye-slash"></i></button>
-                <button class="icon-btn" id="editToggleBtn" onclick="toggleEditMode()" title="화면 편집 모드"><i class="fa-solid fa-palette"></i></button>
-                <button class="icon-btn" onclick="showModal('settingsModal')" title="설정"><i class="fa-solid fa-gear"></i></button>
-                <button class="icon-btn" onclick="handleLogout()" title="잠그기(로그아웃)"><i class="fa-solid fa-lock"></i></button>
+                <!-- 상단 설정 & 제어 통합 단일 버튼 (모바일 화면 옆 넘침 100% 방지) -->
+                <button class="icon-btn" id="headerMenuBtn" onclick="showModal('settingsModal')" title="통합 설정 및 제어" style="background: var(--primary-light); color: var(--primary); border-color: var(--primary); width: 42px; height: 42px;">
+                    <i class="fa-solid fa-sliders" style="font-size: 1.15rem;"></i>
+                </button>
             </div>
         </header>
 
@@ -1971,6 +2150,23 @@
 
                 <!-- 위젯 그리드 (2열 데스크톱 대응) -->
                 <div class="widgets-grid">
+                    <!-- [상시 노출] 다가오는 우리들의 기념일 & 약속 위젯 (홈 화면 바로 보기) -->
+                    <div class="widget-card upcoming-card grid-full-width" id="homeUpcomingWidget">
+                        <div class="widget-title">
+                            <div class="widget-title-left">
+                                <i class="fa-solid fa-calendar-star"></i>
+                                <span>다가오는 우리의 일정</span>
+                                <span class="upcoming-count-badge" id="homeUpcomingCount">0개</span>
+                            </div>
+                            <button class="icon-btn" onclick="switchView('calendar', document.querySelectorAll('.nav-item')[1])" title="캘린더로 보기" style="width: 34px; height: 34px;">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div id="homeUpcomingList" class="upcoming-entries-wrap">
+                            <!-- JS renderHomeUpcomingSchedule()로 실시간 렌더링 -->
+                        </div>
+                    </div>
+
                     <!-- 위젯 1: 우리들의 프로필 -->
                     <div class="widget-card">
                         <div class="widget-title">
@@ -2236,6 +2432,19 @@
             </div>
             <div class="modal-body">
                 <div class="settings-grid">
+                    <!-- 0. 빠른 화면 제어 (편집 모드 & 로그아웃 통합) -->
+                    <div style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1.5px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                        <div>
+                            <h4 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 3px;">
+                                <i class="fa-solid fa-palette" style="color: var(--primary);"></i> 화면 편집 모드
+                            </h4>
+                            <p style="font-size: 0.82rem; color: var(--text-muted);">사진 교체 및 타임라인 삭제 버튼 노출</p>
+                        </div>
+                        <button class="icon-btn" id="editToggleBtn" onclick="toggleEditMode()" title="화면 편집 모드 토글" style="width: 44px; height: 44px; flex-shrink: 0;">
+                            <i class="fa-solid fa-pen-ruler"></i>
+                        </button>
+                    </div>
+
                     <!-- 1. 기본 디데이 & 호칭 -->
                     <div style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
                         <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 12px; color: var(--text-main);"><i class="fa-solid fa-heart" style="color: var(--primary);"></i> 만난 날 & 타이틀</h4>
@@ -2274,6 +2483,19 @@
                         <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-download" style="color: var(--primary);"></i> 둘만의 데이터 백업</h4>
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">추억이 담긴 글과 설정을 JSON 파일로 보관하세요.</p>
                         <button class="btn-submit" style="background: var(--text-main); padding: 12px; font-size: 0.95rem;" onclick="exportDataBackup()"><i class="fa-solid fa-file-arrow-down"></i> 데이터 백업 파일 다운로드</button>
+                    </div>
+
+                    <!-- 5. 시크릿 락 잠그기(로그아웃) -->
+                    <div style="background: #FFF5F5; padding: 16px 18px; border-radius: var(--radius-sm); border: 1px solid #FED7D7; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4 style="font-size: 0.98rem; font-weight: 800; color: #E53E3E; margin-bottom: 2px;">
+                                <i class="fa-solid fa-lock"></i> 둘만의 비밀공간 잠그기
+                            </h4>
+                            <p style="font-size: 0.8rem; color: #742A2A;">로그아웃 후 암호 입력 화면으로 돌아갑니다.</p>
+                        </div>
+                        <button class="btn-submit" style="width: auto; padding: 9px 18px; font-size: 0.88rem; background: #E53E3E; border-radius: var(--radius-full); box-shadow: none;" onclick="handleLogout()">
+                            잠그기
+                        </button>
                     </div>
                 </div>
             </div>
@@ -2345,9 +2567,10 @@
         
         let currentView = 'home';
         let currentBoardTab = '전체';
+        let boardCurrentPage = 1;
+        const postsPerPage = 10;
         let isEditMode = false;
-        let isPrivacyMode = false;
-        let activePost = null;
+                let activePost = null;
         let currentCalDate = new Date();
         let currentSelectedCalDate = '';
 
@@ -2464,6 +2687,7 @@
             startClock();
             loadSettings();
             loadPosts();
+            renderHomeUpcomingSchedule();
             startBannerSlider();
             requestNotificationPermission();
             startNotificationPolling();
@@ -2498,6 +2722,7 @@
             if (target) {
                 target.classList.add('active');
             }
+            if (viewId === 'home') renderHomeUpcomingSchedule();
             if (viewId === 'calendar') renderCalendar();
             if (viewId === 'board') renderBoardList();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2513,14 +2738,7 @@
             }
         }
 
-        // 사생활 보호 모드 토글
-        function togglePrivacyMode() {
-            isPrivacyMode = !isPrivacyMode;
-            document.body.classList.toggle('privacy-mode', isPrivacyMode);
-            const btn = document.getElementById('privacyBtn');
-            if (btn) btn.classList.toggle('active', isPrivacyMode);
-            showToast(isPrivacyMode ? "사생활 보호 모드가 켜졌습니다. 🔒" : "사생활 보호 모드가 꺼졌습니다. 🔓");
-        }
+        // 사생활 보호 모드 제거 (통합 단일 메뉴 시스템 적용)
 
         // 화면 편집 모드 토글
         function toggleEditMode() {
@@ -2899,11 +3117,11 @@
                 dayPosts.forEach(p => {
                     const prts = (p.author || '').split('|');
                     if (prts[3] === '다이어리') {
-                        previews += `<div style="font-size:0.68rem; color:var(--primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:var(--primary-light); padding:2px 5px; border-radius:4px; width:100%; font-weight:700;">📝 ${prts[2]}</div>`;
+                        previews += `<span class="cal-pill" style="color:var(--primary-dark); background:var(--primary-light);">📝 ${prts[2]}</span>`;
                     }
                     if (prts[3] === '일정') {
                         const customColor = prts[5] || 'var(--secondary)';
-                        previews += `<div style="font-size:0.68rem; color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:${customColor}; padding:2px 5px; border-radius:4px; width:100%; font-weight:700;">📅 ${prts[2]}</div>`;
+                        previews += `<span class="cal-pill" style="color:white; background:${customColor};">📅 ${prts[2]}</span>`;
                     }
                 });
                 
@@ -3047,9 +3265,19 @@
 
         function setBoardCategory(cat, btnEl) {
             currentBoardTab = cat;
+            boardCurrentPage = 1; // 탭 변경 시 1페이지로 리셋
             document.querySelectorAll('.board-tab').forEach(b => b.classList.remove('active'));
             btnEl.classList.add('active');
             renderBoardList();
+        }
+
+        function changeBoardPage(newPage) {
+            boardCurrentPage = newPage;
+            renderBoardList();
+            const boardEl = document.getElementById('view-board');
+            if (boardEl) {
+                boardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         // 시간 포맷 헬퍼 함수
@@ -3156,26 +3384,115 @@
             }
         }
 
+
+        // ================= [요구사항 5: 홈 화면에 임박한 일정 상시 렌더링] =================
+        function renderHomeUpcomingSchedule() {
+            const listEl = document.getElementById('homeUpcomingList');
+            const countEl = document.getElementById('homeUpcomingCount');
+            if (!listEl) return;
+
+            if (!Array.isArray(postsData)) postsData = [];
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+
+            // 카테고리가 '일정'이고 날짜가 있는 게시글 필터링
+            const upcomingList = postsData.map(p => {
+                const prts = (p.author || '').split('|');
+                return {
+                    id: p.id,
+                    author: prts[0] || '익명',
+                    title: prts[2] || '무제 일정',
+                    category: prts[3] || '일정',
+                    dateStr: prts[4] || '',
+                    color: prts[5] || 'var(--secondary)',
+                    content: p.content || '',
+                    imageUrl: p.image_url || ''
+                };
+            }).filter(item => {
+                if (item.category === '일정' && item.dateStr) {
+                    const parts = item.dateStr.split('-');
+                    if (parts.length === 3) {
+                        const targetDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                        targetDate.setHours(0, 0, 0, 0);
+                        const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
+                        // 오늘부터 30일 이내의 다가오는 일정 표시
+                        return diffDays >= 0 && diffDays <= 30;
+                    }
+                }
+                return false;
+            }).sort((a, b) => {
+                const da = new Date(a.dateStr);
+                const db = new Date(b.dateStr);
+                return da - db;
+            });
+
+            if (countEl) countEl.innerText = `${upcomingList.length}개`;
+
+            if (upcomingList.length === 0) {
+                listEl.innerHTML = `
+                    <div class="upcoming-empty-box">
+                        <i class="fa-regular fa-calendar-check" style="font-size: 2.2rem; color: var(--primary); opacity: 0.5; margin-bottom: 8px;"></i>
+                        <p style="font-size: 0.96rem; font-weight: 700;">다가오는 30일 이내 일정이 없습니다.</p>
+                        <p style="font-size: 0.82rem; margin-top: 4px;">새로운 데이트나 약속을 계획해 보세요 💖</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = upcomingList.map(item => {
+                const parts = item.dateStr.split('-');
+                const targetDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                targetDate.setHours(0, 0, 0, 0);
+                const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
+                
+                let chipClass = 'd-soon';
+                let chipText = `D-${diffDays}`;
+                if (diffDays === 0) {
+                    chipClass = 'd-today';
+                    chipText = '오늘 D-Day!';
+                } else if (diffDays === 1) {
+                    chipClass = 'd-tomorrow';
+                    chipText = '내일 D-1';
+                }
+
+                const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+                const dayOfWeek = dayNames[targetDate.getDay()];
+                const dateDisplay = `${parts[0]}.${parts[1]}.${parts[2]} (${dayOfWeek})`;
+
+                return `
+                    <div class="upcoming-item-card" style="border-left-color: ${item.color};" onclick="openDetail(${item.id})">
+                        <div class="upcoming-left">
+                            <span class="upcoming-dday-chip ${chipClass}">${chipText}</span>
+                            <div class="upcoming-info">
+                                <div class="upcoming-title">${item.title}</div>
+                                <div class="upcoming-date-sub">
+                                    <i class="fa-regular fa-calendar"></i> ${dateDisplay}
+                                    <span style="margin-left: 8px;"><i class="fa-solid fa-pen-nib"></i> ${item.author}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right" style="color: var(--text-muted); font-size: 0.9rem;"></i>
+                    </div>
+                `;
+            }).join('');
+        }
+
         async function loadPosts() {
             try {
                 const [rp, rc] = await Promise.all([
                     fetch('/api/posts', { cache: 'no-store' }),
                     fetch('/api/comments', { cache: 'no-store' })
                 ]);
-                const pJson = await rp.json();
-                const cJson = await rc.json();
-                postsData = Array.isArray(pJson) ? pJson : [];
-                commentsData = Array.isArray(cJson) ? cJson : [];
+                postsData = await rp.json();
+                commentsData = await rc.json();
                 
                 if (document.getElementById('view-calendar').classList.contains('active')) renderCalendar();
                 if (document.getElementById('view-board').classList.contains('active')) renderBoardList();
+                renderHomeUpcomingSchedule(); // [요구사항 5] 홈 화면 임박 일정 상시 렌더링
                 if (postsData.length > 0) localStorage.setItem('last_post_id', postsData[0].id);
                 
                 checkUpcomingSchedule();
-            } catch(err) {
-                if (!Array.isArray(postsData)) postsData = [];
-                if (!Array.isArray(commentsData)) commentsData = [];
-            }
+            } catch(err) {}
         }
 
         function checkUpcomingSchedule() {
@@ -3201,7 +3518,10 @@
 
         function renderBoardList() {
             const list = document.getElementById('boardList');
+            if (!list) return;
             list.innerHTML = '';
+            
+            if (!Array.isArray(postsData)) postsData = [];
             let filtered = postsData.filter(p => {
                 const cat = (p.author||'').split('|')[3] || '일상';
                 if (currentBoardTab === '전체') return cat !== '다이어리' && cat !== '일정';
@@ -3214,13 +3534,24 @@
                 return;
             }
 
+            // [요구사항 4] 10개마다 1페이지 페이지네이션 계산
+            const totalPosts = filtered.length;
+            const totalPages = Math.ceil(totalPosts / postsPerPage) || 1;
+            if (boardCurrentPage > totalPages) boardCurrentPage = totalPages;
+            if (boardCurrentPage < 1) boardCurrentPage = 1;
+
+            const startIndex = (boardCurrentPage - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+            const pagedPosts = filtered.slice(startIndex, endIndex);
+
+            let htmlContent = '';
             if (currentBoardTab === '갤러리') {
-                list.className = 'gallery-grid';
-                filtered.forEach(p => {
+                htmlContent += '<div class="gallery-grid">';
+                pagedPosts.forEach(p => {
                     const parts = (p.author||'').split('|');
                     const timeDisplay = formatPostDateTime(parts[4], parts[6]);
                     if (p.image_url) {
-                        list.innerHTML += `
+                        htmlContent += `
                             <div class="gallery-item" onclick="openDetail(${p.id})">
                                 <img src="${p.image_url}" alt="갤러리 사진">
                                 <div class="gallery-item-info">
@@ -3231,13 +3562,14 @@
                         `;
                     }
                 });
+                htmlContent += '</div>';
             } else {
-                list.className = '';
-                filtered.forEach(p => {
+                htmlContent += '<div class="posts-list-wrap">';
+                pagedPosts.forEach(p => {
                     const parts = (p.author||'').split('|');
-                    const ccount = commentsData.filter(c => c.post_id === p.id).length;
+                    const ccount = Array.isArray(commentsData) ? commentsData.filter(c => c.post_id === p.id).length : 0;
                     const timeDisplay = formatPostDateTime(parts[4], parts[6]);
-                    list.innerHTML += `
+                    htmlContent += `
                         <div class="post-card" onclick="openDetail(${p.id})">
                             <div class="post-content-flex">
                                 <div>
@@ -3257,7 +3589,37 @@
                         </div>
                     `;
                 });
+                htmlContent += '</div>';
             }
+
+            // 페이지네이션 컨트롤 바 렌더링 (10개 초과 시 또는 페이지 이동 지원)
+            if (totalPages > 1) {
+                let paginationHtml = '<div class="board-pagination">';
+                paginationHtml += `
+                    <button class="page-nav-btn" onclick="changeBoardPage(${boardCurrentPage - 1})" ${boardCurrentPage === 1 ? 'disabled' : ''} title="이전 페이지">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                `;
+
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationHtml += `
+                        <button class="page-btn ${i === boardCurrentPage ? 'active' : ''}" onclick="changeBoardPage(${i})">
+                            ${i}
+                        </button>
+                    `;
+                }
+
+                paginationHtml += `
+                    <button class="page-nav-btn" onclick="changeBoardPage(${boardCurrentPage + 1})" ${boardCurrentPage === totalPages ? 'disabled' : ''} title="다음 페이지">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                `;
+                paginationHtml += '</div>';
+                htmlContent += paginationHtml;
+            }
+
+            list.className = '';
+            list.innerHTML = htmlContent;
         }
 
         function openDetail(id) {
