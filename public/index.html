@@ -2144,6 +2144,290 @@
             }
         }
 
+
+        /* [요구사항 1] 요즘 감성 비주얼 카테고리 칩 선택기 */
+        .category-chip-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+        .cat-chip-item {
+            flex: 1 1 calc(33.333% - 8px);
+            min-width: 95px;
+            padding: 10px 8px;
+            background: #F8FAFD;
+            border: 1.5px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.25s var(--ease-spring);
+            user-select: none;
+            box-sizing: border-box;
+        }
+        .cat-chip-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .cat-chip-item.active {
+            background: var(--primary-light) !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 4px 12px var(--primary-glow);
+            transform: scale(1.02);
+        }
+        .cat-chip-item .chip-icon {
+            font-size: 1.15rem;
+        }
+        .cat-chip-item .chip-text {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+        .cat-chip-item.active .chip-text {
+            color: var(--primary-dark);
+        }
+
+        /* [요구사항 1] 전문적이고 감성적인 드래그 앤 드롭 파일 첨부 존 */
+        .modern-file-dropzone {
+            width: 100%;
+            border: 2px dashed rgba(255, 117, 130, 0.4);
+            border-radius: var(--radius-sm);
+            background: #FCFDFF;
+            padding: 22px 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .modern-file-dropzone:hover, .modern-file-dropzone.dragover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .dropzone-idle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .dropzone-icon-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+            transition: transform 0.25s var(--ease-spring);
+        }
+        .modern-file-dropzone:hover .dropzone-icon-circle {
+            transform: scale(1.15) translateY(-2px);
+        }
+        .dropzone-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+        .dropzone-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .dropzone-preview-wrap {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+        }
+        .dropzone-preview-wrap img {
+            width: 64px;
+            height: 64px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid var(--border-light);
+            flex-shrink: 0;
+        }
+        .dropzone-preview-info {
+            flex-grow: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .preview-filename {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .preview-remove-btn {
+            background: none;
+            border: none;
+            color: #FC8181;
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            width: fit-content;
+        }
+        .preview-remove-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* [요구사항 4] 프로필 사진 확대 커서 */
+        .profile-pic, .sidebar-profile-avatar {
+            cursor: zoom-in !important;
+            transition: transform 0.25s var(--ease-spring);
+        }
+        .profile-pic:hover {
+            transform: scale(1.08);
+        }
+
+
+        /* ==========================================================================
+           [15. 인스타그램 감성 사진 갤러리 전용 피드 스타일 - 제목 & 댓글 중심 차별화]
+           ========================================================================== */
+        .gallery-grid-insta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        @media (min-width: 640px) {
+            .gallery-grid-insta {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .gallery-grid-insta {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 24px;
+            }
+        }
+        .gallery-card-insta {
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .gallery-card-insta:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(255, 117, 130, 0.35);
+        }
+        .gallery-media-frame {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #F1F4F9;
+            overflow: hidden;
+        }
+        .gallery-media-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.45s var(--ease-smooth);
+        }
+        .gallery-card-insta:hover .gallery-media-frame img {
+            transform: scale(1.07);
+        }
+        .gallery-overlay-zoom {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            opacity: 0.85;
+            transition: all 0.2s var(--ease-spring);
+        }
+        .gallery-card-insta:hover .gallery-overlay-zoom {
+            background: var(--primary);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .gallery-bottom-bar {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: white;
+        }
+        .gallery-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+        }
+        .gallery-insta-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+        .gallery-comment-chip {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: var(--radius-full);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px var(--primary-soft);
+        }
+        .gallery-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .gallery-author-tag {
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .gallery-dropzone-highlight {
+            border-color: var(--primary) !important;
+            background: var(--primary-light) !important;
+            box-shadow: 0 0 0 4px var(--primary-soft) !important;
+        }
+
     </style>
 </head>
 <body>
@@ -2303,9 +2587,10 @@
                         <div class="profile-flex">
                             <div class="profile-item">
                                 <div class="profile-avatar-wrap">
-                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop" class="profile-pic" id="profile1" alt="정희원 프로필">
+                                    <!-- [요구사항 4] 프로필 사진 클릭 시 라이트박스로 고화질 확대 뷰어 실행 -->
+                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop" class="profile-pic" id="profile1" alt="정희원 프로필" onclick="openLightbox(this.src)" title="클릭하여 크게 보기 🔍">
                                     <span class="profile-role-tag">히니</span>
-                                    <button class="edit-badge" onclick="triggerSiteImgUpload('profile_1')" style="top: auto; bottom: -5px; right: -5px; padding: 6px; border-radius: 50%;"><i class="fa-solid fa-camera"></i></button>
+                                    <button class="edit-badge" onclick="event.stopPropagation(); triggerSiteImgUpload('profile_1')" style="top: auto; bottom: -5px; right: -5px; padding: 6px; border-radius: 50%;"><i class="fa-solid fa-camera"></i></button>
                                 </div>
                                 <div class="profile-name">정희원</div>
                                 <div class="profile-bio">소중한 내 여자친구 💕</div>
@@ -2313,7 +2598,8 @@
                             <i class="fa-solid fa-heart" style="color: var(--primary); font-size: 2.2rem; animation: pulseHeart 2s infinite ease-in-out;"></i>
                             <div class="profile-item">
                                 <div class="profile-avatar-wrap">
-                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop" class="profile-pic" id="profile2" alt="정효재 프로필">
+                                    <!-- [요구사항 4] 프로필 사진 클릭 시 라이트박스로 고화질 확대 뷰어 실행 -->
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop" class="profile-pic" id="profile2" alt="정효재 프로필" onclick="openLightbox(this.src)" title="클릭하여 크게 보기 🔍">
                                     <span class="profile-role-tag">효니</span>
                                     <button class="edit-badge" onclick="triggerSiteImgUpload('profile_2')" style="top: auto; bottom: -5px; right: -5px; padding: 6px; border-radius: 50%;"><i class="fa-solid fa-camera"></i></button>
                                 </div>
@@ -2402,9 +2688,8 @@
             <div class="board-container">
                 <div class="board-tabs">
                     <button class="board-tab active" onclick="setBoardCategory('전체', this)">전체보기</button>
-                    <button class="board-tab" onclick="setBoardCategory('갤러리', this)">사진 갤러리</button>
-                    <button class="board-tab" onclick="setBoardCategory('편지함', this)">비밀 편지함</button>
-                    <button class="board-tab" onclick="setBoardCategory('일상', this)">자유 일상</button>
+                    <button class="board-tab" onclick="setBoardCategory('갤러리', this)"><i class="fa-regular fa-image" style="margin-right:6px;"></i>사진 갤러리</button>
+                    <button class="board-tab" onclick="setBoardCategory('일상', this)"><i class="fa-solid fa-seedling" style="margin-right:6px;"></i>자유 일상</button>
                 </div>
                 <div id="boardList"></div>
             </div>
@@ -2439,26 +2724,39 @@
                 <button class="btn-close" onclick="resetWriteForm(); hideModal('writeModal')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <div class="form-group" style="display: flex; gap: 12px;">
-                    <div class="input-with-icon" style="flex: 1;">
-                        <i class="fa-solid fa-folder"></i>
-                        <select id="postCategory" class="form-select" onchange="toggleScheduleColor(this)">
-                            <option value="일상">일상 (자유)</option>
-                            <option value="갤러리">갤러리 (사진)</option>
-                            <option value="편지함">비밀 편지함</option>
-                            <option value="다이어리">다이어리</option>
-                            <option value="일정">일정 (약속/기념일)</option>
-                        </select>
+                <!-- [요구사항 1] 요즘 감성 시각적 카테고리 칩 선택기 -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-shapes" style="color: var(--primary);"></i> 카테고리 선택</label>
+                    <div class="category-chip-group" id="writeCategoryChips">
+                        <div class="cat-chip-item active" data-cat="일상" onclick="selectWriteCategory('일상')">
+                            <span class="chip-icon">🌿</span>
+                            <span class="chip-text">일상 기록</span>
+                        </div>
+                        <div class="cat-chip-item" data-cat="갤러리" onclick="selectWriteCategory('갤러리')">
+                            <span class="chip-icon">📸</span>
+                            <span class="chip-text">사진 갤러리</span>
+                        </div>
+                        <div class="cat-chip-item" data-cat="다이어리" onclick="selectWriteCategory('다이어리')">
+                            <span class="chip-icon">📝</span>
+                            <span class="chip-text">다이어리</span>
+                        </div>
+                        <div class="cat-chip-item" data-cat="일정" onclick="selectWriteCategory('일정')">
+                            <span class="chip-icon">📅</span>
+                            <span class="chip-text">기념일/약속</span>
+                        </div>
                     </div>
-                    <div class="input-with-icon" style="flex: 1;">
-                        <i class="fa-regular fa-calendar"></i>
-                        <input type="date" id="postDate" class="form-input">
-                    </div>
+                    <input type="hidden" id="postCategory" value="일상">
                 </div>
 
-                <div class="form-group" id="colorSelectGroup" style="display: none; align-items: center; gap: 15px; background: #F8FAFD; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                <!-- 날짜 및 일정 색상 선택 영역 (다이어리/일정 선택 시 세련되게 등장) -->
+                <div class="form-group" id="writeDateGroup" style="display: none;">
+                    <label class="form-label"><i class="fa-regular fa-calendar" style="color: var(--primary);"></i> 해당 날짜</label>
+                    <input type="date" id="postDate" class="form-input">
+                </div>
+
+                <div class="form-group" id="colorSelectGroup" style="display: none; align-items: center; justify-content: space-between; background: #F8FAFD; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
                     <label class="form-label" style="margin: 0;"><i class="fa-solid fa-palette" style="color: var(--primary);"></i> 일정 포인트 색상</label>
-                    <input type="color" id="postColor" value="#8DA9C4" style="height: 38px; width: 65px; border: none; background: transparent; cursor: pointer;">
+                    <input type="color" id="postColor" value="#FF7582" style="height: 38px; width: 65px; border: none; background: transparent; cursor: pointer;">
                 </div>
 
                 <div class="form-group input-with-icon">
@@ -2471,9 +2769,24 @@
                     <textarea id="postContent" class="form-textarea" rows="6" placeholder="오늘 어떤 행복한 일이 있었나요? 둘만의 이야기를 적어보세요." spellcheck="false"></textarea>
                 </div>
 
-                <div class="form-group input-with-icon">
-                    <i class="fa-regular fa-image"></i>
-                    <input type="file" id="postImage" accept="image/*" class="form-input" style="padding: 13px 16px 13px 48px;">
+                <!-- [요구사항 1] 전문적이고 감성적인 드래그 앤 드롭 파일 첨부 영역 -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-regular fa-image" style="color: var(--primary);"></i> 소중한 사진 첨부 (선택)</label>
+                    <div class="modern-file-dropzone" id="writeDropzone" onclick="document.getElementById('postImage').click()">
+                        <input type="file" id="postImage" accept="image/*" style="display: none;" onchange="handleWriteImagePreview(event)">
+                        <div class="dropzone-idle" id="writeDropzoneIdle">
+                            <div class="dropzone-icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                            <p class="dropzone-title">사진을 탭하여 선택하거나 여기에 끌어다 놓으세요</p>
+                            <p class="dropzone-desc">JPG, PNG, GIF, WEBP 고화질 사진 지원</p>
+                        </div>
+                        <div class="dropzone-preview-wrap" id="writeDropzonePreview" style="display: none;">
+                            <img id="writePreviewImg" src="" alt="미리보기">
+                            <div class="dropzone-preview-info">
+                                <span class="preview-filename" id="writePreviewName">image.jpg</span>
+                                <button type="button" class="preview-remove-btn" onclick="clearWriteImage(event)"><i class="fa-solid fa-xmark"></i> 사진 삭제</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- 화면 밖으로 버튼이 나가지 않도록 하단 고정 푸터 배치 -->
@@ -2529,10 +2842,41 @@
             <div class="modal-body">
                 <input type="hidden" id="editPostId">
                 <input type="hidden" id="editAuthorMeta">
-                <input type="hidden" id="editCategory">
                 <input type="hidden" id="editKeepImage">
-                <input type="hidden" id="editDate">
-                <input type="hidden" id="editColor">
+
+                <!-- [요구사항 2] 게시글 수정 시 카테고리도 자유롭게 수정 가능! -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-shapes" style="color: var(--primary);"></i> 카테고리 수정</label>
+                    <div class="category-chip-group" id="editCategoryChips">
+                        <div class="cat-chip-item active" data-cat="일상" onclick="selectEditCategory('일상')">
+                            <span class="chip-icon">🌿</span>
+                            <span class="chip-text">일상 기록</span>
+                        </div>
+                        <div class="cat-chip-item" data-cat="갤러리" onclick="selectEditCategory('갤러리')">
+                            <span class="chip-icon">📸</span>
+                            <span class="chip-text">사진 갤러리</span>
+                        </div>
+                        <div class="cat-chip-item" data-cat="다이어리" onclick="selectEditCategory('다이어리')">
+                            <span class="chip-icon">📝</span>
+                            <span class="chip-text">다이어리</span>
+                        </div>
+                        <div class="cat-chip-item" data-cat="일정" onclick="selectEditCategory('일정')">
+                            <span class="chip-icon">📅</span>
+                            <span class="chip-text">기념일/약속</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="editCategory" value="일상">
+                </div>
+
+                <div class="form-group" id="editDateGroup" style="display: none;">
+                    <label class="form-label"><i class="fa-regular fa-calendar" style="color: var(--primary);"></i> 해당 날짜</label>
+                    <input type="date" id="editDate" class="form-input">
+                </div>
+
+                <div class="form-group" id="editColorGroup" style="display: none; align-items: center; justify-content: space-between; background: #F8FAFD; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                    <label class="form-label" style="margin: 0;"><i class="fa-solid fa-palette" style="color: var(--primary);"></i> 일정 포인트 색상</label>
+                    <input type="color" id="editColor" value="#FF7582" style="height: 38px; width: 65px; border: none; background: transparent; cursor: pointer;">
+                </div>
 
                 <div class="form-group input-with-icon">
                     <i class="fa-solid fa-heading"></i>
@@ -2544,7 +2888,6 @@
                 </div>
                 <div class="form-group input-with-icon">
                     <i class="fa-regular fa-image"></i>
-                    <!-- placeholder 제거하여 HTML 표준 경고 0개 달성 -->
                     <input type="file" id="editImage" accept="image/*" class="form-input" style="padding: 13px 16px 13px 48px;">
                 </div>
             </div>
@@ -2881,6 +3224,13 @@
             requestNotificationPermission();
             startNotificationPolling();
             updateSidebarProfile(); // [상대방 애칭 & 사진 동적 연동]
+
+            // [요구사항 3]: 이전에 보고 있던 탭으로 자동 복원 (새로고침 시 홈으로 튕김 방지)
+            const lastView = sessionStorage.getItem('couple_active_view') || 'home';
+            if (lastView !== 'home') {
+                const navBtn = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes(lastView === 'calendar' ? '캘린더' : '스토리'));
+                switchView(lastView, navBtn);
+            }
         }
 
         function startClock() {
@@ -2898,8 +3248,16 @@
         // 뷰 전환 (홈 / 캘린더 / 스토리)
         function switchView(viewId, btnElement) {
             currentView = viewId;
+            // [요구사항 3]: 새로고침해도 홈으로 가지 않고 현재 탭을 그대로 유지하도록 저장!
+            sessionStorage.setItem('couple_active_view', viewId);
+
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            if (btnElement) btnElement.classList.add('active');
+            if (btnElement) {
+                btnElement.classList.add('active');
+            } else {
+                const targetNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes(viewId === 'home' ? '홈' : (viewId === 'calendar' ? '캘린더' : '스토리')));
+                if (targetNav) targetNav.classList.add('active');
+            }
             
             document.querySelectorAll('.view-section').forEach(sec => {
                 sec.classList.remove('active');
@@ -3292,10 +3650,11 @@
                 const dayOfWeek = new Date(year, month, d).getDay();
                 
                 const isHoliday = krHolidays.includes(dateMD) || dayOfWeek === 0;
-                const dayPosts = postsData.filter(p => (p.author || '').split('|')[4] === dateStr);
+                // [요구사항 5]: 최신 등록된 글이 먼저 보이도록 역순 정렬
+                const dayPosts = postsData.filter(p => (p.author || '').split('|')[4] === dateStr).reverse();
                 let previews = '';
                 
-                // 캘린더 칸이 길어져 화면 밖으로 나가는 문제를 방지하기 위해 최대 2개까지만 노출
+                // 캘린더 칸이 넘치지 않으면서도 가장 최근에 쓴 글 제목이 바로 보이도록 최대 2개 선별
                 const maxPreviews = 2;
                 const visiblePosts = dayPosts.slice(0, maxPreviews);
                 visiblePosts.forEach(p => {
@@ -3303,14 +3662,16 @@
                     const postTitle = prts[2] || '기록';
                     if (prts[3] === '다이어리') {
                         previews += `<span class="cal-pill" title="${postTitle}" style="color:var(--primary-dark); background:var(--primary-light);">📝 ${postTitle}</span>`;
-                    }
-                    if (prts[3] === '일정') {
+                    } else if (prts[3] === '일정') {
                         const customColor = prts[5] || 'var(--secondary)';
                         previews += `<span class="cal-pill" title="${postTitle}" style="color:white; background:${customColor};">📅 ${postTitle}</span>`;
+                    } else {
+                        previews += `<span class="cal-pill" title="${postTitle}" style="color:var(--text-sub); background:#EDF2F7;">💬 ${postTitle}</span>`;
                     }
                 });
+                // 이전 기록이 추가로 있을 경우에만 단정한 미니 뱃지 표시
                 if (dayPosts.length > maxPreviews) {
-                    previews += `<span class="cal-more-badge">+${dayPosts.length - maxPreviews}개</span>`;
+                    previews += `<span class="cal-more-badge" title="총 ${dayPosts.length}개의 기록 (탭하여 전체 보기)">+${dayPosts.length - maxPreviews}개 더보기</span>`;
                 }
                 
                 const isTodayClass = dateStr === todayStr ? 'today' : '';
@@ -3433,6 +3794,107 @@
         // ================= [글쓰기 모달 열기 & 날짜 분기 처리] =================
         // 요구사항: 캘린더에서 작성 시 해당 날짜, 스토리/홈에서 작성 시 오늘 날짜로 자동 설정
         // 글쓰기 입력 폼 완벽 초기화 (이전에 썼던 기록이나 잔여 텍스트 완전 제거)
+
+        // ================= [요구사항 1: 글작성 카테고리 칩 선택 & 드롭존 제어] =================
+        function selectWriteCategory(cat) {
+            const hiddenCat = document.getElementById('postCategory');
+            if (hiddenCat) hiddenCat.value = cat;
+
+            document.querySelectorAll('#writeCategoryChips .cat-chip-item').forEach(item => {
+                item.classList.toggle('active', item.getAttribute('data-cat') === cat);
+            });
+
+            const dateGroup = document.getElementById('writeDateGroup');
+            const colorGroup = document.getElementById('colorSelectGroup');
+            const dropzone = document.getElementById('writeDropzone');
+            const contentInput = document.getElementById('postContent');
+
+            if (cat === '다이어리' || cat === '일정') {
+                if (dateGroup) dateGroup.style.display = 'block';
+                if (colorGroup) colorGroup.style.display = cat === '일정' ? 'flex' : 'none';
+            } else {
+                if (dateGroup) dateGroup.style.display = 'none';
+                if (colorGroup) colorGroup.style.display = 'none';
+            }
+
+            // 카테고리별 특화 UI 및 감성 인터랙션
+            if (dropzone) {
+                if (cat === '갤러리') {
+                    dropzone.classList.add('gallery-dropzone-highlight');
+                } else {
+                    dropzone.classList.remove('gallery-dropzone-highlight');
+                }
+            }
+
+            if (contentInput) {
+                if (cat === '갤러리') {
+                    contentInput.placeholder = "사진에 덧붙일 감성 캡션을 적어보세요 (선택). 갤러리는 사진과 제목, 댓글 중심으로 기록됩니다 📸";
+                    contentInput.rows = 3;
+                } else if (cat === '다이어리') {
+                    contentInput.placeholder = "오늘 하루 둘만의 소중한 일기를 적어보세요. (캘린더에 표시됩니다 📝)";
+                    contentInput.rows = 6;
+                } else if (cat === '일정') {
+                    contentInput.placeholder = "데이트나 기념일 일정에 대한 메모를 남겨보세요. (캘린더와 홈 D-Day에 연동됩니다 📅)";
+                    contentInput.rows = 4;
+                } else {
+                    contentInput.placeholder = "오늘 어떤 행복한 일이 있었나요? 둘만의 이야기를 자유롭게 적어보세요 🌿";
+                    contentInput.rows = 6;
+                }
+            }
+        }
+
+        // ================= [요구사항 2: 게시글 수정 시 카테고리 선택 핸들러] =================
+        function selectEditCategory(cat) {
+            const hiddenCat = document.getElementById('editCategory');
+            if (hiddenCat) hiddenCat.value = cat;
+
+            document.querySelectorAll('#editCategoryChips .cat-chip-item').forEach(item => {
+                item.classList.toggle('active', item.getAttribute('data-cat') === cat);
+            });
+
+            const dateGroup = document.getElementById('editDateGroup');
+            const colorGroup = document.getElementById('editColorGroup');
+            if (cat === '다이어리' || cat === '일정') {
+                if (dateGroup) dateGroup.style.display = 'block';
+                if (colorGroup) colorGroup.style.display = cat === '일정' ? 'flex' : 'none';
+            } else {
+                if (dateGroup) dateGroup.style.display = 'none';
+                if (colorGroup) colorGroup.style.display = 'none';
+            }
+        }
+
+        // 사진 파일 선택 시 실시간 감성 미리보기
+        function handleWriteImagePreview(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const idleEl = document.getElementById('writeDropzoneIdle');
+                const previewWrap = document.getElementById('writeDropzonePreview');
+                const previewImg = document.getElementById('writePreviewImg');
+                const previewName = document.getElementById('writePreviewName');
+
+                if (previewImg) previewImg.src = evt.target.result;
+                if (previewName) previewName.innerText = file.name;
+                if (idleEl) idleEl.style.display = 'none';
+                if (previewWrap) previewWrap.style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearWriteImage(e) {
+            if (e) e.stopPropagation();
+            const input = document.getElementById('postImage');
+            if (input) input.value = '';
+            const idleEl = document.getElementById('writeDropzoneIdle');
+            const previewWrap = document.getElementById('writeDropzonePreview');
+            const previewImg = document.getElementById('writePreviewImg');
+            if (previewImg) previewImg.src = '';
+            if (previewWrap) previewWrap.style.display = 'none';
+            if (idleEl) idleEl.style.display = 'flex';
+        }
+
         function resetWriteForm() {
             const titleEl = document.getElementById('postTitle');
             const contentEl = document.getElementById('postContent');
@@ -3440,10 +3902,10 @@
             if (titleEl) titleEl.value = '';
             if (contentEl) contentEl.value = '';
             if (imgEl) imgEl.value = '';
+            clearWriteImage();
         }
 
         function openWriteModal(catDefault, targetDate) {
-            // targetDate가 명시적으로 전달되지 않았을 경우
             if (!targetDate) {
                 if (currentView === 'calendar' && currentSelectedCalDate) {
                     targetDate = currentSelectedCalDate;
@@ -3452,10 +3914,11 @@
                 }
             }
 
-            document.getElementById('postCategory').value = catDefault || (currentView === 'calendar' ? '일정' : '일상');
-            document.getElementById('postDate').value = targetDate;
+            const chosenCat = catDefault || (currentView === 'calendar' ? '일정' : '일상');
             resetWriteForm();
-            toggleScheduleColor(document.getElementById('postCategory'));
+            selectWriteCategory(chosenCat);
+            const dateInput = document.getElementById('postDate');
+            if (dateInput) dateInput.value = targetDate;
             showModal('writeModal');
         }
 
@@ -3744,21 +4207,39 @@
 
             let htmlContent = '';
             if (currentBoardTab === '갤러리') {
-                htmlContent += '<div class="gallery-grid">';
+                htmlContent += '<div class="gallery-grid-insta">';
                 pagedPosts.forEach(p => {
-                    const parts = (p.author||'').split('|');
+                    const parts = (p.author || '').split('|');
+                    const ccount = Array.isArray(commentsData) ? commentsData.filter(c => Number(c.post_id || c.postId) === Number(p.id)).length : 0;
                     const timeDisplay = formatPostDateTime(parts[4], parts[6]);
-                    if (p.image_url) {
-                        htmlContent += `
-                            <div class="gallery-item" onclick="openDetail(${p.id})">
-                                <img src="${p.image_url}" alt="갤러리 사진">
-                                <div class="gallery-item-info">
-                                    <div class="gallery-item-title">${parts[2] || '무제'}</div>
-                                    <div class="gallery-item-date"><i class="fa-regular fa-clock"></i> ${timeDisplay}</div>
+                    const authorName = parts[0] || '익명';
+                    const postTitle = parts[2] || '우리의 추억 📸';
+                    const imgUrl = p.image_url || 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=600&auto=format&fit=crop';
+                    
+                    htmlContent += `
+                        <div class="gallery-card-insta" onclick="openDetail(${p.id})">
+                            <div class="gallery-media-frame">
+                                <img src="${imgUrl}" alt="${postTitle}" loading="lazy">
+                                <div class="gallery-overlay-zoom" onclick="event.stopPropagation(); openLightbox('${imgUrl}')" title="사진 원본 확대">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
                                 </div>
                             </div>
-                        `;
-                    }
+                            <div class="gallery-bottom-bar">
+                                <div class="gallery-title-row">
+                                    <div class="gallery-insta-title" title="${postTitle}">${postTitle}</div>
+                                    <span class="gallery-comment-chip" title="댓글 ${ccount}개">
+                                        <i class="fa-regular fa-comment-dots"></i> ${ccount}
+                                    </span>
+                                </div>
+                                <div class="gallery-meta-row">
+                                    <span class="gallery-author-tag">
+                                        <i class="fa-solid fa-heart" style="font-size:0.65rem;"></i> ${authorName}
+                                    </span>
+                                    <span><i class="fa-regular fa-clock"></i> ${timeDisplay}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 });
                 htmlContent += '</div>';
             } else {
@@ -3842,9 +4323,10 @@
             const parts = (activePost.author || '').split('|');
             document.getElementById('editPostId').value = activePost.id;
             document.getElementById('editAuthorMeta').value = `${parts[0]}|${parts[1]}`;
-            document.getElementById('editCategory').value = parts[3] || '일상';
+            const cat = parts[3] || '일상';
+            selectEditCategory(cat); // [요구사항 2] 수정 모달에서 기존 카테고리 칩 활성화
             document.getElementById('editDate').value = parts[4] || '';
-            document.getElementById('editColor').value = parts[5] || '';
+            document.getElementById('editColor').value = parts[5] || '#FF7582';
             document.getElementById('editKeepImage').value = activePost.image_url || '';
             document.getElementById('editTitle').value = parts[2] || '';
             document.getElementById('editContent').value = activePost.content || '';
@@ -4035,6 +4517,7 @@
                 Notification.requestPermission();
             }
         }
+        // [요구사항 3]: 별도 새로고침 없이 8초마다 실시간 자동 동기화 (현재 뷰 완벽 유지)
         function startNotificationPolling() {
             setInterval(async () => {
                 try {
@@ -4044,35 +4527,61 @@
                     ]);
                     const latestPosts = await rp.json();
                     const latestComms = await rc.json();
-                    let notify = false;
+                    
+                    if (!Array.isArray(latestPosts) || !Array.isArray(latestComms)) return;
+
+                    const lastSeenPostId = localStorage.getItem('last_post_id');
+                    const lastSeenCommId = localStorage.getItem('last_comm_id');
+                    let hasNewContent = false;
+                    let isPartnerPost = false;
+
+                    // 새 게시글 감지
                     if (latestPosts.length > 0) {
                         const topPost = latestPosts[0];
-                        const lastSeenId = localStorage.getItem('last_post_id');
-                        if (lastSeenId && topPost.id > parseInt(lastSeenId) && !(topPost.author||'').includes(user.username)) {
-                            localStorage.setItem('last_post_id', topPost.id);
-                            notify = true;
+                        if (lastSeenPostId && topPost.id > parseInt(lastSeenPostId)) {
+                            hasNewContent = true;
+                            if (!(topPost.author || '').includes(user.fullName)) isPartnerPost = true;
                         }
+                        localStorage.setItem('last_post_id', topPost.id);
                     }
+
+                    // 새 댓글 감지
                     if (latestComms.length > 0) {
                         const topComm = latestComms[latestComms.length - 1];
-                        const lastCommId = localStorage.getItem('last_comm_id');
-                        if (lastCommId && topComm.id > parseInt(lastCommId) && topComm.author !== user.fullName) {
-                            localStorage.setItem('last_comm_id', topComm.id);
-                            notify = true;
+                        if (lastSeenCommId && topComm.id > parseInt(lastSeenCommId)) {
+                            hasNewContent = true;
                         }
+                        localStorage.setItem('last_comm_id', topComm.id);
                     }
-                    if (latestPosts.length > 0 && !localStorage.getItem('last_post_id')) localStorage.setItem('last_post_id', latestPosts[0].id);
-                    if (latestComms.length > 0 && !localStorage.getItem('last_comm_id')) localStorage.setItem('last_comm_id', latestComms[latestComms.length-1].id);
-                    
-                    if (notify) {
-                        showToast("새로운 소식이 도착했어요! 💌");
-                        if (Notification.permission === "granted") {
-                            new Notification("Our Secret Space 💖", { body: "상대방이 새로운 추억을 남겼어요!", icon: "https://cdn-icons-png.flaticon.com/512/833/833472.png" });
+
+                    // 새 글이나 댓글이 있으면 페이지 새로고침 없이 현재 화면에서 실시간 리렌더링!
+                    if (hasNewContent) {
+                        postsData = latestPosts;
+                        commentsData = latestComms;
+
+                        // 현재 활성화된 뷰만 부드럽게 리렌더링
+                        if (currentView === 'home') renderHomeUpcomingSchedule();
+                        if (currentView === 'calendar') renderCalendar();
+                        if (currentView === 'board') renderBoardList();
+                        
+                        // 상세 모달이 열려있다면 댓글창도 실시간 리프레시
+                        const detailModal = document.getElementById('detailModal');
+                        if (detailModal && detailModal.classList.contains('active') && activePost) {
+                            renderComments();
                         }
-                        loadPosts();
+
+                        if (isPartnerPost) {
+                            showToast("상대방의 새로운 추억이 실시간 도착했습니다! 💌");
+                            if ("Notification" in window && Notification.permission === "granted") {
+                                new Notification("Our Secret Space 💖", { 
+                                    body: "상대방이 새로운 추억을 남겼어요!", 
+                                    icon: "https://cdn-icons-png.flaticon.com/512/833/833472.png" 
+                                });
+                            }
+                        }
                     }
                 } catch(e) {}
-            }, 30000);
+            }, 8000); // 8초 주기 실시간 스마트 동기화
         }
     </script>
 </body>
