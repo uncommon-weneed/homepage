@@ -3823,64 +3823,116 @@
         // ================= [댓글 시스템 & 시간 표시] =================
         function renderComments() {
             if (!activePost) return;
-            const postComments = commentsData.filter(c => c.post_id === activePost.id);
-            document.getElementById('modalCommentsHeader').innerHTML = `댓글 <span style="color:var(--primary); font-weight:800;">${postComments.length}</span>`;
-            document.getElementById('modalCommentsList').innerHTML = postComments.map(c => {
-                let pureContent = c.content || '';
-                let timeStr = formatCommentTime(c.created_at);
-                if (!timeStr && pureContent.includes('__time:')) {
-                    const match = pureContent.match(/__time:(.*?)__/);
-                    if (match) timeStr = formatCommentTime(match[1]);
-                } else if (!timeStr) {
-                    const legStart = '<' + '!--time:';
-                    const legEnd = '-' + '->';
-                    if (pureContent.includes(legStart)) {
-                        const sIdx = pureContent.indexOf(legStart) + legStart.length;
-                        const eIdx = pureContent.indexOf(legEnd, sIdx);
-                        if (sIdx > 0 && eIdx > sIdx) timeStr = formatCommentTime(pureContent.substring(sIdx, eIdx));
-                    }
-                }
-                pureContent = pureContent.replace(/__time:.*?__/g, '');
-                const legStart = '<' + '!--time:';
-                if (pureContent.includes(legStart)) {
-                    pureContent = pureContent.split(legStart)[0];
-                }
+            if (!Array.isArray(commentsData)) commentsData = [];
+            // [해결]: post_id와 activePost.id의 문자열/숫자 타입 불일치 버그를 Number()로 완벽 방지
+            const postComments = commentsData.filter(c => Number(c.post_id || c.postId) === Number(activePost.id));
+            
+            const headerEl = document.getElementById('modalCommentsHeader');
+            if (headerEl) {
+                headerEl.innerHTML = `댓글 <span style="color:var(--primary); font-weight:800;">${postComments.length}</span>`;
+            }
 
-                return `
-                    <div class="comment-box">
-                        <div style="flex-grow: 1;">
-                            <div class="comment-top-row">
-                                <span class="comment-author">${c.author}</span>
-                                ${timeStr ? `<span class="comment-time"><i class="fa-regular fa-clock"></i> ${timeStr}</span>` : ''}
+            const listEl = document.getElementById('modalCommentsList');
+            if (!listEl) return;
+
+            if (postComments.length === 0) {
+                listEl.innerHTML = `<div style="text-align:center; padding:18px 10px; color:var(--text-muted); font-size:0.92rem; font-weight:600;"><i class="fa-regular fa-comment-dots" style="font-size:1.4rem; opacity:0.5; margin-bottom:6px; display:block;"></i>아직 작성된 댓글이 없습니다. 첫 댓글을 남겨보세요! 💌</div>`;
+            } else {
+                listEl.innerHTML = postComments.map(c => {
+                    let pureContent = c.content || '';
+                    let timeStr = formatCommentTime(c.created_at);
+                    if (!timeStr && pureContent.includes('__time:')) {
+                        const match = pureContent.match(/__time:(.*?)__/);
+                        if (match) timeStr = formatCommentTime(match[1]);
+                    } else if (!timeStr) {
+                        const legStart = '<' + '!--time:';
+                        const legEnd = '-' + '->';
+                        if (pureContent.includes(legStart)) {
+                            const sIdx = pureContent.indexOf(legStart) + legStart.length;
+                            const eIdx = pureContent.indexOf(legEnd, sIdx);
+                            if (sIdx > 0 && eIdx > sIdx) timeStr = formatCommentTime(pureContent.substring(sIdx, eIdx));
+                        }
+                    }
+                    pureContent = pureContent.replace(/__time:.*?__/g, '');
+                    const legStart = '<' + '!--time:';
+                    if (pureContent.includes(legStart)) {
+                        pureContent = pureContent.split(legStart)[0];
+                    }
+
+                    return `
+                        <div class="comment-box">
+                            <div style="flex-grow: 1;">
+                                <div class="comment-top-row">
+                                    <span class="comment-author">${c.author || '익명'}</span>
+                                    ${timeStr ? `<span class="comment-time"><i class="fa-regular fa-clock"></i> ${timeStr}</span>` : ''}
+                                </div>
+                                <div class="comment-text">${pureContent}</div>
                             </div>
-                            <div class="comment-text">${pureContent}</div>
+                            <button class="comment-del-btn edit-mode-only-inline" onclick="deleteComment(${c.id})" title="삭제"><i class="fa-solid fa-xmark"></i></button>
                         </div>
-                        <button class="comment-del-btn edit-mode-only-inline" onclick="deleteComment(${c.id})" title="삭제"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                `;
-            }).join('');
-            document.getElementById('modal-comment-input').value = '';
+                    `;
+                }).join('');
+            }
         }
 
         async function submitComment() {
-            if (!activePost) return;
-            const content = document.getElementById('modal-comment-input').value.trim();
-            if (!content) return;
+            if (!activePost) {
+                showToast("게시글 정보를 찾을 수 없습니다.");
+                return;
+            }
+            const input = document.getElementById('modal-comment-input');
+            const content = input ? input.value.trim() : '';
+            if (!content) {
+                showToast("댓글 내용을 입력해 주세요.");
+                return;
+            }
+
+            // 작성자 결정 (user 객체나 로컬스토리지에서 안전하게 획득)
+            let authorName = '우리';
+            if (user && user.fullName) {
+                authorName = user.fullName;
+            } else {
+                try {
+                    const saved = JSON.parse(localStorage.getItem('couple_user') || '{}');
+                    if (saved.fullName) authorName = saved.fullName;
+                } catch(e) {}
+            }
+
             const nowIso = new Date().toISOString();
+            showToast("댓글 저장 중...");
+
             try {
                 const res = await fetch('/api/comments', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ postId: activePost.id, author: user.fullName, content, exactTime: nowIso })
+                    body: JSON.stringify({ 
+                        postId: Number(activePost.id),
+                        post_id: Number(activePost.id),
+                        author: authorName, 
+                        content: content, 
+                        exactTime: nowIso 
+                    })
                 });
+
                 if (res.ok) {
-                    commentsData = await (await fetch('/api/comments', { cache: 'no-store' })).json();
+                    if (input) input.value = ''; // 입력창 비우기
+                    const resJson = await (await fetch('/api/comments', { cache: 'no-store' })).json();
+                    commentsData = Array.isArray(resJson) ? resJson : [];
                     renderComments();
-                    if (document.getElementById('view-board').classList.contains('active')) renderBoardList();
-                    showToast("댓글이 달렸습니다! 💬");
+                    if (document.getElementById('view-board') && document.getElementById('view-board').classList.contains('active')) {
+                        renderBoardList();
+                    }
+                    showToast("댓글이 소중히 등록되었습니다! 💬");
+                } else {
+                    let errMsg = "댓글 등록에 실패했습니다.";
+                    try {
+                        const errData = await res.json();
+                        if (errData && errData.error) errMsg = errData.error;
+                    } catch(errParse) {}
+                    showToast(errMsg);
                 }
             } catch(e) {
-                showToast("댓글 등록에 실패했습니다.");
+                showToast("서버 연결 실패로 댓글을 남기지 못했습니다.");
             }
         }
 

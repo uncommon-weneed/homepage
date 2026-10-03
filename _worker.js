@@ -184,31 +184,68 @@ export default {
       }
     }
 
-    // 5. [댓글 API] - 작성 시간(created_at) 저장 및 Fallback
+    // 5. [댓글 API] - D1 테이블 자동 복구 및 다중 스키마 완벽 Fallback
     if (url.pathname === "/api/comments" && request.method === "GET") {
       try {
         const { results } = await env.DB.prepare("SELECT * FROM comments ORDER BY id ASC").all();
         return jsonResponse(results || []);
       } catch (e) {
+        // comments 테이블이 없으면 자동 생성 시도
+        try {
+          await env.DB.prepare(`
+            CREATE TABLE IF NOT EXISTS comments (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              post_id INTEGER NOT NULL,
+              author TEXT NOT NULL,
+              content TEXT NOT NULL,
+              created_at TEXT
+            )
+          `).run();
+        } catch(initErr) {}
         return jsonResponse([]);
       }
     }
     
     if (url.pathname === "/api/comments" && request.method === "POST") {
       try {
-        const { postId, author, content, exactTime } = await request.json();
-        const commentTime = exactTime || new Date().toISOString();
+        const reqData = await request.json().catch(() => ({}));
+        const pId = parseInt(reqData.postId || reqData.post_id || 0, 10);
+        const author = String(reqData.author || "우리").trim();
+        const content = String(reqData.content || "").trim();
+        const commentTime = reqData.exactTime || reqData.created_at || new Date().toISOString();
+
+        if (!pId) {
+          return jsonResponse({ error: "게시글 번호(postId)가 유효하지 않습니다." }, 400);
+        }
+        if (!content) {
+          return jsonResponse({ error: "댓글 내용을 입력해 주세요." }, 400);
+        }
+
+        // 테이블이 존재하지 않을 경우 자동 생성
+        try {
+          await env.DB.prepare(`
+            CREATE TABLE IF NOT EXISTS comments (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              post_id INTEGER NOT NULL,
+              author TEXT NOT NULL,
+              content TEXT NOT NULL,
+              created_at TEXT
+            )
+          `).run();
+        } catch(tblErr) {}
+
+        // 1차 시도: created_at 컬럼 포함 삽입
         try {
           await env.DB.prepare("INSERT INTO comments (post_id, author, content, created_at) VALUES (?, ?, ?, ?)")
-              .bind(postId, author, content, commentTime).run();
+              .bind(pId, author, content, commentTime).run();
         } catch (colErr) {
-          // created_at 컬럼이 아직 없는 D1 스키마용 안전 Fallback (content 끝에 시간 메타데이터 포함)
+          // 2차 시도: created_at 컬럼이 없는 스키마용 안전 Fallback (__time: 토큰 포함)
           await env.DB.prepare("INSERT INTO comments (post_id, author, content) VALUES (?, ?, ?)")
-              .bind(postId, author, `${content}<!--time:${commentTime}-->`).run();
+              .bind(pId, author, `${content}__time:${commentTime}__`).run();
         }
-        return jsonResponse({ success: true });
+        return jsonResponse({ success: true }, 200);
       } catch (e) {
-        return jsonResponse({ error: e.message }, 500);
+        return jsonResponse({ error: `댓글 저장 오류: ${e.message}` }, 500);
       }
     }
     
