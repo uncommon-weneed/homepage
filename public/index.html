@@ -2470,6 +2470,221 @@
             box-shadow: 0 0 0 4px var(--primary-soft) !important;
         }
 
+
+        /* ==========================================================================
+           [16. 다중 사진 첨부 & 인스타그램 감성 캐러셀 슬라이더 스타일]
+           ========================================================================== */
+        .insta-slider-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            background: #0F172A;
+        }
+        .insta-slider-track {
+            display: flex;
+            width: 100%;
+            transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .insta-slider-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0F172A;
+            min-height: 280px;
+        }
+        .insta-slider-slide img {
+            width: 100%;
+            max-height: 520px;
+            object-fit: contain;
+            cursor: zoom-in;
+            display: block;
+            margin: 0 auto;
+        }
+        .insta-slider-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            z-index: 10;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .insta-slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: var(--text-main);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.25s var(--ease-spring);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }
+        .insta-slider-arrow:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-50%) scale(1.12);
+        }
+        .insta-slider-arrow.prev { left: 12px; }
+        .insta-slider-arrow.next { right: 12px; }
+        .insta-slider-dots {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+        }
+        .insta-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.45);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .insta-dot.active {
+            width: 20px;
+            border-radius: var(--radius-full);
+            background: white;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+        }
+
+        /* 글작성 모달 내 다중 썸네일 그리드 */
+        .write-preview-multi-box {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 10px;
+        }
+        .write-preview-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0 4px;
+        }
+        .write-preview-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .write-preview-grid {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 4px 2px 8px;
+            width: 100%;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+        .write-preview-thumb-item {
+            position: relative;
+            width: 78px;
+            height: 78px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--border-light);
+            box-shadow: var(--shadow-xs);
+            background: #F8FAFD;
+        }
+        .write-preview-thumb-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .write-thumb-index {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: var(--radius-full);
+            line-height: 1.1;
+        }
+
+        /* 목록 내 멀티 이미지 뱃지 */
+        .gallery-multi-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: white;
+            font-size: 0.74rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 5;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .post-multi-badge {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            color: white;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .cal-multi-badge {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            background: var(--primary);
+            color: white;
+            font-size: 0.62rem;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: var(--radius-full);
+        }
+
     </style>
 </head>
 <body>
@@ -2815,17 +3030,19 @@
                 <div class="form-group">
                     <label class="form-label"><i class="fa-regular fa-image" style="color: var(--primary);"></i> 소중한 사진 첨부 (선택)</label>
                     <div class="modern-file-dropzone" id="writeDropzone" onclick="document.getElementById('postImage').click()">
-                        <input type="file" id="postImage" accept="image/*" style="display: none;" onchange="handleWriteImagePreview(event)">
+                        <input type="file" id="postImage" accept="image/*" multiple style="display: none;" onchange="handleWriteImagePreview(event)">
                         <div class="dropzone-idle" id="writeDropzoneIdle">
-                            <div class="dropzone-icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                            <p class="dropzone-title">사진을 탭하여 선택하거나 여기에 끌어다 놓으세요</p>
-                            <p class="dropzone-desc">JPG, PNG, GIF, WEBP 고화질 사진 지원</p>
+                            <div class="dropzone-icon-circle"><i class="fa-solid fa-images"></i></div>
+                            <p class="dropzone-title">사진을 탭하여 선택하세요 (여러 장 첨부 가능 📸)</p>
+                            <p class="dropzone-desc">JPG, PNG, GIF, WEBP · 한 번에 여러 사진 선택 지원</p>
                         </div>
                         <div class="dropzone-preview-wrap" id="writeDropzonePreview" style="display: none;">
-                            <img id="writePreviewImg" src="" alt="미리보기">
-                            <div class="dropzone-preview-info">
-                                <span class="preview-filename" id="writePreviewName">image.jpg</span>
-                                <button type="button" class="preview-remove-btn" onclick="clearWriteImage(event)"><i class="fa-solid fa-xmark"></i> 사진 삭제</button>
+                            <div class="write-preview-multi-box">
+                                <div class="write-preview-top-bar">
+                                    <span class="write-preview-title" id="writePreviewTitle"><i class="fa-solid fa-check"></i> 사진 선택됨</span>
+                                    <button type="button" class="dropzone-remove-btn" onclick="clearWriteImage(event)" title="전체 취소" style="position:static; margin-left:auto;"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                                <div class="write-preview-grid" id="writePreviewList"></div>
                             </div>
                         </div>
                     </div>
@@ -2930,7 +3147,7 @@
                 </div>
                 <div class="form-group input-with-icon">
                     <i class="fa-regular fa-image"></i>
-                    <input type="file" id="editImage" accept="image/*" class="form-input" style="padding: 13px 16px 13px 48px;">
+                    <input type="file" id="editImage" accept="image/*" multiple class="form-input" style="padding: 13px 16px 13px 48px;" title="여러 장의 사진을 선택할 수 있습니다">
                 </div>
             </div>
             <div class="modal-footer">
@@ -3856,7 +4073,16 @@
                                 <div class="cal-slide-item-title">${title}</div>
                                 ${p.content ? `<div class="cal-slide-item-snippet">${p.content}</div>` : ''}
                             </div>
-                            ${p.image_url ? `<img src="${p.image_url}" class="cal-slide-item-thumb" alt="일정 사진">` : ''}
+                            ${(() => {
+                        const imgList = parseImageUrls(p.image_url);
+                        if (imgList.length === 0) return '';
+                        return `
+                            <div style="position:relative; flex-shrink:0; margin-left:14px;">
+                                <img src="${imgList[0]}" class="cal-slide-item-thumb" style="margin-left:0;" alt="기록 사진">
+                                ${imgList.length > 1 ? `<span class="cal-multi-badge">${imgList.length}</span>` : ''}
+                            </div>
+                        `;
+                    })()}
                         </div>
                     `;
                 }).join('');
@@ -3948,36 +4174,56 @@
             }
         }
 
-        // 사진 파일 선택 시 실시간 감성 미리보기
+        // [다중 사진 첨부]: 선택된 파일 배열 보관 및 실시간 프리뷰 렌더링
+        let writeSelectedFiles = [];
+
         function handleWriteImagePreview(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+            const files = Array.from(e.target.files || []);
+            if (files.length === 0) return;
+            writeSelectedFiles = files;
+            renderWriteImagePreviews();
+        }
 
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const idleEl = document.getElementById('writeDropzoneIdle');
-                const previewWrap = document.getElementById('writeDropzonePreview');
-                const previewImg = document.getElementById('writePreviewImg');
-                const previewName = document.getElementById('writePreviewName');
+        function renderWriteImagePreviews() {
+            const idleEl = document.getElementById('writeDropzoneIdle');
+            const previewWrap = document.getElementById('writeDropzonePreview');
+            const previewTitle = document.getElementById('writePreviewTitle');
+            const previewList = document.getElementById('writePreviewList');
 
-                if (previewImg) previewImg.src = evt.target.result;
-                if (previewName) previewName.innerText = file.name;
-                if (idleEl) idleEl.style.display = 'none';
-                if (previewWrap) previewWrap.style.display = 'flex';
-            };
-            reader.readAsDataURL(file);
+            if (!writeSelectedFiles || writeSelectedFiles.length === 0) {
+                if (idleEl) idleEl.style.display = 'block';
+                if (previewWrap) previewWrap.style.display = 'none';
+                return;
+            }
+
+            if (idleEl) idleEl.style.display = 'none';
+            if (previewWrap) previewWrap.style.display = 'flex';
+            if (previewTitle) previewTitle.innerHTML = `<i class="fa-solid fa-circle-check"></i> 총 <b>${writeSelectedFiles.length}</b>장의 사진이 선택되었습니다.`;
+
+            if (previewList) {
+                previewList.innerHTML = '';
+                writeSelectedFiles.forEach((file, idx) => {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const thumbDiv = document.createElement('div');
+                        thumbDiv.className = 'write-preview-thumb-item';
+                        thumbDiv.innerHTML = `
+                            <img src="${evt.target.result}" alt="${file.name}">
+                            <span class="write-thumb-index">${idx + 1}</span>
+                        `;
+                        previewList.appendChild(thumbDiv);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
         }
 
         function clearWriteImage(e) {
             if (e) e.stopPropagation();
+            writeSelectedFiles = [];
             const input = document.getElementById('postImage');
             if (input) input.value = '';
-            const idleEl = document.getElementById('writeDropzoneIdle');
-            const previewWrap = document.getElementById('writeDropzonePreview');
-            const previewImg = document.getElementById('writePreviewImg');
-            if (previewImg) previewImg.src = '';
-            if (previewWrap) previewWrap.style.display = 'none';
-            if (idleEl) idleEl.style.display = 'flex';
+            renderWriteImagePreviews();
         }
 
         function resetWriteForm() {
@@ -3987,6 +4233,7 @@
             if (titleEl) titleEl.value = '';
             if (contentEl) contentEl.value = '';
             if (imgEl) imgEl.value = '';
+            writeSelectedFiles = [];
             clearWriteImage();
         }
 
@@ -4022,6 +4269,57 @@
             if (boardEl) {
                 boardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+        }
+
+
+        // ================= [다중 사진 파싱 & 인스타그램 감성 캐러셀 슬라이더] =================
+        function parseImageUrls(urlStr) {
+            if (!urlStr) return [];
+            const trimmed = String(urlStr).trim();
+            if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                try {
+                    const parsed = JSON.parse(trimmed);
+                    if (Array.isArray(parsed)) return parsed.map(s => String(s).trim()).filter(Boolean);
+                } catch(e) {}
+            }
+            return [trimmed].filter(Boolean);
+        }
+
+        let detailSlideIndex = 0;
+        let detailSlideMax = 0;
+
+        function initDetailSlider(count) {
+            detailSlideIndex = 0;
+            detailSlideMax = count;
+            updateDetailSliderView();
+        }
+
+        function moveDetailSlide(dir) {
+            detailSlideIndex += dir;
+            if (detailSlideIndex < 0) detailSlideIndex = detailSlideMax - 1;
+            if (detailSlideIndex >= detailSlideMax) detailSlideIndex = 0;
+            updateDetailSliderView();
+        }
+
+        function goToDetailSlide(idx) {
+            detailSlideIndex = idx;
+            updateDetailSliderView();
+        }
+
+        function updateDetailSliderView() {
+            const track = document.getElementById('sliderTrack');
+            const badge = document.getElementById('sliderBadge');
+            const dots = document.querySelectorAll('#sliderDots .insta-dot');
+            
+            if (track) {
+                track.style.transform = `translateX(-${detailSlideIndex * 100}%)`;
+            }
+            if (badge) {
+                badge.innerText = `${detailSlideIndex + 1} / ${detailSlideMax}`;
+            }
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === detailSlideIndex);
+            });
         }
 
         // 시간 포맷 헬퍼 함수
@@ -4094,13 +4392,14 @@
             const cat = document.getElementById('postCategory').value;
             const title = document.getElementById('postTitle').value.trim();
             const content = document.getElementById('postContent').value.trim();
-            const file = document.getElementById('postImage').files[0];
+            const inputFiles = document.getElementById('postImage').files;
+            const filesToUpload = writeSelectedFiles.length > 0 ? writeSelectedFiles : Array.from(inputFiles || []);
             const dateStr = document.getElementById('postDate').value || new Date().toISOString().split('T')[0];
             const color = cat === '일정' ? document.getElementById('postColor').value : '';
             const nowIso = new Date().toISOString();
 
             if (!title) return showToast('제목을 입력하세요.');
-            if (cat === '갤러리' && !file) return showToast('갤러리는 사진 첨부가 필수입니다!');
+            if (cat === '갤러리' && filesToUpload.length === 0) return showToast('갤러리는 최소 1장 이상의 사진 첨부가 필수입니다!');
 
             const fd = new FormData();
             fd.append('author', user.fullName);
@@ -4111,7 +4410,13 @@
             fd.append('exactTime', color);
             fd.append('createdAt', nowIso);
             fd.append('content', content);
-            if (file) fd.append('image', file);
+            
+            // [다중 사진 전송]: 선택된 모든 사진을 'images'로 append
+            if (filesToUpload.length > 0) {
+                filesToUpload.forEach(f => {
+                    fd.append('images', f);
+                });
+            }
             
             showToast("기록 저장 중...");
             try {
@@ -4299,12 +4604,19 @@
                     const timeDisplay = formatPostDateTime(parts[4], parts[6]);
                     const authorName = parts[0] || '익명';
                     const postTitle = parts[2] || '우리의 추억 📸';
-                    const imgUrl = p.image_url || 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=600&auto=format&fit=crop';
+                    const imgList = parseImageUrls(p.image_url);
+                    const imgUrl = imgList[0] || 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=600&auto=format&fit=crop';
+                    const isMulti = imgList.length > 1;
                     
                     htmlContent += `
                         <div class="gallery-card-insta" onclick="openDetail(${p.id})">
                             <div class="gallery-media-frame">
                                 <img src="${imgUrl}" alt="${postTitle}" loading="lazy">
+                                ${isMulti ? `<div class="gallery-multi-badge" title="사진 ${imgList.length}장"><i class="fa-solid fa-clone"></i> ${imgList.length}</div>` : ''}
+                                <div class="gallery-overlay-zoom" onclick="event.stopPropagation(); openLightbox('${imgUrl}')" title="사진 원본 확대">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                </div>
+                            </div> alt="${postTitle}" loading="lazy">
                                 <div class="gallery-overlay-zoom" onclick="event.stopPropagation(); openLightbox('${imgUrl}')" title="사진 원본 확대">
                                     <i class="fa-solid fa-magnifying-glass-plus"></i>
                                 </div>
@@ -4349,7 +4661,16 @@
                                     <span><i class="fa-regular fa-comment-dots"></i> 댓글 ${ccount}개</span>
                                 </div>
                             </div>
-                            ${p.image_url ? `<img src="${p.image_url}" class="post-thumb" alt="썸네일">` : ''}
+                            ${(() => {
+                        const imgList = parseImageUrls(p.image_url);
+                        if (imgList.length === 0) return '';
+                        return `
+                            <div style="position:relative; flex-shrink:0;">
+                                <img src="${imgList[0]}" class="post-thumb" alt="썸네일">
+                                ${imgList.length > 1 ? `<span class="post-multi-badge"><i class="fa-solid fa-clone"></i> ${imgList.length}</span>` : ''}
+                            </div>
+                        `;
+                    })()}
                         </div>
                     `;
                 });
@@ -4396,8 +4717,33 @@
             document.getElementById('modalAuthor').innerHTML = `<i class="fa-solid fa-user-pen"></i> ${parts[0]}`;
             document.getElementById('modalTitle').innerText = parts[2] || '무제';
             document.getElementById('modalContent').innerText = activePost.content;
-            document.getElementById('modalImageWrap').innerHTML = activePost.image_url ? 
-                `<img src="${activePost.image_url}" class="detail-image" alt="상세 사진" onclick="openLightbox('${activePost.image_url}')">` : '';
+            // [다중 사진 슬라이더 연동]: 1장이면 단일 이미지, 2장 이상이면 인스타그램 슬라이더
+            const imgList = parseImageUrls(activePost.image_url);
+            const imgWrap = document.getElementById('modalImageWrap');
+            if (imgList.length === 0) {
+                imgWrap.innerHTML = '';
+            } else if (imgList.length === 1) {
+                imgWrap.innerHTML = `<img src="${imgList[0]}" class="detail-image" alt="상세 사진" onclick="openLightbox('${imgList[0]}')">`;
+            } else {
+                imgWrap.innerHTML = `
+                    <div class="insta-slider-container" id="detailSliderContainer">
+                        <div class="insta-slider-badge" id="sliderBadge">1 / ${imgList.length}</div>
+                        <button type="button" class="insta-slider-arrow prev" onclick="moveDetailSlide(-1)" title="이전 사진"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button type="button" class="insta-slider-arrow next" onclick="moveDetailSlide(1)" title="다음 사진"><i class="fa-solid fa-chevron-right"></i></button>
+                        <div class="insta-slider-track" id="sliderTrack">
+                            ${imgList.map((url, idx) => `
+                                <div class="insta-slider-slide">
+                                    <img src="${url}" alt="사진 ${idx + 1}" onclick="openLightbox('${url}')">
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="insta-slider-dots" id="sliderDots">
+                            ${imgList.map((_, idx) => `<span class="insta-dot ${idx === 0 ? 'active' : ''}" onclick="goToDetailSlide(${idx})"></span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                initDetailSlider(imgList.length);
+            }
             renderComments();
             showModal('detailModal');
         }
