@@ -2939,10 +2939,104 @@
             100% { opacity: 0; transform: translate(var(--tx), calc(var(--ty) - 80px)) scale(1.4); }
         }
 
+
+        /* ==========================================================================
+           [18. 감성 랜덤 위치 사랑 카드 (Romantic Floating Card) - 초미니멀 & 세련된 감성]
+           ========================================================================== */
+        .romantic-love-card {
+            position: fixed;
+            z-index: 99990;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.7) translateY(18px) rotate(var(--card-rot, 0deg));
+            user-select: none;
+        }
+        .romantic-love-card.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: scale(1) translateY(0) rotate(var(--card-rot, 0deg));
+        }
+        .love-card-inner {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 117, 130, 0.35);
+            box-shadow: 0 16px 42px rgba(255, 117, 130, 0.28), 0 2px 10px rgba(0,0,0,0.04);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            width: 250px;
+            max-width: calc(100vw - 32px);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s var(--ease-spring);
+        }
+        .romantic-love-card:hover .love-card-inner {
+            transform: scale(1.03);
+            border-color: var(--primary);
+        }
+        .love-card-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 117, 130, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+        .love-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .love-card-icon {
+            font-size: 1.4rem;
+            animation: pulseHeart 1.8s infinite ease-in-out;
+            line-height: 1;
+        }
+        .love-card-dday {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+        }
+        .love-card-message {
+            font-size: 0.96rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.45;
+            margin-bottom: 6px;
+            word-break: keep-all;
+        }
+        .love-card-names {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-align: right;
+            letter-spacing: -0.2px;
+        }
+
     </style>
 </head>
 <body>
 
+
+
+    <!-- 감성 랜덤 위치 사랑 팝업 (Romantic Floating Card) -->
+    <div id="romanticLoveCard" class="romantic-love-card" onclick="dismissRomanticCard(event)">
+        <div class="love-card-inner">
+            <div class="love-card-glow"></div>
+            <div class="love-card-top">
+                <span class="love-card-icon" id="loveCardIcon">💖</span>
+                <span class="love-card-dday" id="loveCardDday">D+♥</span>
+            </div>
+            <div class="love-card-message" id="loveCardMessage">오늘도 너와 함께라 행복해 💕</div>
+            <div class="love-card-names" id="loveCardNames">효니 ♥ 히니</div>
+        </div>
+    </div>
 
     <!-- 브라우저 옆 감성 플로팅 하트 위젯 -->
     <aside id="floatingHeartBadge" class="floating-heart-badge" onclick="handleFloatingHeartClick(event)" title="클릭하여 하트 날리기 💖">
@@ -5485,20 +5579,123 @@
             showToast("하트 위젯 위치가 기본 우측 중앙으로 초기화되었습니다.");
         }
 
+        
+        // ================= [감성 로맨틱 사랑 문구 라이브러리] =================
+        const romanticMessages = [
+            "오늘도 너와 함께라 세상에서 제일 행복해 💖",
+            "내 하루의 시작과 끝은 항상 너야 ✨",
+            "어제보다 오늘 더, 내일 더 사랑해 💕",
+            "세상에서 가장 소중하고 예쁜 사람 🌸",
+            "너와 함께하는 매 순간이 내겐 기적이야 💘",
+            "둘만의 작은 우주 속에서 영원히 함께 💓",
+            "우리만의 특별하고 따뜻한 이야기 🧸",
+            "너의 웃는 얼굴이 내 삶의 가장 큰 선물이야 💝",
+            "변함없이 언제나 네 곁에 있을게 ✨"
+        ];
+
+        let romanticCardTimer = null;
+
+        // [요청 반영 1]: 하트를 간단히 '톡' 터치하면 화면의 안전한 랜덤 위치로 스무스하게 슝~ 이동!
+        function moveFloatingHeartRandomly() {
+            const badge = document.getElementById('floatingHeartBadge');
+            if (!badge) return;
+
+            const winW = window.innerWidth;
+            const winH = window.innerHeight;
+            const badgeW = badge.offsetWidth || 130;
+            const badgeH = badge.offsetHeight || 44;
+
+            // 화면 경계 안전 영역 (헤더 아래, 네비게이션 위)
+            const minX = 16;
+            const maxX = Math.max(16, winW - badgeW - 16);
+            const minY = 80;
+            const maxY = Math.max(80, winH - badgeH - 95);
+
+            // 좌우 모서리 중 하나를 우선 선택하여 본문 글 가림 원천 방지
+            const preferLeft = Math.random() > 0.5;
+            const randX = preferLeft ? minX : maxX;
+            const randY = Math.floor(minY + Math.random() * (maxY - minY));
+
+            // 스무스 비행 애니메이션
+            badge.style.transition = 'left 0.45s cubic-bezier(0.16, 1, 0.3, 1), top 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease';
+            badge.style.right = 'auto';
+            badge.style.left = `${randX}px`;
+            badge.style.top = `${randY}px`;
+            badge.style.transform = `scale(1.12) rotate(${Math.random() > 0.5 ? 4 : -4}deg)`;
+
+            setTimeout(() => {
+                badge.style.transform = 'scale(1) rotate(0deg)';
+                localStorage.setItem('couple_heart_pos', JSON.stringify({ x: randX, y: randY }));
+            }, 300);
+        }
+
+        // [요청 반영 2 & 3]: 탭 시 하트 이동 + 세련된 미니멀 사랑 팝업이 화면의 랜덤 위치에 퐁! 등장
         function handleFloatingHeartClick(e) {
-            // 드래그하여 이동 중이었거나 이동한 직후라면 클릭 동작 차단
-            if (heartHasMoved) {
-                heartHasMoved = false;
-                return;
-            }
+            if (e) e.stopPropagation();
+
+            // 1. 하트 위젯을 가벼운 터치로 다른 위치로 이동시켜 화면 가림 완전 해소
+            moveFloatingHeartRandomly();
+
+            // 2. 하트 파티클 폭죽 발사
             spawnHeartParticles(e.clientX, e.clientY);
-            showInteractiveToast({
-                icon: 'fa-solid fa-heart',
-                title: `${currentHeartEmoji} ${currentHeartText}`,
-                desc: '마우스나 손가락으로 끌어서 원하는 곳으로 자유롭게 옮겨보세요! 🖐️',
-                actionText: '설정 변경 ❯',
-                onClick: () => showModal('heartSettingsModal')
-            });
+
+            // 3. 설명/가이드 없이 극도로 세련된 감성 사랑 팝업을 화면의 랜덤한 위치에 띄움
+            showRandomRomanticCard();
+        }
+
+        function showRandomRomanticCard() {
+            const card = document.getElementById('romanticLoveCard');
+            const iconEl = document.getElementById('loveCardIcon');
+            const ddayEl = document.getElementById('loveCardDday');
+            const msgEl = document.getElementById('loveCardMessage');
+            const namesEl = document.getElementById('loveCardNames');
+
+            if (!card) return;
+
+            // 랜덤 감성 문구 선택
+            const randomMsg = romanticMessages[Math.floor(Math.random() * romanticMessages.length)];
+            if (msgEl) msgEl.innerText = randomMsg;
+            if (iconEl) iconEl.innerText = currentHeartEmoji;
+            if (namesEl) namesEl.innerText = currentHeartText;
+
+            // D-Day 연동
+            const ddayText = document.getElementById('ddayText');
+            if (ddayEl && ddayText) ddayEl.innerText = ddayText.innerText || 'D+♥';
+
+            // 화면 크기 기준 안전한 랜덤 X, Y 위치 계산 (화면 밖 잘림 100% 방지)
+            const winW = window.innerWidth;
+            const winH = window.innerHeight;
+            const cardW = 250;
+            const cardH = 120;
+
+            const minX = 16;
+            const maxX = Math.max(16, winW - cardW - 16);
+            const minY = 85;
+            const maxY = Math.max(85, winH - cardH - 95);
+
+            const randX = Math.floor(minX + Math.random() * (maxX - minX));
+            const randY = Math.floor(minY + Math.random() * (maxY - minY));
+            const randRot = (Math.random() * 6 - 3).toFixed(1); // -3도 ~ +3도 감성 틸트
+
+            card.style.left = `${randX}px`;
+            card.style.top = `${randY}px`;
+            card.style.setProperty('--card-rot', `${randRot}deg`);
+
+            card.classList.add('active');
+
+            if (romanticCardTimer) clearTimeout(romanticCardTimer);
+            romanticCardTimer = setTimeout(() => {
+                card.classList.remove('active');
+            }, 3800);
+        }
+
+        function dismissRomanticCard(e) {
+            if (e) e.stopPropagation();
+            const card = document.getElementById('romanticLoveCard');
+            if (card) {
+                card.classList.remove('active');
+                spawnHeartParticles();
+            }
         }
 
         function spawnHeartParticles(x, y) {
