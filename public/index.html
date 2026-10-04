@@ -6,6 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
     <title>Our Secret Space · 영원한 우리들의 이야기 💖</title>
 
     <!-- 프리미엄 폰트: Pretendard & 감성 명조 MaruBuri / Playfair Display -->
@@ -2685,9 +2686,304 @@
             border-radius: var(--radius-full);
         }
 
+
+        /* ==========================================================================
+           [17. 브라우저 옆 플로팅 하트 위젯 & 유니클로/자라 감성 인터랙티브 토스트]
+           ========================================================================== */
+        /* 브라우저 옆 플로팅 하트 위젯 */
+        .floating-heart-badge {
+            position: fixed;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid rgba(255, 117, 130, 0.35);
+            box-shadow: 0 10px 28px rgba(255, 117, 130, 0.22);
+            padding: 8px 14px 8px 12px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 850;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            user-select: none;
+        }
+        .floating-heart-badge:hover {
+            transform: translateY(-50%) scale(1.08);
+            border-color: var(--primary);
+            box-shadow: 0 14px 34px var(--primary-glow);
+            background: white;
+        }
+        .floating-heart-badge:active {
+            transform: translateY(-50%) scale(0.96);
+        }
+        .floating-heart-icon-wrap {
+            font-size: 1.45rem;
+            animation: pulseHeart 1.8s infinite ease-in-out;
+            line-height: 1;
+        }
+        .floating-heart-text {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+        }
+        .floating-heart-edit-trigger {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            margin-left: 2px;
+        }
+        .floating-heart-edit-trigger:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+            transform: scale(1.2);
+        }
+        @media (max-width: 768px) {
+            .floating-heart-badge {
+                right: 12px;
+                top: 76px;
+                transform: none;
+                padding: 6px 12px 6px 10px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            }
+            .floating-heart-badge:hover {
+                transform: scale(1.04);
+            }
+        }
+
+        /* 갤러리 피드 썸네일 자체 슬라이더 버튼 & 도트 */
+        .thumb-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            color: var(--text-main);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+            z-index: 6;
+            transition: all 0.2s var(--ease-spring);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+            opacity: 0.92;
+        }
+        .thumb-nav-btn:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-50%) scale(1.15);
+            opacity: 1;
+        }
+        .thumb-nav-btn.prev { left: 8px; }
+        .thumb-nav-btn.next { right: 8px; }
+        .thumb-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4px;
+            z-index: 6;
+            background: rgba(0, 0, 0, 0.38);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding: 3px 7px;
+            border-radius: var(--radius-full);
+        }
+        .thumb-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
+        }
+        .thumb-dot.active {
+            width: 14px;
+            border-radius: var(--radius-full);
+            background: white;
+        }
+
+        /* 유니클로 / 자라 앱 스타일 인터랙티브 토스트 캡슐 */
+        .zara-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: rgba(18, 22, 34, 0.95);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            color: white;
+            padding: 12px 18px 12px 16px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 99999;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 90%;
+            width: auto;
+            min-width: 290px;
+        }
+        .zara-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .zara-toast:hover {
+            transform: translateX(-50%) translateY(2px) scale(1.02);
+            border-color: rgba(255, 117, 130, 0.5);
+            box-shadow: 0 20px 48px rgba(255, 117, 130, 0.25);
+        }
+        .zara-toast-icon-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+        .zara-toast-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        .zara-toast-title {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .zara-toast-desc {
+            font-size: 0.78rem;
+            color: #A0AEC0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .zara-toast-action-btn {
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            font-size: 0.76rem;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .zara-toast:hover .zara-toast-action-btn {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* 하트 폭죽 파티클 */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999999;
+            font-size: 1.6rem;
+            user-select: none;
+            animation: flyUpHeart 1.4s ease-out forwards;
+        }
+        @keyframes flyUpHeart {
+            0% { opacity: 1; transform: translate(0, 0) scale(0.6); }
+            50% { opacity: 0.9; transform: translate(var(--tx), var(--ty)) scale(1.2); }
+            100% { opacity: 0; transform: translate(var(--tx), calc(var(--ty) - 80px)) scale(1.4); }
+        }
+
     </style>
 </head>
 <body>
+
+
+    <!-- 브라우저 옆 감성 플로팅 하트 위젯 -->
+    <aside id="floatingHeartBadge" class="floating-heart-badge" onclick="handleFloatingHeartClick(event)" title="클릭하여 하트 날리기 💖">
+        <div class="floating-heart-icon-wrap" id="floatingHeartIcon">💖</div>
+        <div class="floating-heart-text" id="floatingHeartText">효니 ♥ 히니</div>
+        <button type="button" class="floating-heart-edit-trigger" onclick="event.stopPropagation(); showModal('heartSettingsModal')" title="하트 문구/아이콘 수정"><i class="fa-solid fa-pen"></i></button>
+    </aside>
+
+    <!-- 유니클로 / 자라 스타일 인터랙티브 토스트 알림 -->
+    <div id="zaraToast" class="zara-toast" onclick="handleZaraToastClick()">
+        <div class="zara-toast-icon-wrap" id="zaraToastIcon"><i class="fa-solid fa-heart"></i></div>
+        <div class="zara-toast-content">
+            <span class="zara-toast-title" id="zaraToastTitle">새로운 소식</span>
+            <span class="zara-toast-desc" id="zaraToastDesc">알림 내용을 확인하세요.</span>
+        </div>
+        <span class="zara-toast-action-btn" id="zaraToastActionBtn">확인 ❯</span>
+    </div>
+
+    <!-- 하트 설정 수정 모달 -->
+    <div class="modal-overlay" id="heartSettingsModal">
+        <div class="modal-content" style="max-width: 440px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-heart" style="color: var(--primary);"></i> 브라우저 하트 위젯 설정</h3>
+                <button class="btn-close" onclick="hideModal('heartSettingsModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">하트 이모지 선택</label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💖')">💖</button>
+                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💕')">💕</button>
+                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('❤️')">❤️</button>
+                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💘')">💘</button>
+                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💓')">💓</button>
+                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💝')">💝</button>
+                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('🌸')">🌸</button>
+                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('✨')">✨</button>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 14px;">
+                    <label class="form-label">표시할 문구</label>
+                    <input type="text" id="settingHeartText" class="form-input" placeholder="효니 ♥ 히니" value="효니 ♥ 히니">
+                </div>
+                <div style="background: #F9FAFD; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); margin-top: 10px;">
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.45;">
+                        <i class="fa-solid fa-sparkles" style="color: var(--primary);"></i> 브라우저 옆 하트를 탭하면 하트 폭죽이 날아오르고, 설정한 문구가 항상 곁에 표시됩니다.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-submit" onclick="saveHeartSettings()"><i class="fa-solid fa-check"></i> 하트 설정 저장</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 1. 토스트 알림 컴포넌트 -->
     <div id="toast" class="toast">
@@ -3218,6 +3514,21 @@
                         <button class="btn-submit" style="background: var(--text-main); padding: 12px; font-size: 0.95rem;" onclick="exportDataBackup()"><i class="fa-solid fa-file-arrow-down"></i> 데이터 백업 파일 다운로드</button>
                     </div>
 
+
+                    <!-- 6. 유니클로 / 자라 스타일 인터랙티브 토스트 체험 -->
+                    <div style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                        <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-bell" style="color: var(--primary);"></i> 유니클로/자라 스타일 인터랙티브 토스트 체험</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">토스트 알림을 누르면 해당 게시글이나 캘린더로 즉시 워프합니다.</p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button type="button" class="btn-submit" style="width: auto; padding: 10px 16px; font-size: 0.88rem; background: #1A202C;" onclick="triggerZaraStyleNotification('new_post')">
+                                <i class="fa-regular fa-image"></i> 신규 글 알림 테스트
+                            </button>
+                            <button type="button" class="btn-submit" style="width: auto; padding: 10px 16px; font-size: 0.88rem; background: var(--secondary);" onclick="triggerZaraStyleNotification('upcoming')">
+                                <i class="fa-regular fa-calendar-check"></i> 기념일 알림 테스트
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- 5. 시크릿 락 잠그기(로그아웃) -->
                     <div style="background: #FFF5F5; padding: 16px 18px; border-radius: var(--radius-sm); border: 1px solid #FED7D7; display: flex; justify-content: space-between; align-items: center;">
                         <div>
@@ -3408,6 +3719,19 @@
             document.getElementById('app-container').style.display = 'flex';
             initApp();
             updateSidebarProfile();
+                if (siteSettings.floating_heart_emoji) {
+                    currentHeartEmoji = siteSettings.floating_heart_emoji;
+                    const hIcon = document.getElementById('floatingHeartIcon');
+                    if (hIcon) hIcon.innerText = currentHeartEmoji;
+                }
+                if (siteSettings.floating_heart_text) {
+                    currentHeartText = siteSettings.floating_heart_text;
+                    const hText = document.getElementById('floatingHeartText');
+                    const hInput = document.getElementById('settingHeartText');
+                    if (hText) hText.innerText = currentHeartText;
+                    if (hInput) hInput.value = currentHeartText;
+                }
+
             showToast(`${name}님 환영합니다! 💖`);
         }
 
@@ -3482,7 +3806,20 @@
             startBannerSlider();
             requestNotificationPermission();
             startNotificationPolling();
-            updateSidebarProfile(); // [상대방 애칭 & 사진 동적 연동]
+            updateSidebarProfile();
+                if (siteSettings.floating_heart_emoji) {
+                    currentHeartEmoji = siteSettings.floating_heart_emoji;
+                    const hIcon = document.getElementById('floatingHeartIcon');
+                    if (hIcon) hIcon.innerText = currentHeartEmoji;
+                }
+                if (siteSettings.floating_heart_text) {
+                    currentHeartText = siteSettings.floating_heart_text;
+                    const hText = document.getElementById('floatingHeartText');
+                    const hInput = document.getElementById('settingHeartText');
+                    if (hText) hText.innerText = currentHeartText;
+                    if (hInput) hInput.value = currentHeartText;
+                }
+ // [상대방 애칭 & 사진 동적 연동]
 
             // [요구사항 3]: 이전에 보고 있던 탭으로 자동 복원 (새로고침 시 홈으로 튕김 방지)
             const lastView = sessionStorage.getItem('couple_active_view') || 'home';
@@ -3674,6 +4011,19 @@
                 renderBucketList();
                 previewAnniversaries();
                 updateSidebarProfile();
+                if (siteSettings.floating_heart_emoji) {
+                    currentHeartEmoji = siteSettings.floating_heart_emoji;
+                    const hIcon = document.getElementById('floatingHeartIcon');
+                    if (hIcon) hIcon.innerText = currentHeartEmoji;
+                }
+                if (siteSettings.floating_heart_text) {
+                    currentHeartText = siteSettings.floating_heart_text;
+                    const hText = document.getElementById('floatingHeartText');
+                    const hInput = document.getElementById('settingHeartText');
+                    if (hText) hText.innerText = currentHeartText;
+                    if (hInput) hInput.value = currentHeartText;
+                }
+
             } catch(e) {}
         }
 
@@ -4611,13 +4961,24 @@
                     htmlContent += `
                         <div class="gallery-card-insta" onclick="openDetail(${p.id})">
                             <div class="gallery-media-frame">
-                                <img src="${imgUrl}" alt="${postTitle}" loading="lazy">
-                                ${isMulti ? `<div class="gallery-multi-badge" title="사진 ${imgList.length}장"><i class="fa-solid fa-clone"></i> ${imgList.length}</div>` : ''}
-                                <div class="gallery-overlay-zoom" onclick="event.stopPropagation(); openLightbox('${imgUrl}')" title="사진 원본 확대">
-                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
-                                </div>
-                            </div> alt="${postTitle}" loading="lazy">
-                                <div class="gallery-overlay-zoom" onclick="event.stopPropagation(); openLightbox('${imgUrl}')" title="사진 원본 확대">
+                                <img id="galleryImg-${p.id}" src="${imgUrl}" alt="${postTitle}" loading="lazy">
+                                
+                                ${isMulti ? `
+                                    <div class="gallery-multi-badge" id="galleryBadge-${p.id}" title="사진 ${imgList.length}장">
+                                        <i class="fa-solid fa-clone"></i> 1/${imgList.length}
+                                    </div>
+                                    <button type="button" class="thumb-nav-btn prev" onclick="slideGalleryCardThumb(${p.id}, -1, event)" title="이전 사진">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button type="button" class="thumb-nav-btn next" onclick="slideGalleryCardThumb(${p.id}, 1, event)" title="다음 사진">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                    <div class="thumb-dots" id="galleryDots-${p.id}">
+                                        ${imgList.map((_, idx) => `<span class="thumb-dot ${idx === 0 ? 'active' : ''}"></span>`).join('')}
+                                    </div>
+                                ` : ''}
+
+                                <div class="gallery-overlay-zoom" id="galleryZoom-${p.id}" onclick="event.stopPropagation(); openLightbox('${imgUrl}')" title="사진 원본 확대">
                                     <i class="fa-solid fa-magnifying-glass-plus"></i>
                                 </div>
                             </div>
@@ -4942,6 +5303,159 @@
             });
         }
 
+
+        // ================= [갤러리 피드 썸네일 슬라이더 제어] =================
+        const galleryThumbIndexes = {};
+
+        function slideGalleryCardThumb(postId, dir, e) {
+            if (e) e.stopPropagation();
+            const post = postsData.find(p => p.id === postId);
+            if (!post) return;
+            const imgList = parseImageUrls(post.image_url);
+            if (imgList.length <= 1) return;
+            
+            let curr = galleryThumbIndexes[postId] || 0;
+            curr = (curr + dir + imgList.length) % imgList.length;
+            galleryThumbIndexes[postId] = curr;
+            
+            const imgEl = document.getElementById(`galleryImg-${postId}`);
+            const badgeEl = document.getElementById(`galleryBadge-${postId}`);
+            const dotsWrap = document.getElementById(`galleryDots-${postId}`);
+            const zoomBtn = document.getElementById(`galleryZoom-${postId}`);
+            
+            if (imgEl) imgEl.src = imgList[curr];
+            if (badgeEl) badgeEl.innerHTML = `<i class="fa-solid fa-clone"></i> ${curr + 1}/${imgList.length}`;
+            if (zoomBtn) zoomBtn.setAttribute('onclick', `event.stopPropagation(); openLightbox('${imgList[curr]}')`);
+            
+            if (dotsWrap) {
+                const dots = dotsWrap.querySelectorAll('.thumb-dot');
+                dots.forEach((dot, idx) => dot.classList.toggle('active', idx === curr));
+            }
+        }
+
+        // ================= [브라우저 옆 플로팅 하트 위젯 & 설정] =================
+        let currentHeartEmoji = '💖';
+        let currentHeartText = '효니 ♥ 히니';
+
+        function selectHeartEmoji(emoji) {
+            currentHeartEmoji = emoji;
+            const iconEl = document.getElementById('floatingHeartIcon');
+            if (iconEl) iconEl.innerText = emoji;
+            showToast(`${emoji} 이모지가 선택되었습니다.`);
+        }
+
+        function handleFloatingHeartClick(e) {
+            spawnHeartParticles(e.clientX, e.clientY);
+            showInteractiveToast({
+                icon: 'fa-solid fa-heart',
+                title: `${currentHeartEmoji} ${currentHeartText}`,
+                desc: '터치하면 언제나 사랑이 피어납니다 💕',
+                actionText: '설정 변경 ❯',
+                onClick: () => showModal('heartSettingsModal')
+            });
+        }
+
+        function spawnHeartParticles(x, y) {
+            const emojis = [currentHeartEmoji, '💕', '❤️', '✨', '🌸', '💘'];
+            for (let i = 0; i < 7; i++) {
+                const p = document.createElement('div');
+                p.className = 'heart-particle';
+                p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                p.style.left = `${(x || window.innerWidth - 60) + (Math.random() * 40 - 20)}px`;
+                p.style.top = `${(y || window.innerHeight / 2) + (Math.random() * 40 - 20)}px`;
+                p.style.setProperty('--tx', `${(Math.random() - 0.5) * 120}px`);
+                p.style.setProperty('--ty', `${-40 - Math.random() * 100}px`);
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 1400);
+            }
+        }
+
+        async function saveHeartSettings() {
+            const text = document.getElementById('settingHeartText').value.trim() || '효니 ♥ 히니';
+            currentHeartText = text;
+            
+            const textEl = document.getElementById('floatingHeartText');
+            const iconEl = document.getElementById('floatingHeartIcon');
+            if (textEl) textEl.innerText = text;
+            if (iconEl) iconEl.innerText = currentHeartEmoji;
+
+            await fetch('/api/settings', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ key: 'floating_heart_emoji', value: currentHeartEmoji }) });
+            await fetch('/api/settings', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ key: 'floating_heart_text', value: text }) });
+
+            hideModal('heartSettingsModal');
+            showToast("하트 위젯 설정이 저장되었습니다! ✨");
+        }
+
+        // ================= [유니클로/자라 감성 인터랙티브 토스트 엔진] =================
+        let zaraToastTimeout = null;
+        let zaraToastCallback = null;
+
+        function showInteractiveToast({ icon = 'fa-solid fa-bell', title = '새로운 소식', desc = '확인하세요', actionText = '확인 ❯', onClick = null }) {
+            const toast = document.getElementById('zaraToast');
+            const iconEl = document.getElementById('zaraToastIcon');
+            const titleEl = document.getElementById('zaraToastTitle');
+            const descEl = document.getElementById('zaraToastDesc');
+            const actionBtn = document.getElementById('zaraToastActionBtn');
+
+            if (!toast) return;
+
+            if (iconEl) iconEl.innerHTML = `<i class="${icon}"></i>`;
+            if (titleEl) titleEl.innerText = title;
+            if (descEl) descEl.innerText = desc;
+            if (actionBtn) actionBtn.innerText = actionText;
+
+            zaraToastCallback = onClick;
+
+            toast.classList.add('show');
+
+            if (zaraToastTimeout) clearTimeout(zaraToastTimeout);
+            zaraToastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5500);
+        }
+
+        function handleZaraToastClick() {
+            const toast = document.getElementById('zaraToast');
+            if (toast) toast.classList.remove('show');
+
+            if (typeof zaraToastCallback === 'function') {
+                zaraToastCallback();
+            } else {
+                spawnHeartParticles();
+            }
+        }
+
+
+        // ================= [유니클로/자라 알림 임의 시뮬레이션 동작 트리거] =================
+        function triggerZaraStyleNotification(type) {
+            if (type === 'new_post') {
+                const firstPost = postsData[0];
+                const pTitle = firstPost ? ((firstPost.author || '').split('|')[2] || '우리의 소중한 추억') : '첫 번째 데이트 사진';
+                showInteractiveToast({
+                    icon: 'fa-regular fa-image',
+                    title: '새로운 추억이 등록되었습니다 💌',
+                    desc: `"${pTitle}" 탭하여 바로 읽어보세요!`,
+                    actionText: '보러가기 ❯',
+                    onClick: () => {
+                        if (firstPost) openDetail(firstPost.id);
+                        else switchView('board', document.querySelectorAll('.nav-item')[2]);
+                    }
+                });
+            } else if (type === 'upcoming') {
+                showInteractiveToast({
+                    icon: 'fa-regular fa-calendar-check',
+                    title: '다가오는 우리들의 약속 📅',
+                    desc: '곧 다가오는 기념일 일정을 캘린더에서 확인해보세요!',
+                    actionText: '캘린더 보기 ❯',
+                    onClick: () => {
+                        switchView('calendar', document.querySelectorAll('.nav-item')[1]);
+                        const todayStr = new Date().toISOString().split('T')[0];
+                        openDayView(todayStr);
+                    }
+                });
+            }
+        }
+
         // ================= [새 소식 푸시 알림 폴링] =================
         function requestNotificationPermission() {
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
@@ -5002,10 +5516,21 @@
                         }
 
                         if (isPartnerPost) {
-                            showToast("상대방의 새로운 추억이 실시간 도착했습니다! 💌");
+                            const topPost = latestPosts[0];
+                            const postTitle = topPost ? ((topPost.author || '').split('|')[2] || '새로운 추억') : '새 글';
+                            showInteractiveToast({
+                                icon: 'fa-solid fa-heart',
+                                title: '상대방이 새로운 추억을 남겼어요! 💌',
+                                desc: `"${postTitle}" 탭하여 바로 확인해보세요.`,
+                                actionText: '지금 보기 ❯',
+                                onClick: () => {
+                                    if (topPost) openDetail(topPost.id);
+                                    else switchView('board', document.querySelectorAll('.nav-item')[2]);
+                                }
+                            });
                             if ("Notification" in window && Notification.permission === "granted") {
                                 new Notification("Our Secret Space 💖", { 
-                                    body: "상대방이 새로운 추억을 남겼어요!", 
+                                    body: `상대방이 "${postTitle}"을(를) 남겼어요!`, 
                                     icon: "https://cdn-icons-png.flaticon.com/512/833/833472.png" 
                                 });
                             }
