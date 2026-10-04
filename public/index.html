@@ -2695,7 +2695,6 @@
             position: fixed;
             right: 18px;
             top: 50%;
-            transform: translateY(-50%);
             background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -2707,18 +2706,32 @@
             align-items: center;
             gap: 8px;
             z-index: 850;
-            cursor: pointer;
-            transition: all 0.3s var(--ease-spring);
+            cursor: grab;
             user-select: none;
+            touch-action: none;
+            transition: box-shadow 0.25s ease, transform 0.2s var(--ease-spring);
         }
         .floating-heart-badge:hover {
-            transform: translateY(-50%) scale(1.08);
             border-color: var(--primary);
             box-shadow: 0 14px 34px var(--primary-glow);
             background: white;
         }
-        .floating-heart-badge:active {
-            transform: translateY(-50%) scale(0.96);
+        .floating-heart-badge.dragging {
+            cursor: grabbing !important;
+            transition: none !important;
+            box-shadow: 0 16px 38px rgba(255, 117, 130, 0.4) !important;
+            transform: scale(1.06) !important;
+            opacity: 0.92;
+        }
+        .floating-heart-badge.minimized .floating-heart-text,
+        .floating-heart-badge.minimized .floating-heart-edit-trigger {
+            display: none !important;
+        }
+        .floating-heart-badge.minimized {
+            padding: 8px !important;
+            width: 44px !important;
+            height: 44px !important;
+            justify-content: center !important;
         }
         .floating-heart-icon-wrap {
             font-size: 1.45rem;
@@ -2974,9 +2987,17 @@
                     <input type="text" id="settingHeartText" class="form-input" placeholder="효니 ♥ 히니" value="효니 ♥ 히니">
                 </div>
                 <div style="background: #F9FAFD; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); margin-top: 10px;">
-                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.45;">
-                        <i class="fa-solid fa-sparkles" style="color: var(--primary);"></i> 브라우저 옆 하트를 탭하면 하트 폭죽이 날아오르고, 설정한 문구가 항상 곁에 표시됩니다.
+                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 12px;">
+                        <i class="fa-solid fa-hand-pointer" style="color: var(--primary);"></i> <b>자유 이동 팁</b>: 하트를 손가락이나 마우스로 잡고 끌면 화면 어디든 자유롭게 이동할 수 있으며, 더블 클릭(더블 탭) 시 작은 미니 하트로 쏙 접어둘 수 있습니다.
                     </p>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn-submit" style="flex: 1; padding: 8px 12px; font-size: 0.82rem; background: var(--secondary);" onclick="toggleHeartMinimize()">
+                            <i class="fa-solid fa-compress"></i> 미니멀 접기/펼치기
+                        </button>
+                        <button type="button" class="btn-submit" style="flex: 1; padding: 8px 12px; font-size: 0.82rem; background: var(--text-muted);" onclick="resetHeartPosition()">
+                            <i class="fa-solid fa-rotate-left"></i> 위치 초기화
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -3719,6 +3740,7 @@
             document.getElementById('app-container').style.display = 'flex';
             initApp();
             updateSidebarProfile();
+            initFloatingHeartDrag();
                 if (siteSettings.floating_heart_emoji) {
                     currentHeartEmoji = siteSettings.floating_heart_emoji;
                     const hIcon = document.getElementById('floatingHeartIcon');
@@ -5344,12 +5366,136 @@
             showToast(`${emoji} 이모지가 선택되었습니다.`);
         }
 
+
+        // ================= [플로팅 하트 위젯 자유 드래그 & 이동 엔진] =================
+        let heartIsDragging = false;
+        let heartStartX = 0;
+        let heartStartY = 0;
+        let heartInitialLeft = 0;
+        let heartInitialTop = 0;
+        let heartHasMoved = false;
+
+        function initFloatingHeartDrag() {
+            const badge = document.getElementById('floatingHeartBadge');
+            if (!badge) return;
+
+            // 로컬에 저장된 드래그 위치 복원
+            const savedPos = localStorage.getItem('couple_heart_pos');
+            if (savedPos) {
+                try {
+                    const pos = JSON.parse(savedPos);
+                    badge.style.left = `${pos.x}px`;
+                    badge.style.top = `${pos.y}px`;
+                    badge.style.right = 'auto';
+                    badge.style.transform = 'none';
+                } catch(e) {}
+            }
+
+            const isMinimized = localStorage.getItem('couple_heart_minimized') === 'true';
+            if (isMinimized) badge.classList.add('minimized');
+
+            const startDrag = (clientX, clientY) => {
+                heartIsDragging = true;
+                heartHasMoved = false;
+                heartStartX = clientX;
+                heartStartY = clientY;
+                const rect = badge.getBoundingClientRect();
+                heartInitialLeft = rect.left;
+                heartInitialTop = rect.top;
+                badge.classList.add('dragging');
+            };
+
+            const doDrag = (clientX, clientY) => {
+                if (!heartIsDragging) return;
+                const dx = clientX - heartStartX;
+                const dy = clientY - heartStartY;
+                if (Math.hypot(dx, dy) > 5) {
+                    heartHasMoved = true;
+                }
+                let newX = heartInitialLeft + dx;
+                let newY = heartInitialTop + dy;
+
+                // 화면 밖으로 나가지 않도록 경계 제한
+                const maxW = window.innerWidth - badge.offsetWidth - 4;
+                const maxH = window.innerHeight - badge.offsetHeight - 4;
+                newX = Math.max(4, Math.min(newX, maxW));
+                newY = Math.max(4, Math.min(newY, maxH));
+
+                badge.style.left = `${newX}px`;
+                badge.style.top = `${newY}px`;
+                badge.style.right = 'auto';
+                badge.style.transform = 'none';
+            };
+
+            const endDrag = () => {
+                if (!heartIsDragging) return;
+                heartIsDragging = false;
+                badge.classList.remove('dragging');
+                if (heartHasMoved) {
+                    const rect = badge.getBoundingClientRect();
+                    localStorage.setItem('couple_heart_pos', JSON.stringify({ x: rect.left, y: rect.top }));
+                }
+            };
+
+            // 마우스 이벤트 (PC)
+            badge.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.floating-heart-edit-trigger')) return;
+                startDrag(e.clientX, e.clientY);
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (heartIsDragging) doDrag(e.clientX, e.clientY);
+            });
+            window.addEventListener('mouseup', endDrag);
+
+            // 모바일 터치 이벤트 (스마트폰)
+            badge.addEventListener('touchstart', (e) => {
+                if (e.target.closest('.floating-heart-edit-trigger')) return;
+                const t = e.touches[0];
+                startDrag(t.clientX, t.clientY);
+            }, { passive: true });
+            window.addEventListener('touchmove', (e) => {
+                if (heartIsDragging && e.touches.length > 0) {
+                    const t = e.touches[0];
+                    doDrag(t.clientX, t.clientY);
+                }
+            }, { passive: true });
+            window.addEventListener('touchend', endDrag);
+
+            // 더블 클릭(더블 탭) 시 미니멀 접기/펼치기 토글
+            badge.addEventListener('dblclick', toggleHeartMinimize);
+        }
+
+        function toggleHeartMinimize() {
+            const badge = document.getElementById('floatingHeartBadge');
+            if (!badge) return;
+            badge.classList.toggle('minimized');
+            const isMin = badge.classList.contains('minimized');
+            localStorage.setItem('couple_heart_minimized', isMin);
+            showToast(isMin ? "하트 위젯이 미니멀하게 접혔습니다 (더블탭 시 펼침)" : "하트 위젯이 펼쳐졌습니다 💕");
+        }
+
+        function resetHeartPosition() {
+            const badge = document.getElementById('floatingHeartBadge');
+            if (!badge) return;
+            localStorage.removeItem('couple_heart_pos');
+            badge.style.left = 'auto';
+            badge.style.right = '18px';
+            badge.style.top = '50%';
+            badge.style.transform = 'translateY(-50%)';
+            showToast("하트 위젯 위치가 기본 우측 중앙으로 초기화되었습니다.");
+        }
+
         function handleFloatingHeartClick(e) {
+            // 드래그하여 이동 중이었거나 이동한 직후라면 클릭 동작 차단
+            if (heartHasMoved) {
+                heartHasMoved = false;
+                return;
+            }
             spawnHeartParticles(e.clientX, e.clientY);
             showInteractiveToast({
                 icon: 'fa-solid fa-heart',
                 title: `${currentHeartEmoji} ${currentHeartText}`,
-                desc: '터치하면 언제나 사랑이 피어납니다 💕',
+                desc: '마우스나 손가락으로 끌어서 원하는 곳으로 자유롭게 옮겨보세요! 🖐️',
                 actionText: '설정 변경 ❯',
                 onClick: () => showModal('heartSettingsModal')
             });
