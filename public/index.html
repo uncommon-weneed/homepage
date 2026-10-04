@@ -117,6 +117,9 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html {
+            scrollbar-gutter: stable;
+        }
         html, body {
             width: 100%;
             height: 100%;
@@ -951,14 +954,13 @@
             border-bottom: 1px solid var(--border-light);
         }
         .cal-cell {
-            min-height: 84px;
-            height: auto;
-            max-height: 125px;
+            height: 76px;
+            max-height: 76px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 5px 3px 4px;
+            padding: 4px 3px 3px;
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -971,16 +973,16 @@
         }
         @media (min-width: 600px) {
             .cal-cell {
-                min-height: 98px;
-                max-height: 140px;
-                padding: 7px 4px 6px;
+                height: 88px;
+                max-height: 88px;
+                padding: 6px 4px 5px;
             }
         }
         @media (min-width: 900px) {
             .cal-cell {
-                min-height: 112px;
-                max-height: 155px;
-                padding: 8px 6px 6px;
+                height: 98px;
+                max-height: 98px;
+                padding: 7px 5px 6px;
             }
         }
         .cal-cell:hover {
@@ -1232,17 +1234,27 @@
             box-shadow: 0 4px 14px var(--primary-glow);
         }
 
+        .posts-list-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+            box-sizing: border-box;
+        }
         .post-card {
             background: white;
             border-radius: var(--radius-md);
-            padding: 26px;
-            margin-bottom: 22px;
+            padding: 22px 24px;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--border-light);
             transition: all 0.3s ease;
             cursor: pointer;
             display: flex;
-            gap: 22px;
+            gap: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 148px;
+            align-items: stretch;
         }
         .post-card:hover {
             box-shadow: var(--shadow-md);
@@ -1255,21 +1267,22 @@
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
+            min-width: 0;
         }
         .post-top-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-size: 0.86rem;
         }
         .post-cat-badge {
             background: var(--primary-light);
             color: var(--primary-dark);
-            padding: 5px 12px;
+            padding: 4px 12px;
             border-radius: var(--radius-full);
             font-weight: 800;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
         }
         .post-date {
             color: var(--text-muted);
@@ -1279,43 +1292,63 @@
             font-weight: 600;
         }
         .post-title {
-            font-size: 1.35rem;
+            font-size: 1.25rem;
             font-weight: 800;
             color: var(--text-main);
             margin-bottom: 8px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.35;
         }
-        /* CSS 호환성 경고 0개를 위해 standard line-clamp 추가 */
         .post-preview {
-            font-size: 1.02rem;
+            font-size: 0.98rem;
             color: var(--text-sub);
             display: -webkit-box;
             -webkit-line-clamp: 2;
             line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            line-height: 1.6;
+            line-height: 1.55;
+            min-height: 3.1em;
         }
         .post-footer-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 16px;
-            padding-top: 12px;
+            margin-top: 14px;
+            padding-top: 10px;
             border-top: 1px dashed var(--border-light);
-            font-size: 0.86rem;
+            font-size: 0.84rem;
             color: var(--text-muted);
             font-weight: 600;
         }
         .post-thumb {
-            width: 130px;
-            height: 130px;
+            width: 110px;
+            height: 110px;
             border-radius: var(--radius-sm);
             object-fit: cover;
             flex-shrink: 0;
             border: 1px solid var(--border-light);
+            align-self: center;
+        }
+        @media (max-width: 600px) {
+            .post-card {
+                padding: 16px;
+                gap: 14px;
+                min-height: 120px;
+            }
+            .post-thumb {
+                width: 86px;
+                height: 86px;
+            }
+            .post-title {
+                font-size: 1.12rem;
+            }
+            .post-preview {
+                font-size: 0.9rem;
+                min-height: 2.8em;
+            }
         }
 
         .gallery-grid {
@@ -2328,6 +2361,9 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            width: 100%;
+            box-sizing: border-box;
+            height: 100%;
         }
         .gallery-card-insta:hover {
             transform: translateY(-6px);
@@ -2340,12 +2376,14 @@
             aspect-ratio: 1 / 1;
             background: #F1F4F9;
             overflow: hidden;
+            flex-shrink: 0;
         }
         .gallery-media-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.45s var(--ease-smooth);
+            display: block;
         }
         .gallery-card-insta:hover .gallery-media-frame img {
             transform: scale(1.07);
@@ -2374,11 +2412,14 @@
             transform: scale(1.1);
         }
         .gallery-bottom-bar {
-            padding: 14px;
+            padding: 12px 14px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            justify-content: space-between;
+            height: 74px;
+            box-sizing: border-box;
             background: white;
+            flex-grow: 1;
         }
         .gallery-title-row {
             display: flex;
@@ -3652,23 +3693,29 @@
                 
                 const isHoliday = krHolidays.includes(dateMD) || dayOfWeek === 0;
                 // [요구사항 5]: 최신 등록된 글이 먼저 보이도록 역순 정렬
-                // [수정 완료]: 해당 날짜의 모든 기록을 최신순으로 추출
-                const dayPosts = postsData.filter(p => (p.author || '').split('|')[4] === dateStr).slice().reverse();
+                // [요청 반영]: 그날 일정을 상위(최우선)로 올리고, 동일 카테고리 내에서는 최신순 정렬
+                const dayPosts = postsData.filter(p => (p.author || '').split('|')[4] === dateStr).slice().sort((a, b) => {
+                    const catA = (a.author || '').split('|')[3] || '';
+                    const catB = (b.author || '').split('|')[3] || '';
+                    if (catA === '일정' && catB !== '일정') return -1;
+                    if (catA !== '일정' && catB === '일정') return 1;
+                    return b.id - a.id;
+                });
                 let previews = '';
                 
-                // [해결]: 오늘 적은 글의 기록이 누락 없이 다 보이도록 최대 4개까지 제목과 카테고리별 아이콘 표시!
-                const maxPreviews = 4;
+                // [요청 반영]: 최대 2줄까지만 사용하고, 나머지는 더보기 (+N개)로 표시!
+                const maxPreviews = 2;
                 const visiblePosts = dayPosts.slice(0, maxPreviews);
                 visiblePosts.forEach(p => {
                     const prts = (p.author || '').split('|');
                     const postTitle = prts[2] || '기록';
                     const cat = prts[3] || '일상';
                     
-                    if (cat === '다이어리') {
-                        previews += `<span class="cal-pill" title="${postTitle}" style="color:var(--primary-dark); background:var(--primary-light);">📝 ${postTitle}</span>`;
-                    } else if (cat === '일정') {
+                    if (cat === '일정') {
                         const customColor = prts[5] || 'var(--secondary)';
                         previews += `<span class="cal-pill" title="${postTitle}" style="color:white; background:${customColor};">📅 ${postTitle}</span>`;
+                    } else if (cat === '다이어리') {
+                        previews += `<span class="cal-pill" title="${postTitle}" style="color:var(--primary-dark); background:var(--primary-light);">📝 ${postTitle}</span>`;
                     } else if (cat === '갤러리') {
                         previews += `<span class="cal-pill" title="${postTitle}" style="color:#7B341E; background:#FEEBC8;">📸 ${postTitle}</span>`;
                     } else {
@@ -3677,9 +3724,9 @@
                     }
                 });
                 
-                // 4개를 초과하는 극단적으로 많은 글이 있을 때만 정직하게 추가 개수 배지 표시
+                // [요청 반영]: 2줄을 초과하는 나머지는 몇 개인지만 (+N개) 간결하게 표시
                 if (dayPosts.length > maxPreviews) {
-                    previews += `<span class="cal-more-badge">+${dayPosts.length - maxPreviews}개 더보기</span>`;
+                    previews += `<span class="cal-more-badge">+${dayPosts.length - maxPreviews}개</span>`;
                 }
                 
                 const isTodayClass = dateStr === todayStr ? 'today' : '';
@@ -3738,11 +3785,17 @@
             const dayOfWeekName = ['일', '월', '화', '수', '목', '금', '토'][new Date(parts[0], parts[1] - 1, parts[2]).getDay()];
             document.getElementById('calSlideTitle').innerText = `${parts[0]}년 ${parts[1]}월 ${parts[2]}일 (${dayOfWeekName})`;
             
-            // [해결]: 해당 일자에 작성된 모든 글(다이어리, 일정, 일상, 갤러리)을 누락 없이 최신순으로 추출
+            // [요청 반영]: 해당 일자의 모든 글 중 '일정'을 최우선으로 상단 배치하고 슬라이드에 표시
             const dayPosts = postsData.filter(p => { 
                 const prts = (p.author || '').split('|'); 
                 return prts[4] === dateStr; 
-            }).slice().reverse();
+            }).slice().sort((a, b) => {
+                const catA = (a.author || '').split('|')[3] || '';
+                const catB = (b.author || '').split('|')[3] || '';
+                if (catA === '일정' && catB !== '일정') return -1;
+                if (catA !== '일정' && catB === '일정') return 1;
+                return b.id - a.id;
+            });
 
             const subtitleEl = document.getElementById('calSlideSubtitle');
             const listEl = document.getElementById('calSlideEntryList');
