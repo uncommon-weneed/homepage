@@ -116,22 +116,33 @@ export default {
           const exactTime = formData.get("exactTime") || ""; // 일정 컬러
           const createdAt = formData.get("createdAt") || new Date().toISOString(); // 실제 작성 시간
           const content = formData.get("content") || ""; 
-          const file = formData.get("image"); 
           
-          let fileUrl = "";
-          if (file && typeof file === "object" && file.size > 0 && file.name) {
+          // [다중 사진 첨부 완벽 지원]: formData.getAll로 'images' 및 'image' 모두 수집
+          const rawFiles = [...formData.getAll("images"), ...formData.getAll("image")];
+          const validFiles = rawFiles.filter(f => f && typeof f === "object" && f.size > 0 && f.name);
+          
+          const fileUrls = [];
+          for (const file of validFiles) {
             const ext = file.name.split(".").pop(); 
             const fileName = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
             await env.BUCKET.put(fileName, file.stream(), { httpMetadata: { contentType: file.type || "application/octet-stream" } });
-            fileUrl = `/api/images/${fileName}`;
+            fileUrls.push(`/api/images/${fileName}`);
+          }
+          
+          // 1장이면 단일 문자열, 여러 장이면 JSON 배열 문자열로 보관 (기존 글 완벽 하위 호환)
+          let finalImageUrl = "";
+          if (fileUrls.length === 1) {
+            finalImageUrl = fileUrls[0];
+          } else if (fileUrls.length > 1) {
+            finalImageUrl = JSON.stringify(fileUrls);
           }
           
           // 저장 포맷: 이름(0)|아이디(1)|제목(2)|카테고리(3)|캘린더날짜(4)|일정색상(5)|작성일시(6)
           const authorMeta = `${author}|${username}|${title}|${category}|${dateStr}|${exactTime}|${createdAt}`;
           await env.DB.prepare("INSERT INTO posts (author, content, image_url) VALUES (?, ?, ?)")
-              .bind(authorMeta, content, fileUrl).run();
+              .bind(authorMeta, content, finalImageUrl).run();
               
-          return jsonResponse({ success: true }, 200);
+          return jsonResponse({ success: true, imageUrl: finalImageUrl }, 200);
       } catch (e) {
           return jsonResponse({ error: e.message }, 500); 
       }
@@ -149,21 +160,28 @@ export default {
           const createdAt = formData.get("createdAt") || new Date().toISOString(); 
           const authorMeta = formData.get("authorMeta"); 
           const keepImage = formData.get("keepImage") || ""; 
-          const file = formData.get("image");
           
-          let fileUrl = keepImage;
-          if (file && typeof file === "object" && file.size > 0 && file.name) {
-            const ext = file.name.split(".").pop(); 
-            const fileName = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
-            await env.BUCKET.put(fileName, file.stream(), { httpMetadata: { contentType: file.type || "application/octet-stream" } });
-            fileUrl = `/api/images/${fileName}`;
+          // 새로 업로드된 다중 파일 수집
+          const rawFiles = [...formData.getAll("images"), ...formData.getAll("image")];
+          const validFiles = rawFiles.filter(f => f && typeof f === "object" && f.size > 0 && f.name);
+          
+          let finalImageUrl = keepImage;
+          if (validFiles.length > 0) {
+            const newUrls = [];
+            for (const file of validFiles) {
+              const ext = file.name.split(".").pop(); 
+              const fileName = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
+              await env.BUCKET.put(fileName, file.stream(), { httpMetadata: { contentType: file.type || "application/octet-stream" } });
+              newUrls.push(`/api/images/${fileName}`);
+            }
+            finalImageUrl = newUrls.length === 1 ? newUrls[0] : JSON.stringify(newUrls);
           }
           
           const newAuthorMeta = `${authorMeta}|${title}|${category}|${dateStr}|${exactTime}|${createdAt}`;
           await env.DB.prepare("UPDATE posts SET author = ?, content = ?, image_url = ? WHERE id = ?")
-              .bind(newAuthorMeta, content, fileUrl, id).run();
+              .bind(newAuthorMeta, content, finalImageUrl, id).run();
               
-          return jsonResponse({ success: true }, 200);
+          return jsonResponse({ success: true, imageUrl: finalImageUrl }, 200);
       } catch (e) {
           return jsonResponse({ error: e.message }, 500); 
       }
@@ -174,7 +192,17 @@ export default {
         const { id } = await request.json();
         const post = await env.DB.prepare("SELECT image_url FROM posts WHERE id = ?").bind(id).first();
         if (post && post.image_url) { 
-            try { await env.BUCKET.delete(post.image_url.replace("/api/images/", "")); } catch (err) {} 
+            const rawUrl = post.image_url.trim();
+            if (rawUrl.startsWith('[') && rawUrl.endsWith(']')) {
+              try {
+                const arr = JSON.parse(rawUrl);
+                for (const u of arr) {
+                  try { await env.BUCKET.delete(String(u).replace("/api/images/", "")); } catch(delErr) {}
+                }
+              } catch(e) {}
+            } else {
+              try { await env.BUCKET.delete(rawUrl.replace("/api/images/", "")); } catch (err) {} 
+            }
         }
         await env.DB.prepare("DELETE FROM posts WHERE id = ?").bind(id).run();
         await env.DB.prepare("DELETE FROM comments WHERE post_id = ?").bind(id).run();
