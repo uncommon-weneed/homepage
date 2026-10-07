@@ -304,13 +304,28 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 30%;
+            flex: 1 1 0%;
+            min-width: 0;
+            padding: 0 2px;
             height: var(--nav-height);
             color: var(--text-muted);
             text-decoration: none;
             transition: all 0.25s ease;
             cursor: pointer;
             border-radius: var(--radius-sm);
+        }
+        .nav-item i {
+            font-size: 1.15rem;
+            margin-bottom: 2px;
+            transition: all 0.25s var(--ease-spring);
+        }
+        .nav-item span {
+            font-size: 0.72rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
         }
         .nav-item i {
             font-size: 1.3rem;
@@ -3019,7 +3034,883 @@
             letter-spacing: -0.2px;
         }
 
-    </style>
+    
+        /* ==========================================================================
+           [19. 데이트 플래너 & 하루 일정 타임라인 스타일]
+           ========================================================================== */
+        .planner-container, .places-container, .couple-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+        @media (min-width: 1200px) {
+            .planner-container, .places-container, .couple-container {
+                max-width: 1240px;
+                padding: 30px 35px;
+            }
+        }
+        @media (min-width: 1500px) {
+            .planner-container, .places-container, .couple-container {
+                max-width: 1400px;
+            }
+        }
+
+        .planner-date-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 16px 22px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            margin-bottom: 22px;
+        }
+        .planner-date-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .planner-date-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+        .planner-dday-badge {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.82rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+        }
+        .planner-date-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .planner-tab-bar {
+            display: flex;
+            gap: 8px;
+            background: #F1F4F9;
+            padding: 6px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            border: 1px solid var(--border-light);
+        }
+        .planner-tab-btn {
+            flex: 1;
+            padding: 12px 14px;
+            border: none;
+            background: transparent;
+            font-size: 0.96rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.25s var(--ease-spring);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .planner-tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--primary);
+        }
+        .planner-tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow-xs);
+        }
+
+        .itinerary-summary-card {
+            background: linear-gradient(135deg, #FFF6F7 0%, #FFFFFF 100%);
+            border: 1.5px solid rgba(255, 117, 130, 0.3);
+            border-radius: var(--radius-md);
+            padding: 18px 22px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: var(--shadow-xs);
+        }
+        .itinerary-summary-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .itinerary-budget-chip {
+            background: white;
+            border: 1px solid var(--border-light);
+            padding: 7px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            box-shadow: var(--shadow-xs);
+        }
+
+        .itinerary-timeline-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+        }
+        .itinerary-slot-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 18px 22px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: all 0.25s var(--ease-spring);
+            border-left: 5px solid var(--primary);
+            box-shadow: var(--shadow-xs);
+        }
+        .itinerary-slot-card:hover {
+            transform: translateX(4px);
+            border-color: rgba(255, 117, 130, 0.35);
+            box-shadow: var(--shadow-sm);
+        }
+        .itinerary-slot-card.done {
+            opacity: 0.65;
+            background: #FAFAFB;
+        }
+        .itinerary-slot-card.done .itinerary-slot-title {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+        .itinerary-time-chip {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.88rem;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .itinerary-slot-content {
+            flex-grow: 1;
+            min-width: 0;
+        }
+        .itinerary-slot-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+        .itinerary-slot-place {
+            font-size: 0.92rem;
+            color: var(--secondary);
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .itinerary-slot-memo {
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            line-height: 1.45;
+            margin-bottom: 10px;
+        }
+        .itinerary-btn-naver {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #03C75A;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(3, 199, 90, 0.25);
+        }
+        .itinerary-btn-naver:hover {
+            background: #029a45;
+            transform: scale(1.05);
+        }
+        .itinerary-btn-naver-dir {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: white;
+            color: #03C75A;
+            border: 1.5px solid #03C75A;
+            padding: 5px 11px;
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .itinerary-btn-naver-dir:hover {
+            background: #EAF9F1;
+        }
+        .itinerary-slot-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* ==========================================================================
+           [20. 오늘 챙겨야 할 물품 메모 & 체크리스트 탭 스타일]
+           ========================================================================== */
+        .packing-header-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 22px 24px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow-sm);
+        }
+        .packing-progress-bar-wrap {
+            background: #EDF2F7;
+            height: 12px;
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+        .packing-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: width 0.5s var(--ease-smooth);
+            border-radius: var(--radius-full);
+        }
+        .packing-stats-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+        .packing-stats-row span.count {
+            color: var(--primary);
+        }
+        .packing-presets-wrap {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+        .packing-preset-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .preset-chips-flex {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-preset-chip {
+            background: #F8FAFD;
+            border: 1.5px solid var(--border-light);
+            padding: 7px 14px;
+            border-radius: var(--radius-full);
+            font-size: 0.84rem;
+            font-weight: 800;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s var(--ease-spring);
+        }
+        .btn-preset-chip:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .packing-assignee-filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+        .assignee-filter-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid var(--border-light);
+            background: white;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-xs);
+        }
+        .assignee-filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .packing-group-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-xs);
+        }
+        .packing-group-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .packing-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .packing-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 16px;
+            background: #F9FAFD;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+            transition: all 0.25s ease;
+        }
+        .packing-item-row:hover {
+            background: var(--primary-light);
+            border-color: rgba(255, 117, 130, 0.3);
+            transform: translateX(3px);
+        }
+        .packing-item-row.done {
+            opacity: 0.55;
+            background: #F4F6F8;
+        }
+        .packing-item-row.done .packing-item-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+        .packing-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-grow: 1;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .packing-check-box {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--border-light);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            transition: all 0.2s var(--ease-spring);
+            flex-shrink: 0;
+        }
+        .packing-item-row.done .packing-check-box {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .packing-item-text {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .packing-assignee-tag {
+            font-size: 0.74rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+        .tag-hyoni { background: #EBF8FF; color: #2B6CB0; border: 1px solid #BEE3F8; }
+        .tag-hini { background: #FFF5F7; color: #D53F8C; border: 1px solid #FED7E2; }
+        .tag-together { background: #F0FFF4; color: #2F855A; border: 1px solid #C6F6D5; }
+
+        /* ==========================================================================
+           [21. 네이버 지도 연동 데이트 장소 & 위시리스트 스타일]
+           ========================================================================== */
+        .places-search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+        .places-search-bar input {
+            flex-grow: 1;
+        }
+        .naver-quick-search-btn {
+            background: #03C75A;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            transition: all 0.2s var(--ease-spring);
+            box-shadow: 0 4px 14px rgba(3, 199, 90, 0.25);
+        }
+        .naver-quick-search-btn:hover {
+            background: #029a45;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(3, 199, 90, 0.35);
+        }
+        .places-filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .place-cat-chip {
+            padding: 8px 16px;
+            background: white;
+            border: 1.5px solid var(--border-light);
+            border-radius: var(--radius-full);
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .place-cat-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .place-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s var(--ease-spring);
+        }
+        .place-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(255, 117, 130, 0.35);
+        }
+        .place-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .place-cat-badge {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+        .place-visited-chip {
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.76rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .place-visited-chip.visited {
+            background: #EBF8FF;
+            color: #2B6CB0;
+            border: 1px solid #BEE3F8;
+        }
+        .place-visited-chip.wish {
+            background: #FFF5F7;
+            color: #D53F8C;
+            border: 1px solid #FED7E2;
+        }
+        .place-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            line-height: 1.35;
+        }
+        .place-address {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .place-notes-box {
+            background: #F9FAFD;
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            line-height: 1.45;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-light);
+        }
+        .place-naver-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .btn-naver-link {
+            flex: 1;
+            background: #03C75A;
+            color: white;
+            border: none;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.84rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        .btn-naver-link:hover {
+            background: #029a45;
+        }
+        .btn-naver-dir-link {
+            flex: 1;
+            background: white;
+            color: #03C75A;
+            border: 1.5px solid #03C75A;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.84rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        .btn-naver-dir-link:hover {
+            background: #EAF9F1;
+        }
+        .btn-add-to-plan {
+            width: 100%;
+            background: var(--secondary-light);
+            color: var(--secondary);
+            border: 1.5px solid rgba(127, 169, 198, 0.4);
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn-add-to-plan:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* ==========================================================================
+           [22. 커플 Q&A 및 추가 질문 작성 뷰 스타일]
+           ========================================================================== */
+        .qa-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .qa-filter-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        .qa-filter-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid var(--border-light);
+            background: white;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .qa-filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .qa-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s ease;
+        }
+        .qa-card:hover {
+            border-color: rgba(255, 117, 130, 0.35);
+            box-shadow: var(--shadow-md);
+        }
+        .qa-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .qa-cat-chip {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+        }
+        .qa-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .qa-answers-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        @media (min-width: 768px) {
+            .qa-answers-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .qa-answer-box {
+            border-radius: var(--radius-sm);
+            padding: 18px 20px;
+            border: 1.5px solid var(--border-light);
+            background: #F9FAFD;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 140px;
+        }
+        .qa-answer-box.hyoni {
+            background: #F0F7FF;
+            border-color: #BEE3F8;
+        }
+        .qa-answer-box.hini {
+            background: #FFF5F7;
+            border-color: #FED7E2;
+        }
+        .qa-ans-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .qa-ans-name {
+            font-size: 1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .qa-ans-name.hyoni { color: #2B6CB0; }
+        .qa-ans-name.hini { color: #D53F8C; }
+        .qa-ans-time {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .qa-ans-content {
+            font-size: 1.02rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            white-space: pre-wrap;
+            flex-grow: 1;
+            margin-bottom: 10px;
+        }
+        .qa-ans-empty {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            font-style: italic;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        /* ==========================================================================
+           [23. 사랑의 커플 쿠폰북 & 밸런스 게임 스타일]
+           ========================================================================== */
+        .coupons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 20px;
+        }
+        .coupon-card {
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF9FA 100%);
+            border: 2px dashed rgba(255, 117, 130, 0.45);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s var(--ease-spring);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 190px;
+        }
+        .coupon-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+        .coupon-card.used {
+            opacity: 0.55;
+            filter: grayscale(40%);
+        }
+        .coupon-stamp {
+            position: absolute;
+            top: 20px;
+            right: 18px;
+            transform: rotate(15deg);
+            border: 3px solid #E53E3E;
+            color: #E53E3E;
+            font-size: 1.05rem;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none;
+            animation: popInModal 0.3s ease;
+        }
+        .coupon-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+        .coupon-desc {
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        .coupon-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed var(--border-light);
+            padding-top: 12px;
+        }
+
+        .balance-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .balance-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .balance-vs-row {
+            display: flex;
+            gap: 14px;
+            align-items: stretch;
+        }
+        .balance-btn {
+            flex: 1;
+            padding: 18px 16px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border-light);
+            background: #F8FAFD;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.25s var(--ease-spring);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .balance-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .balance-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+        .balance-results-row {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 14px;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+    
+</style>
 </head>
 <body>
 
@@ -3189,6 +4080,18 @@
                 <i class="fa-regular fa-calendar-check"></i>
                 <span>캘린더</span>
             </a>
+            <a class="nav-item" onclick="switchView('planner', this)">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <span>플래너·메모</span>
+            </a>
+            <a class="nav-item" onclick="switchView('places', this)">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>장소·지도</span>
+            </a>
+            <a class="nav-item" onclick="switchView('couple', this)">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <span>커플존</span>
+            </a>
             <a class="nav-item" onclick="switchView('board', this)">
                 <i class="fa-regular fa-images"></i>
                 <span>스토리</span>
@@ -3303,6 +4206,59 @@
                         </div>
                         <div class="timeline-box" id="timelineList"></div>
                     </div>
+
+                    <!-- 위젯 4: 오늘의 데이트 플래너 & 챙길 물품 요약 위젯 -->
+                    <div class="widget-card" id="homePlannerWidget">
+                        <div class="widget-title">
+                            <div class="widget-title-left">
+                                <i class="fa-solid fa-clipboard-check"></i>
+                                <span>오늘의 일정 & 챙길 물품</span>
+                            </div>
+                            <button class="icon-btn" onclick="switchView('planner', document.querySelectorAll('.nav-item')[2])" title="플래너 열기" style="width: 34px; height: 34px;">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div id="homePlannerSummaryWrap" style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- JS renderHomePlannerSummary()로 렌더링 -->
+                        </div>
+                    </div>
+
+                    <!-- 위젯 5: 가고 싶은 데이트 장소 위젯 -->
+                    <div class="widget-card" id="homePlacesWidget">
+                        <div class="widget-title">
+                            <div class="widget-title-left">
+                                <i class="fa-solid fa-map-location-dot" style="color: var(--secondary);"></i>
+                                <span>가고 싶은 데이트 장소</span>
+                            </div>
+                            <button class="icon-btn" onclick="switchView('places', document.querySelectorAll('.nav-item')[3])" title="장소 목록 열기" style="width: 34px; height: 34px;">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div id="homePlacesSummaryWrap" style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- JS renderHomePlacesSummary()로 렌더링 -->
+                        </div>
+                    </div>
+
+                    <!-- 위젯 6: 오늘의 커플 질문 (Q&A) & 쿠폰 위젯 -->
+                    <div class="widget-card grid-full-width" id="homeCoupleWidget">
+                        <div class="widget-title">
+                            <div class="widget-title-left">
+                                <i class="fa-solid fa-heart-pulse"></i>
+                                <span>오늘의 커플 질문 & 사랑의 쿠폰</span>
+                            </div>
+                            <button class="icon-btn" onclick="switchView('couple', document.querySelectorAll('.nav-item')[4])" title="커플존 열기" style="width: 34px; height: 34px;">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                            <div id="homeQaSummaryBox" style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                                <!-- JS renderHomeQaSummary()로 렌더링 -->
+                            </div>
+                            <div id="homeCouponSummaryBox" style="background: #FFF9FA; padding: 18px; border-radius: var(--radius-sm); border: 1.5px dashed rgba(255, 117, 130, 0.4);">
+                                <!-- JS renderHomeCouponSummary()로 렌더링 -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -3338,12 +4294,15 @@
                         <div id="calSlideEntryList" class="cal-slide-entries"></div>
 
                         <!-- 캘린더 작성 액션 버튼 -->
-                        <div class="cal-slide-actions">
-                            <button class="btn-submit" style="background: var(--secondary); flex: 1;" onclick="openWriteModal('일정', currentSelectedCalDate)">
+                        <div class="cal-slide-actions" style="flex-wrap: wrap;">
+                            <button class="btn-submit" style="background: var(--secondary); flex: 1; min-width: 140px;" onclick="openWriteModal('일정', currentSelectedCalDate)">
                                 <i class="fa-solid fa-calendar-plus"></i> 일정 추가
                             </button>
-                            <button class="btn-submit" style="flex: 1;" onclick="openWriteModal('다이어리', currentSelectedCalDate)">
+                            <button class="btn-submit" style="flex: 1; min-width: 140px;" onclick="openWriteModal('다이어리', currentSelectedCalDate)">
                                 <i class="fa-solid fa-book"></i> 다이어리 쓰기
+                            </button>
+                            <button class="btn-submit" style="background: #9D7BE8; flex: 1 1 100%;" onclick="openPlannerForDate(currentSelectedCalDate)">
+                                <i class="fa-solid fa-clipboard-check"></i> 이 날의 하루 일정 계획 & 챙길 물품 열기 ❯
                             </button>
                         </div>
                     </div>
@@ -3360,6 +4319,236 @@
                     <button class="board-tab" onclick="setBoardCategory('일상', this)"><i class="fa-solid fa-seedling" style="margin-right:6px;"></i>자유 일상</button>
                 </div>
                 <div id="boardList"></div>
+            </div>
+        </main>
+
+        <!-- [VIEW 4] 하루 일정 계획 & 챙길 물품 메모 뷰 -->
+        <main class="view-section" id="view-planner">
+            <div class="planner-container">
+                <!-- 날짜 선택 컨트롤러 -->
+                <div class="planner-date-bar">
+                    <div class="planner-date-info">
+                        <i class="fa-regular fa-calendar-days" style="color: var(--primary); font-size: 1.5rem;"></i>
+                        <div>
+                            <h2 class="planner-date-title" id="plannerCurrentDateText">2026. 10. 07 (수)</h2>
+                            <span class="planner-dday-badge" id="plannerDdayBadge">오늘 데이트 💕</span>
+                        </div>
+                    </div>
+                    <div class="planner-date-actions">
+                        <button class="icon-btn" onclick="changePlannerDate(-1)" title="어제"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="btn-submit" style="width: auto; padding: 8px 16px; font-size: 0.88rem; background: var(--primary-light); color: var(--primary); border: 1.5px solid var(--primary); box-shadow: none;" onclick="setPlannerToday()">오늘</button>
+                        <button class="icon-btn" onclick="changePlannerDate(1)" title="내일"><i class="fa-solid fa-chevron-right"></i></button>
+                        <button class="icon-btn" onclick="document.getElementById('plannerDatePicker').showPicker ? document.getElementById('plannerDatePicker').showPicker() : document.getElementById('plannerDatePicker').focus()" title="날짜 직접 선택" style="margin-left: 4px;">
+                            <i class="fa-solid fa-calendar"></i>
+                        </button>
+                        <input type="date" id="plannerDatePicker" style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;" onchange="onPlannerDatePickerChange(event)">
+                    </div>
+                </div>
+
+                <!-- 플래너 탭 스위처 (사용자 요청: 일정계획 + 옆에 탭을 만들어 챙길 물품 메모) -->
+                <div class="planner-tab-bar">
+                    <button class="planner-tab-btn active" id="tabBtnItinerary" onclick="switchPlannerTab('itinerary', this)">
+                        <i class="fa-solid fa-route"></i>
+                        <span>📅 하루 일정 계획</span>
+                    </button>
+                    <button class="planner-tab-btn" id="tabBtnPacking" onclick="switchPlannerTab('packing', this)">
+                        <i class="fa-solid fa-suitcase-rolling"></i>
+                        <span>🎒 챙길 물품 메모</span>
+                    </button>
+                    <button class="planner-tab-btn" id="tabBtnNotes" onclick="switchPlannerTab('notes', this)">
+                        <i class="fa-regular fa-note-sticky"></i>
+                        <span>💡 데이트 메모</span>
+                    </button>
+                </div>
+
+                <!-- [탭 1] 하루 일정 계획 타임라인 섹션 -->
+                <div id="plannerTabSectionItinerary">
+                    <div class="itinerary-summary-card">
+                        <div class="itinerary-summary-left">
+                            <i class="fa-solid fa-map-pin" style="color: var(--primary); font-size: 1.6rem;"></i>
+                            <div>
+                                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px;" id="itineraryCourseCount">총 0개의 코스</h3>
+                                <p style="font-size: 0.84rem; color: var(--text-muted);">시간 순서대로 알찬 데이트를 즐겨보세요 ✨</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                            <div class="itinerary-budget-chip" id="itineraryTotalBudget">총 예상 비용: 0원</div>
+                            <button class="btn-submit" style="width: auto; padding: 10px 18px; font-size: 0.88rem;" onclick="openAddPlannerSlotModal()">
+                                <i class="fa-solid fa-plus"></i> 일정 추가
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 일정 타임라인 카드 목록 -->
+                    <div class="itinerary-timeline-wrap" id="itinerarySlotsList">
+                        <!-- JS renderPlannerItinerary()로 렌더링 -->
+                    </div>
+                </div>
+
+                <!-- [탭 2] 오늘 챙겨야 할 물품 메모 & 준비물 체크리스트 섹션 -->
+                <div id="plannerTabSectionPacking" style="display: none;">
+                    <div class="packing-header-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-clipboard-check" style="color: var(--primary);"></i>
+                                <span>오늘 챙길 물품 리스트</span>
+                            </h3>
+                            <button class="btn-submit" style="width: auto; padding: 9px 18px; font-size: 0.88rem;" onclick="openAddPackingItemModal()">
+                                <i class="fa-solid fa-plus"></i> 물품 추가
+                            </button>
+                        </div>
+                        <div class="packing-progress-bar-wrap">
+                            <div class="packing-progress-bar" id="packingProgressBar" style="width: 0%;"></div>
+                        </div>
+                        <div class="packing-stats-row">
+                            <span>준비 완료율 <span class="count" id="packingPercent">0%</span></span>
+                            <span id="packingStatsText">0개 준비완료 / 총 0개</span>
+                        </div>
+
+
+                    </div>
+
+                    <!-- 담당자 필터 (효니 / 히니 / 함께) -->
+                    <div class="packing-assignee-filters">
+                        <button class="assignee-filter-btn active" onclick="filterPackingAssignee('전체', this)">전체보기</button>
+                        <button class="assignee-filter-btn" onclick="filterPackingAssignee('효니', this)">👦 효니 담당</button>
+                        <button class="assignee-filter-btn" onclick="filterPackingAssignee('히니', this)">👧 히니 담당</button>
+                        <button class="assignee-filter-btn" onclick="filterPackingAssignee('함께', this)">💖 함께 챙기기</button>
+                    </div>
+
+                    <!-- 챙길 물품 리스트 (카테고리별 그룹) -->
+                    <div id="packingListContainer">
+                        <!-- JS renderPackingChecklist()로 렌더링 -->
+                    </div>
+                </div>
+
+                <!-- [탭 3] 데이트 메모 & 소지품 꿀팁 섹션 -->
+                <div id="plannerTabSectionNotes" style="display: none;">
+                    <div class="widget-card">
+                        <div class="widget-title">
+                            <div class="widget-title-left">
+                                <i class="fa-regular fa-note-sticky"></i>
+                                <span>오늘의 데이트 자유 메모</span>
+                            </div>
+                            <button class="btn-submit" style="width: auto; padding: 8px 16px; font-size: 0.85rem;" onclick="savePlannerNotes()">
+                                <i class="fa-solid fa-floppy-disk"></i> 메모 저장
+                            </button>
+                        </div>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">
+                            주차 위치, 음식점 예약 번호, 상대방이 좋아하는 메뉴, 오늘 꼭 전하고 싶은 말 등을 적어두세요 ✍️
+                        </p>
+                        <textarea id="plannerNotesTextarea" class="form-textarea" rows="8" placeholder="오늘 데이트에 필요한 세부 메모를 자유롭게 남겨보세요." oninput="savePlannerNotesSilently()"></textarea>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- [VIEW 5] 데이트 장소 & 지도 위시리스트 뷰 -->
+        <main class="view-section" id="view-places">
+            <div class="places-container">
+                <!-- 상단 타이틀 & 등록 버튼 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; font-weight: 800; font-family: 'Playfair Display', serif; color: var(--text-main);">Our Favorite Places 🗺️</h2>
+                        <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 4px;">가고 싶은 장소와 하고 싶은 일들을 지도와 함께 정리해보세요.</p>
+                    </div>
+                    <button class="btn-submit" style="width: auto; padding: 12px 22px; font-size: 0.95rem;" onclick="openAddPlaceModal()">
+                        <i class="fa-solid fa-map-pin"></i> 장소·하고싶은 일 추가
+                    </button>
+                </div>
+
+                <!-- 지도 검색 바 -->
+                <div class="places-search-bar">
+                    <div class="input-with-icon" style="flex-grow: 1;">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="naverSearchQuery" class="form-input" placeholder="장소명, 맛집, 카페 이름을 입력하세요 (예: 성수동 브런치, 강릉 오션뷰)" onkeydown="if(event.key==='Enter') searchNaverDirectly()">
+                    </div>
+                    <button type="button" class="naver-quick-search-btn" onclick="searchNaverDirectly()" title="지도에서 바로 검색" style="background: var(--secondary); box-shadow: 0 4px 14px rgba(127, 169, 198, 0.3);">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>지도 검색</span>
+                    </button>
+                </div>
+
+                <!-- 카테고리 필터 & 방문 상태 필터 -->
+                <div class="places-filter-bar">
+                    <button class="place-cat-chip active" onclick="setPlaceCategoryFilter('전체', this)">전체보기</button>
+                    <button class="place-cat-chip" onclick="setPlaceCategoryFilter('맛집', this)">🍽️ 맛집</button>
+                    <button class="place-cat-chip" onclick="setPlaceCategoryFilter('카페', this)">☕ 감성카페</button>
+                    <button class="place-cat-chip" onclick="setPlaceCategoryFilter('여행', this)">🏕️ 여행/숙소</button>
+                    <button class="place-cat-chip" onclick="setPlaceCategoryFilter('전시', this)">🎨 문화/전시</button>
+                    <button class="place-cat-chip" onclick="setPlaceCategoryFilter('액티비티', this)">🚴 레저/액티비티</button>
+                    <button class="place-cat-chip" onclick="setPlaceCategoryFilter('쇼핑', this)">🛍️ 쇼핑/힐링</button>
+                    <span style="border-left: 1px solid var(--border-light); margin: 0 4px;"></span>
+                    <button class="place-cat-chip" onclick="setPlaceStatusFilter('wish', this)">🤍 가고 싶어요</button>
+                    <button class="place-cat-chip" onclick="setPlaceStatusFilter('visited', this)">💖 다녀왔어요</button>
+                </div>
+
+                <!-- 장소 카드 그리드 -->
+                <div class="places-grid" id="placesCardsGrid">
+                    <!-- JS renderPlacesList()로 렌더링 -->
+                </div>
+            </div>
+        </main>
+
+        <!-- [VIEW 6] 커플존 라운지: Q&A 백문백답 & 사랑의 쿠폰북 & 밸런스 게임 -->
+        <main class="view-section" id="view-couple">
+            <div class="couple-container">
+                <!-- 상단 타이틀 -->
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <span style="font-size: 0.88rem; font-weight: 800; color: var(--primary); letter-spacing: 2px;">OUR ROMANTIC LOUNGE</span>
+                    <h2 style="font-size: 2rem; font-weight: 800; font-family: 'Playfair Display', serif; color: var(--text-main); margin-top: 4px;">둘만의 특별한 커플 공간 💖</h2>
+                    <p style="font-size: 0.95rem; color: var(--text-muted); margin-top: 6px;">서로에 대해 더 깊이 알아가고, 소중한 추억을 선물해보세요.</p>
+                </div>
+
+                <!-- 커플존 탭 바 -->
+                <div class="planner-tab-bar" style="margin-bottom: 24px;">
+                    <button class="planner-tab-btn active" id="coupleTabBtnQa" onclick="switchCoupleTab('qa', this)">
+                        <i class="fa-regular fa-comments"></i>
+                        <span>💬 커플 백문백답 Q&A</span>
+                    </button>
+                    <button class="planner-tab-btn" id="coupleTabBtnCoupons" onclick="switchCoupleTab('coupons', this)">
+                        <i class="fa-solid fa-ticket"></i>
+                        <span>🎟️ 사랑의 쿠폰북</span>
+                    </button>
+
+                </div>
+
+                <!-- [커플존 탭 1] 커플 백문백답 Q&A (사용자 요청: 추가 질문 넣기 지원) -->
+                <div id="coupleSectionQa">
+                    <div class="qa-header-row">
+                        <div class="qa-filter-tabs">
+                            <button class="qa-filter-btn active" onclick="filterQuestionsTab('전체', this)">전체 질문</button>
+                            <button class="qa-filter-btn" onclick="filterQuestionsTab('미답변', this)">✏️ 내 미답변 질문</button>
+                            <button class="qa-filter-btn" onclick="filterQuestionsTab('완료', this)">💖 둘 다 답변 완료</button>
+                        </div>
+                        <button class="btn-submit" style="width: auto; padding: 10px 20px; font-size: 0.92rem;" onclick="openAddQuestionModal()">
+                            <i class="fa-solid fa-plus-circle"></i> 새로운 질문 추가하기
+                        </button>
+                    </div>
+
+                    <div id="questionsCardsList">
+                        <!-- JS renderQuestionsList()로 렌더링 -->
+                    </div>
+                </div>
+
+                <!-- [커플존 탭 2] 사랑의 쿠폰북 -->
+                <div id="coupleSectionCoupons" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">사랑의 소원 쿠폰함 🎟️</h3>
+                            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 3px;">연인에게 특별한 쿠폰을 발급하고 원할 때 마음껏 사용하세요!</p>
+                        </div>
+                        <button class="btn-submit" style="width: auto; padding: 10px 18px; font-size: 0.92rem;" onclick="openAddCouponModal()">
+                            <i class="fa-solid fa-gift"></i> 새 쿠폰 선물하기
+                        </button>
+                    </div>
+
+                    <div class="coupons-grid" id="couponsCardsGrid">
+                        <!-- JS renderCouponsList()로 렌더링 -->
+                    </div>
+                </div>
+
+
             </div>
         </main>
 
@@ -3706,6 +4895,222 @@
         </div>
     </div>
 
+    <!-- (8) 데이트 일정 슬롯 추가 모달 -->
+    <div class="modal-overlay" id="addPlannerSlotModal">
+        <div class="modal-content" style="max-width: 480px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-calendar-plus" style="color: var(--primary);"></i> 새로운 일정 코스 추가</h3>
+                <button class="btn-close" onclick="hideModal('addPlannerSlotModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-regular fa-clock" style="color: var(--primary);"></i> 시간</label>
+                    <input type="time" id="slotTime" class="form-input" value="12:00">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-heading" style="color: var(--primary);"></i> 일정명 / 활동</label>
+                    <input type="text" id="slotTitle" class="form-input" placeholder="예: 맛있는 브런치 & 수다">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-map-location-dot" style="color: var(--secondary);"></i> 장소명 (지도 연동)</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="slotPlace" class="form-input" placeholder="예: 성수동 대림창고">
+                        <button type="button" class="btn-submit" style="width: auto; padding: 10px 14px; font-size: 0.82rem; background: var(--secondary); white-space: nowrap;" onclick="previewNaverSearchFromSlot()" title="지도에서 확인">
+                            <i class="fa-solid fa-magnifying-glass"></i> 지도 확인
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-won-sign" style="color: var(--secondary);"></i> 예상 비용 (원)</label>
+                    <input type="number" id="slotCost" class="form-input" placeholder="예: 35000 (숫자만 입력)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-regular fa-comment-dots" style="color: var(--text-muted);"></i> 세부 메모 & 예약 정보</label>
+                    <input type="text" id="slotMemo" class="form-input" placeholder="예: 네이버 예약 완료, 창가 2인석 요청">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-submit" onclick="submitPlannerSlot()"><i class="fa-solid fa-check"></i> 코스에 추가하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- (9) 오늘 챙길 물품 추가 모달 -->
+    <div class="modal-overlay" id="addPackingItemModal">
+        <div class="modal-content" style="max-width: 440px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-suitcase-rolling" style="color: var(--primary);"></i> 챙길 물품 등록</h3>
+                <button class="btn-close" onclick="hideModal('addPackingItemModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">물품 이름</label>
+                    <input type="text" id="packingNameInput" class="form-input" placeholder="예: 보조배터리, 돗자리, 필름카메라">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">카테고리</label>
+                    <select id="packingCategorySelect" class="form-select">
+                        <option value="필수소지품">📱 필수 소지품 (지갑, 폰, 신분증)</option>
+                        <option value="의류코디">👗 의류 & 코디 (여벌옷, 가디건, 선글라스)</option>
+                        <option value="뷰티위생">💄 뷰티 & 위생 (립밤, 핸드크림, 수정화장품)</option>
+                        <option value="데이트소품">📸 데이트 소품 (삼각대, 카메라, 돗자리)</option>
+                        <option value="서프라이즈">🎁 서프라이즈 & 특별 준비물</option>
+                        <option value="기타">✨ 기타 소지품</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">누가 챙기나요? (담당자)</label>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn-auth" id="packAssigneeTogether" style="flex: 1; padding: 12px; font-size: 0.92rem; background: var(--primary-light); color: var(--primary); border: 1.5px solid var(--primary); box-shadow: none;" onclick="setPackingAssignee('함께')">💖 함께</button>
+                        <button type="button" class="btn-auth" id="packAssigneeHyoni" style="flex: 1; padding: 12px; font-size: 0.92rem; background: #F8FAFD; color: #2B6CB0; border: 1.5px solid var(--border-light); box-shadow: none;" onclick="setPackingAssignee('효니')">👦 효니</button>
+                        <button type="button" class="btn-auth" id="packAssigneeHini" style="flex: 1; padding: 12px; font-size: 0.92rem; background: #F8FAFD; color: #D53F8C; border: 1.5px solid var(--border-light); box-shadow: none;" onclick="setPackingAssignee('히니')">👧 히니</button>
+                    </div>
+                    <input type="hidden" id="packingAssigneeInput" value="함께">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">수량 또는 메모 (선택)</label>
+                    <input type="text" id="packingMemoInput" class="form-input" placeholder="예: 2개, 완충 필수">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-submit" onclick="submitPackingItem()"><i class="fa-solid fa-check"></i> 리스트에 담기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- (10) 네이버 지도 연동 장소 / 위시 등록 모달 -->
+    <div class="modal-overlay" id="addPlaceModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-map-location-dot" style="color: var(--secondary);"></i> 데이트 장소 & 위시 등록</h3>
+                <button class="btn-close" onclick="hideModal('addPlaceModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">장소 또는 하고 싶은 일 이름 *</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="placeNameInput" class="form-input" placeholder="예: 난포 한식 성수점, 남산타워 케이블카">
+                        <button type="button" class="btn-submit" style="width: auto; padding: 10px 14px; font-size: 0.84rem; background: var(--secondary); white-space: nowrap;" onclick="previewNaverSearchFromPlaceModal()" title="지도에서 확인">
+                            <i class="fa-solid fa-magnifying-glass"></i> 지도 확인
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">카테고리</label>
+                    <select id="placeCategorySelect" class="form-select">
+                        <option value="맛집">🍽️ 맛집 (한식, 양식, 일식, 브런치)</option>
+                        <option value="카페">☕ 감성 카페 & 디저트</option>
+                        <option value="여행">🏕️ 여행 & 감성 숙소</option>
+                        <option value="전시">🎨 문화 & 미술관/전시</option>
+                        <option value="액티비티">🚴 레저 & 테마파크/액티비티</option>
+                        <option value="쇼핑">🛍️ 쇼핑 & 산책/힐링</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">위치 / 주소 (선택)</label>
+                    <input type="text" id="placeAddressInput" class="form-input" placeholder="예: 서울 성동구 서울숲길 44">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">지도 링크 (선택 - 비워두면 자동 검색 연동)</label>
+                    <input type="url" id="placeNaverUrlInput" class="form-input" placeholder="https://naver.me/... 또는 지도 검색 링크">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">우리의 메모 & 하고 싶은 일</label>
+                    <textarea id="placeNotesInput" class="form-textarea" rows="3" placeholder="예: 강된장 쌈밥 꼭 먹어보기! 일몰 타임에 맞춰서 방문하면 예쁨"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-submit" onclick="submitPlace()"><i class="fa-solid fa-check"></i> 위시리스트에 저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- (11) 커플 추가 질문 넣기 모달 (사용자 요청: 추가 질문도 넣을 수 있게 해줘) -->
+    <div class="modal-overlay" id="addQuestionModal">
+        <div class="modal-content" style="max-width: 480px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-circle-question" style="color: var(--primary);"></i> 새로운 커플 질문 만들기</h3>
+                <button class="btn-close" onclick="hideModal('addQuestionModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">질문 카테고리</label>
+                    <select id="newQuestionCategory" class="form-select">
+                        <option value="첫 만남 & 추억">🌸 첫 만남 & 추억</option>
+                        <option value="일상 & 취향">☕ 일상 & 취향</option>
+                        <option value="설레는 순간">💘 설레는 순간 & 로맨틱</option>
+                        <option value="연애관 & 미래">💍 연애관 & 미래</option>
+                        <option value="솔직 담백 토크">💬 솔직 담백 Q&A</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">질문 내용 *</label>
+                    <textarea id="newQuestionTextInput" class="form-textarea" rows="4" placeholder="상대방에게 묻고 싶은 소중한 질문을 적어보세요. (예: 내가 가장 사랑스러워 보였던 순간은 언제야?)"></textarea>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.45;">
+                    💡 등록된 질문은 효니와 히니가 각각 답변을 남길 수 있으며, 둘만의 소중한 기록으로 보관됩니다.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-submit" onclick="submitAddQuestion()"><i class="fa-solid fa-check"></i> 질문 등록하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- (12) 질문에 답변하기 모달 -->
+    <div class="modal-overlay" id="answerQuestionModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-pen-nib" style="color: var(--primary);"></i> 나의 마음 답변하기</h3>
+                <button class="btn-close" onclick="hideModal('answerQuestionModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="answerQuestionId">
+                <div style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); margin-bottom: 20px;">
+                    <span id="answerQuestionCatBadge" class="qa-cat-chip" style="margin-bottom: 8px; display: inline-block;">일상</span>
+                    <h4 id="answerQuestionTitleText" style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); line-height: 1.45;">질문 내용</h4>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="answerAuthorLabel">효니의 답변</label>
+                    <textarea id="answerContentTextarea" class="form-textarea" rows="5" placeholder="진심을 담아 솔직하게 답변해보세요 💕"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-submit" onclick="submitAnswerQuestion()"><i class="fa-solid fa-heart"></i> 답변 등록 완료</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- (13) 사랑의 커플 쿠폰 선물하기 모달 -->
+    <div class="modal-overlay" id="addCouponModal">
+        <div class="modal-content" style="max-width: 440px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-ticket" style="color: var(--primary);"></i> 사랑의 쿠폰 선물</h3>
+                <button class="btn-close" onclick="hideModal('addCouponModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">쿠폰 이름 *</label>
+                    <input type="text" id="couponTitleInput" class="form-input" placeholder="예: 평생 유효 소원권, 토닥토닥 30분 안마권">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">혜택 설명</label>
+                    <textarea id="couponDescInput" class="form-textarea" rows="3" placeholder="예: 언제든 제시하면 원하는 소원을 하나 들어드립니다! (거부권 없음 💖)"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">받는 사람</label>
+                    <select id="couponReceiverSelect" class="form-select">
+                        <option value="히니">👧 소중한 여자친구 (히니에게)</option>
+                        <option value="효니">👦 든든한 남자친구 (효니에게)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-submit" onclick="submitAddCoupon()"><i class="fa-solid fa-gift"></i> 쿠폰 선물하기</button>
+            </div>
+        </div>
+    </div>
+
     <!-- (7) 라이트박스 (이미지 확대 뷰어 - 유효한 SVG와 alt 속성으로 HTML 경고 0개) -->
     <div id="lightbox" class="modal-overlay" onclick="closeLightbox()">
         <span style="position: absolute; top: 30px; right: 30px; color: white; font-size: 2.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></span>
@@ -3813,17 +5218,7 @@
                     showToast(errMsg); 
                 }
             } catch(netErr) {
-                // 오프라인이거나 로컬 file:/// 실행 시 0709 통과 폴백
-                if (pw === "0709") {
-                    user = { success: true, username: "ourlove", fullName: "우리", isAdmin: true, status: "approved" };
-                    document.getElementById('auth-wall').style.opacity = '0';
-                    setTimeout(() => { 
-                        document.getElementById('auth-wall').style.display = 'none'; 
-                        showModal('authorSelectModal'); 
-                    }, 400);
-                } else {
-                    showToast("서버 연결에 실패했습니다. 비밀번호를 다시 확인해주세요.");
-                }
+                showToast("서버 연결에 실패했습니다. 네트워크 상태를 확인해주세요.");
             }
         }
 
@@ -3923,24 +5318,40 @@
             requestNotificationPermission();
             startNotificationPolling();
             updateSidebarProfile();
-                if (siteSettings.floating_heart_emoji) {
-                    currentHeartEmoji = siteSettings.floating_heart_emoji;
-                    const hIcon = document.getElementById('floatingHeartIcon');
-                    if (hIcon) hIcon.innerText = currentHeartEmoji;
-                }
-                if (siteSettings.floating_heart_text) {
-                    currentHeartText = siteSettings.floating_heart_text;
-                    const hText = document.getElementById('floatingHeartText');
-                    const hInput = document.getElementById('settingHeartText');
-                    if (hText) hText.innerText = currentHeartText;
-                    if (hInput) hInput.value = currentHeartText;
-                }
- // [상대방 애칭 & 사진 동적 연동]
 
-            // [요구사항 3]: 이전에 보고 있던 탭으로 자동 복원 (새로고침 시 홈으로 튕김 방지)
+            // 신규 커플 기능 초기 로드
+            initPlannerDate();
+            loadPlannerData();
+            loadPlacesData();
+            loadQuestionsData();
+            loadCouponsData();
+            
+            if (siteSettings.floating_heart_emoji) {
+                currentHeartEmoji = siteSettings.floating_heart_emoji;
+                const hIcon = document.getElementById('floatingHeartIcon');
+                if (hIcon) hIcon.innerText = currentHeartEmoji;
+            }
+            if (siteSettings.floating_heart_text) {
+                currentHeartText = siteSettings.floating_heart_text;
+                const hText = document.getElementById('floatingHeartText');
+                const hInput = document.getElementById('settingHeartText');
+                if (hText) hText.innerText = currentHeartText;
+                if (hInput) hInput.value = currentHeartText;
+            }
+
+            // 이전에 보고 있던 탭으로 자동 복원
             const lastView = sessionStorage.getItem('couple_active_view') || 'home';
             if (lastView !== 'home') {
-                const navBtn = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes(lastView === 'calendar' ? '캘린더' : '스토리'));
+                const navLabelMap = {
+                    'home': '홈',
+                    'calendar': '캘린더',
+                    'planner': '플래너',
+                    'places': '장소·지도',
+                    'couple': '커플존',
+                    'board': '스토리'
+                };
+                const label = navLabelMap[lastView] || '홈';
+                const navBtn = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes(label));
                 switchView(lastView, navBtn);
             }
         }
@@ -3960,14 +5371,22 @@
         // 뷰 전환 (홈 / 캘린더 / 스토리)
         function switchView(viewId, btnElement) {
             currentView = viewId;
-            // [요구사항 3]: 새로고침해도 홈으로 가지 않고 현재 탭을 그대로 유지하도록 저장!
             sessionStorage.setItem('couple_active_view', viewId);
 
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             if (btnElement) {
                 btnElement.classList.add('active');
             } else {
-                const targetNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes(viewId === 'home' ? '홈' : (viewId === 'calendar' ? '캘린더' : '스토리')));
+                const navLabelMap = {
+                    'home': '홈',
+                    'calendar': '캘린더',
+                    'planner': '플래너',
+                    'places': '장소·지도',
+                    'couple': '커플존',
+                    'board': '스토리'
+                };
+                const label = navLabelMap[viewId] || '홈';
+                const targetNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes(label));
                 if (targetNav) targetNav.classList.add('active');
             }
             
@@ -3978,9 +5397,19 @@
             if (target) {
                 target.classList.add('active');
             }
-            if (viewId === 'home') renderHomeUpcomingSchedule();
+
+            if (viewId === 'home') {
+                renderHomeUpcomingSchedule();
+                renderHomePlannerSummary();
+                renderHomePlacesSummary();
+                renderHomeQaSummary();
+                renderHomeCouponSummary();
+            }
             if (viewId === 'calendar') renderCalendar();
             if (viewId === 'board') renderBoardList();
+            if (viewId === 'planner') renderPlannerView();
+            if (viewId === 'places') renderPlacesList();
+            if (viewId === 'couple') renderCoupleView();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -5882,6 +7311,1378 @@
                 } catch(e) {}
             }, 8000); // 8초 주기 실시간 스마트 동기화
         }
+
+
+        // ==========================================================================
+        // [19. 데이트 플래너 & 오늘 챙겨야 할 물품 메모 비즈니스 로직]
+        // ==========================================================================
+        let plannerData = {};
+        let currentPlannerDate = '';
+        let currentPlannerTab = 'itinerary'; // 'itinerary' | 'packing' | 'notes'
+        let currentPackingAssigneeFilter = '전체'; // '전체' | '효니' | '히니' | '함께'
+
+        // 로컬 날짜(YYYY-MM-DD) 포맷 헬퍼 (타임존 오프셋 버그 원천 차단)
+        function getFormattedDate(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+
+        function formatDateKoreanWithDay(dateStr) {
+            if (!dateStr) return '';
+            const p = dateStr.split('-');
+            if (p.length !== 3) return dateStr;
+            const d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+            const days = ['일', '월', '화', '수', '목', '금', '토'];
+            return `${p[0]}년 ${p[1]}월 ${p[2]}일 (${days[d.getDay()]})`;
+        }
+
+        function initPlannerDate() {
+            currentPlannerDate = getFormattedDate(new Date());
+            updatePlannerDateDisplay();
+        }
+
+        function updatePlannerDateDisplay() {
+            const txt = document.getElementById('plannerCurrentDateText');
+            const picker = document.getElementById('plannerDatePicker');
+            const badge = document.getElementById('plannerDdayBadge');
+
+            if (txt) txt.innerText = formatDateKoreanWithDay(currentPlannerDate);
+            if (picker) picker.value = currentPlannerDate;
+
+            if (badge) {
+                const todayStr = getFormattedDate(new Date());
+                if (currentPlannerDate === todayStr) {
+                    badge.innerText = '오늘 데이트 💕';
+                    badge.style.background = 'var(--primary-light)';
+                    badge.style.color = 'var(--primary-dark)';
+                } else {
+                    const now = new Date(); now.setHours(0,0,0,0);
+                    const p = currentPlannerDate.split('-');
+                    const target = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+                    target.setHours(0,0,0,0);
+                    const diff = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+                    if (diff > 0) {
+                        badge.innerText = `D-${diff} 설레는 계획 🌟`;
+                        badge.style.background = 'var(--secondary-light)';
+                        badge.style.color = 'var(--secondary)';
+                    } else {
+                        badge.innerText = `D+${Math.abs(diff)} 지난 추억 📸`;
+                        badge.style.background = '#EDF2F7';
+                        badge.style.color = 'var(--text-muted)';
+                    }
+                }
+            }
+        }
+
+        // 날짜 이동 시 메모 즉시 저장 후 이동 (내용 유실 100% 방지)
+        function changePlannerDate(offset) {
+            savePlannerNotesSilently();
+            const p = currentPlannerDate.split('-');
+            const d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+            d.setDate(d.getDate() + offset);
+            currentPlannerDate = getFormattedDate(d);
+            updatePlannerDateDisplay();
+            loadPlannerData(currentPlannerDate);
+        }
+
+        function setPlannerToday() {
+            savePlannerNotesSilently();
+            currentPlannerDate = getFormattedDate(new Date());
+            updatePlannerDateDisplay();
+            loadPlannerData(currentPlannerDate);
+        }
+
+        function onPlannerDatePickerChange(e) {
+            if (e.target.value) {
+                savePlannerNotesSilently();
+                currentPlannerDate = e.target.value;
+                updatePlannerDateDisplay();
+                loadPlannerData(currentPlannerDate);
+            }
+        }
+
+        function openPlannerForDate(dateStr) {
+            if (dateStr) {
+                savePlannerNotesSilently();
+                currentPlannerDate = dateStr;
+                updatePlannerDateDisplay();
+            }
+            switchView('planner', document.querySelectorAll('.nav-item')[2]);
+            loadPlannerData(currentPlannerDate);
+        }
+
+        function switchPlannerTab(tabName, btnEl) {
+            currentPlannerTab = tabName;
+            document.querySelectorAll('.planner-tab-btn').forEach(b => b.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+
+            const secItin = document.getElementById('plannerTabSectionItinerary');
+            const secPack = document.getElementById('plannerTabSectionPacking');
+            const secNotes = document.getElementById('plannerTabSectionNotes');
+
+            if (secItin) secItin.style.display = tabName === 'itinerary' ? 'block' : 'none';
+            if (secPack) secPack.style.display = tabName === 'packing' ? 'block' : 'none';
+            if (secNotes) secNotes.style.display = tabName === 'notes' ? 'block' : 'none';
+
+            if (tabName === 'itinerary') renderPlannerItinerary();
+            if (tabName === 'packing') renderPackingChecklist();
+            if (tabName === 'notes') {
+                const plan = getDailyPlan(currentPlannerDate);
+                const nEl = document.getElementById('plannerNotesTextarea');
+                if (nEl) nEl.value = plan.notes || '';
+            }
+        }
+
+        function getDailyPlan(dateStr) {
+            if (!plannerData[dateStr]) {
+                try {
+                    const localSaved = localStorage.getItem(`planner_${dateStr}`);
+                    if (localSaved) {
+                        plannerData[dateStr] = JSON.parse(localSaved);
+                    }
+                } catch(e) {}
+            }
+            if (!plannerData[dateStr]) {
+                plannerData[dateStr] = {
+                    plan_date: dateStr,
+                    title: `${dateStr} 데이트 계획`,
+                    timetable: [],
+                    packing_items: [],
+                    notes: ''
+                };
+            }
+            return plannerData[dateStr];
+        }
+
+        async function loadPlannerData(dateStr) {
+            const targetDate = dateStr || currentPlannerDate;
+            try {
+                const res = await fetch(`/api/planner?date=${targetDate}`, { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.plan_date) {
+                        plannerData[targetDate] = {
+                            plan_date: data.plan_date,
+                            title: data.title || `${targetDate} 데이트 계획`,
+                            timetable: typeof data.timetable_json === 'string' ? JSON.parse(data.timetable_json || '[]') : (data.timetable || []),
+                            packing_items: typeof data.packing_items_json === 'string' ? JSON.parse(data.packing_items_json || '[]') : (data.packing_items || []),
+                            notes: data.notes || ''
+                        };
+                    }
+                }
+            } catch(e) {}
+
+            renderPlannerView();
+        }
+
+        async function savePlannerData(dateStr) {
+            const targetDate = dateStr || currentPlannerDate;
+            const plan = getDailyPlan(targetDate);
+            try {
+                localStorage.setItem(`planner_${targetDate}`, JSON.stringify(plan));
+            } catch(e) {}
+
+            try {
+                await fetch('/api/planner', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        plan_date: targetDate,
+                        title: plan.title,
+                        timetable_json: JSON.stringify(plan.timetable || []),
+                        packing_items_json: JSON.stringify(plan.packing_items || []),
+                        notes: plan.notes || ''
+                    })
+                });
+            } catch(e) {}
+
+            renderHomePlannerSummary();
+        }
+
+        function renderPlannerView() {
+            updatePlannerDateDisplay();
+            if (currentPlannerTab === 'itinerary') renderPlannerItinerary();
+            if (currentPlannerTab === 'packing') renderPackingChecklist();
+            if (currentPlannerTab === 'notes') {
+                const plan = getDailyPlan(currentPlannerDate);
+                const nEl = document.getElementById('plannerNotesTextarea');
+                if (nEl) nEl.value = plan.notes || '';
+            }
+            renderHomePlannerSummary();
+        }
+
+        // ================= [플래너 타임라인 렌더링 & 제어] =================
+        function renderPlannerItinerary() {
+            const listEl = document.getElementById('itinerarySlotsList');
+            const countEl = document.getElementById('itineraryCourseCount');
+            const budgetEl = document.getElementById('itineraryTotalBudget');
+            if (!listEl) return;
+
+            const plan = getDailyPlan(currentPlannerDate);
+            const slots = plan.timetable || [];
+
+            slots.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+
+            if (countEl) countEl.innerText = `총 ${slots.length}개의 데이트 코스`;
+
+            let totalBudget = 0;
+            slots.forEach(s => {
+                if (s.cost) totalBudget += Number(s.cost) || 0;
+            });
+            if (budgetEl) budgetEl.innerText = `총 예상 비용: ${totalBudget.toLocaleString()}원`;
+
+            if (slots.length === 0) {
+                listEl.innerHTML = `
+                    <div style="text-align: center; padding: 45px 20px; background: white; border-radius: var(--radius-md); border: 1px dashed var(--border-light); color: var(--text-muted);">
+                        <i class="fa-solid fa-route" style="font-size: 2.6rem; color: var(--primary); opacity: 0.4; margin-bottom: 12px; display: block;"></i>
+                        <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">아직 등록된 일정 코스가 없습니다.</h4>
+                        <p style="font-size: 0.88rem; margin-bottom: 16px;">시간대별로 어디에 갈지, 무엇을 할지 등록해보세요!</p>
+                        <button class="btn-submit" style="width: auto; margin: 0 auto; padding: 10px 20px; font-size: 0.9rem;" onclick="openAddPlannerSlotModal()">
+                            <i class="fa-solid fa-plus"></i> 첫 코스 추가하기
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = slots.map((s, idx) => {
+                const searchQ = encodeURIComponent(s.place || s.title || '');
+                const mapSearchUrl = `https://map.naver.com/p/search/${searchQ}`;
+                const mapDirUrl = `https://map.naver.com/p/directions/-,,-,/${searchQ}`;
+                const costTxt = s.cost ? `${Number(s.cost).toLocaleString()}원` : '';
+
+                return `
+                    <div class="itinerary-slot-card ${s.done ? 'done' : ''}">
+                        <div class="itinerary-time-chip">
+                            <i class="fa-regular fa-clock"></i> ${s.time || '시간 미지정'}
+                        </div>
+                        <div class="itinerary-slot-content">
+                            <div class="itinerary-slot-title">${s.title || '새 일정'}</div>
+                            ${s.place ? `
+                                <div class="itinerary-slot-place">
+                                    <i class="fa-solid fa-location-dot"></i> ${s.place}
+                                </div>
+                            ` : ''}
+                            ${s.memo ? `<div class="itinerary-slot-memo">${s.memo}</div>` : ''}
+                            
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px;">
+                                ${s.place ? `
+                                    <a href="${mapSearchUrl}" target="_blank" rel="noopener noreferrer" class="itinerary-btn-naver" style="background: var(--secondary); box-shadow: 0 2px 6px rgba(127, 169, 198, 0.25);">
+                                        <i class="fa-solid fa-map-location-dot"></i> 지도 보기
+                                    </a>
+                                    <a href="${mapDirUrl}" target="_blank" rel="noopener noreferrer" class="itinerary-btn-naver-dir" style="color: var(--secondary); border-color: var(--secondary);">
+                                        <i class="fa-solid fa-route"></i> 길찾기
+                                    </a>
+                                ` : ''}
+                                ${costTxt ? `<span style="font-size: 0.84rem; font-weight: 800; color: var(--text-muted); margin-left: 4px;">예상 ${costTxt}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="itinerary-slot-actions">
+                            <button class="icon-btn" onclick="togglePlannerSlotDone(${idx})" title="${s.done ? '미완료로 변경' : '완료 체크'}" style="width: 36px; height: 36px; ${s.done ? 'background:var(--primary); color:white;' : ''}">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                            <button class="icon-btn" onclick="deletePlannerSlot(${idx})" title="삭제" style="width: 36px; height: 36px; color:#FC8181;">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAddPlannerSlotModal() {
+            document.getElementById('slotTitle').value = '';
+            document.getElementById('slotPlace').value = '';
+            document.getElementById('slotCost').value = '';
+            document.getElementById('slotMemo').value = '';
+            showModal('addPlannerSlotModal');
+        }
+
+        function previewNaverSearchFromSlot() {
+            const place = document.getElementById('slotPlace').value.trim() || document.getElementById('slotTitle').value.trim();
+            if (!place) return showToast("장소명을 먼저 입력해주세요.");
+            openNaverSearch(place);
+        }
+
+        function submitPlannerSlot() {
+            const time = document.getElementById('slotTime').value || '12:00';
+            const title = document.getElementById('slotTitle').value.trim();
+            const place = document.getElementById('slotPlace').value.trim();
+            const cost = document.getElementById('slotCost').value.trim();
+            const memo = document.getElementById('slotMemo').value.trim();
+
+            if (!title) return showToast("일정 활동명을 입력해주세요.");
+
+            const plan = getDailyPlan(currentPlannerDate);
+            if (!plan.timetable) plan.timetable = [];
+            plan.timetable.push({
+                time,
+                title,
+                place,
+                cost: cost ? Number(cost) : 0,
+                memo,
+                done: false
+            });
+
+            hideModal('addPlannerSlotModal');
+            savePlannerData(currentPlannerDate);
+            renderPlannerItinerary();
+            showToast("새로운 데이트 코스가 등록되었습니다! ✨");
+        }
+
+        function deletePlannerSlot(idx) {
+            showConfirm(() => {
+                const plan = getDailyPlan(currentPlannerDate);
+                if (plan.timetable && plan.timetable[idx]) {
+                    plan.timetable.splice(idx, 1);
+                    savePlannerData(currentPlannerDate);
+                    renderPlannerItinerary();
+                    showToast("일정 코스가 삭제되었습니다.");
+                }
+            });
+        }
+
+        function togglePlannerSlotDone(idx) {
+            const plan = getDailyPlan(currentPlannerDate);
+            if (plan.timetable && plan.timetable[idx]) {
+                plan.timetable[idx].done = !plan.timetable[idx].done;
+                savePlannerData(currentPlannerDate);
+                renderPlannerItinerary();
+                showToast(plan.timetable[idx].done ? "코스 완료! 수고했어요 💕" : "미완료로 변경되었습니다.");
+            }
+        }
+
+        // ================= [오늘 챙겨야 할 물품 메모 렌더링 & 제어] =================
+        function filterPackingAssignee(assignee, btnEl) {
+            currentPackingAssigneeFilter = assignee;
+            document.querySelectorAll('.assignee-filter-btn').forEach(b => b.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+            renderPackingChecklist();
+        }
+
+        function renderPackingChecklist() {
+            const container = document.getElementById('packingListContainer');
+            const pBar = document.getElementById('packingProgressBar');
+            const pTxt = document.getElementById('packingPercent');
+            const sTxt = document.getElementById('packingStatsText');
+            if (!container) return;
+
+            const plan = getDailyPlan(currentPlannerDate);
+            const items = plan.packing_items || [];
+
+            const doneCount = items.filter(it => it.done).length;
+            const totalCount = items.length;
+            const percent = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
+
+            if (pBar) pBar.style.width = `${percent}%`;
+            if (pTxt) pTxt.innerText = `${percent}%`;
+            if (sTxt) sTxt.innerText = `${doneCount}개 준비완료 / 총 ${totalCount}개`;
+
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 45px 20px; background: white; border-radius: var(--radius-md); border: 1px dashed var(--border-light); color: var(--text-muted);">
+                        <i class="fa-solid fa-suitcase-rolling" style="font-size: 2.6rem; color: var(--primary); opacity: 0.4; margin-bottom: 12px; display: block;"></i>
+                        <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">아직 등록된 챙길 물품이 없습니다.</h4>
+                        <p style="font-size: 0.88rem; margin-bottom: 16px;">상단의 '물품 추가' 버튼을 눌러 오늘 챙겨야 할 소지품을 등록해보세요!</p>
+                        <button class="btn-submit" style="width: auto; margin: 0 auto; padding: 10px 20px; font-size: 0.9rem;" onclick="openAddPackingItemModal()">
+                            <i class="fa-solid fa-plus"></i> 물품 추가하기
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            let filtered = items;
+            if (currentPackingAssigneeFilter !== '전체') {
+                filtered = items.filter(it => it.assignee === currentPackingAssigneeFilter);
+            }
+
+            const categories = [
+                { key: '필수소지품', title: '📱 필수 소지품' },
+                { key: '의류코디', title: '👗 의류 & 코디' },
+                { key: '뷰티위생', title: '💄 뷰티 & 위생' },
+                { key: '데이트소품', title: '📸 데이트 소품' },
+                { key: '서프라이즈', title: '🎁 서프라이즈 & 특별 준비물' },
+                { key: '기타', title: '✨ 기타 소지품' }
+            ];
+
+            let html = '';
+            categories.forEach(cat => {
+                const groupItems = filtered.map((it, originalIdx) => ({ it, originalIdx })).filter(x => (x.it.category || '기타') === cat.key);
+                if (groupItems.length === 0) return;
+
+                html += `
+                    <div class="packing-group-card">
+                        <div class="packing-group-title">
+                            <span>${cat.title}</span>
+                            <span style="font-size: 0.82rem; color: var(--primary); font-weight: 800;">${groupItems.filter(x => x.it.done).length}/${groupItems.length}</span>
+                        </div>
+                        <div class="packing-items-list">
+                            ${groupItems.map(({ it, originalIdx }) => {
+                                let tagClass = 'tag-together';
+                                let tagText = '💖 함께';
+                                if (it.assignee === '효니') { tagClass = 'tag-hyoni'; tagText = '👦 효니'; }
+                                if (it.assignee === '히니') { tagClass = 'tag-hini'; tagText = '👧 히니'; }
+
+                                return `
+                                    <div class="packing-item-row ${it.done ? 'done' : ''}">
+                                        <div class="packing-item-left" onclick="togglePackingItemDone(${originalIdx})">
+                                            <div class="packing-check-box">
+                                                ${it.done ? '<i class="fa-solid fa-check"></i>' : ''}
+                                            </div>
+                                            <span class="packing-item-text">${it.name}</span>
+                                            <span class="packing-assignee-tag ${tagClass}">${tagText}</span>
+                                            ${it.memo ? `<span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 6px;">(${it.memo})</span>` : ''}
+                                        </div>
+                                        <button class="bucket-del-btn" onclick="deletePackingItem(${originalIdx})" title="삭제">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (!html) {
+                html = `<div style="text-align: center; color: var(--text-muted); padding: 30px;">'${currentPackingAssigneeFilter}' 담당으로 등록된 챙길 물품이 없습니다.</div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function openAddPackingItemModal() {
+            document.getElementById('packingNameInput').value = '';
+            document.getElementById('packingMemoInput').value = '';
+            setPackingAssignee('함께');
+            showModal('addPackingItemModal');
+        }
+
+        function setPackingAssignee(val) {
+            document.getElementById('packingAssigneeInput').value = val;
+            const bTogether = document.getElementById('packAssigneeTogether');
+            const bHyoni = document.getElementById('packAssigneeHyoni');
+            const bHini = document.getElementById('packAssigneeHini');
+
+            if (bTogether) {
+                bTogether.style.background = val === '함께' ? 'var(--primary-light)' : '#F8FAFD';
+                bTogether.style.borderColor = val === '함께' ? 'var(--primary)' : 'var(--border-light)';
+                bTogether.style.color = val === '함께' ? 'var(--primary)' : 'inherit';
+            }
+            if (bHyoni) {
+                bHyoni.style.background = val === '효니' ? '#EBF8FF' : '#F8FAFD';
+                bHyoni.style.borderColor = val === '효니' ? '#3182CE' : 'var(--border-light)';
+                bHyoni.style.color = val === '효니' ? '#2B6CB0' : 'inherit';
+            }
+            if (bHini) {
+                bHini.style.background = val === '히니' ? '#FFF5F7' : '#F8FAFD';
+                bHini.style.borderColor = val === '히니' ? '#D53F8C' : 'var(--border-light)';
+                bHini.style.color = val === '히니' ? '#D53F8C' : 'inherit';
+            }
+        }
+
+        function submitPackingItem() {
+            const name = document.getElementById('packingNameInput').value.trim();
+            const category = document.getElementById('packingCategorySelect').value || '기타';
+            const assignee = document.getElementById('packingAssigneeInput').value || '함께';
+            const memo = document.getElementById('packingMemoInput').value.trim();
+
+            if (!name) return showToast("챙길 물품 이름을 입력해주세요.");
+
+            const plan = getDailyPlan(currentPlannerDate);
+            if (!plan.packing_items) plan.packing_items = [];
+            plan.packing_items.push({
+                name,
+                category,
+                assignee,
+                memo,
+                done: false
+            });
+
+            hideModal('addPackingItemModal');
+            savePlannerData(currentPlannerDate);
+            renderPackingChecklist();
+            showToast("챙길 물품이 등록되었습니다! 🎒");
+        }
+
+        function togglePackingItemDone(idx) {
+            const plan = getDailyPlan(currentPlannerDate);
+            if (plan.packing_items && plan.packing_items[idx]) {
+                plan.packing_items[idx].done = !plan.packing_items[idx].done;
+                savePlannerData(currentPlannerDate);
+                renderPackingChecklist();
+                if (plan.packing_items[idx].done) {
+                    showToast("준비물 챙김 완료! 꼼꼼해요 ✨");
+                }
+            }
+        }
+
+        function deletePackingItem(idx) {
+            showConfirm(() => {
+                const plan = getDailyPlan(currentPlannerDate);
+                if (plan.packing_items && plan.packing_items[idx]) {
+                    plan.packing_items.splice(idx, 1);
+                    savePlannerData(currentPlannerDate);
+                    renderPackingChecklist();
+                    showToast("물품이 삭제되었습니다.");
+                }
+            });
+        }
+
+        function savePlannerNotesSilently() {
+            const nEl = document.getElementById('plannerNotesTextarea');
+            if (!nEl || !currentPlannerDate) return;
+            const plan = getDailyPlan(currentPlannerDate);
+            plan.notes = nEl.value;
+            try {
+                localStorage.setItem(`planner_${currentPlannerDate}`, JSON.stringify(plan));
+            } catch(e) {}
+        }
+
+        function savePlannerNotes() {
+            savePlannerNotesSilently();
+            savePlannerData(currentPlannerDate);
+            showToast("오늘의 데이트 메모가 저장되었습니다 ✍️");
+        }
+
+        function renderHomePlannerSummary() {
+            const wrap = document.getElementById('homePlannerSummaryWrap');
+            if (!wrap) return;
+
+            const todayStr = getFormattedDate(new Date());
+            const plan = getDailyPlan(todayStr);
+            const slots = plan.timetable || [];
+            const packing = plan.packing_items || [];
+            const packDone = packing.filter(p => p.done).length;
+            const packPercent = packing.length === 0 ? 0 : Math.round((packDone / packing.length) * 100);
+
+            wrap.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #F8FAFD; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                    <div>
+                        <span style="font-size: 0.84rem; font-weight: 800; color: var(--primary);">오늘의 데이트 코스</span>
+                        <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-top: 2px;">
+                            ${slots.length > 0 ? `${slots.length}개 일정 계획됨` : '등록된 일정 없음'}
+                        </div>
+                    </div>
+                    <span style="font-size: 0.88rem; color: var(--text-muted); font-weight: 700;">
+                        ${slots.length > 0 && slots[0].title ? slots[0].title : ''}
+                    </span>
+                </div>
+                <div style="background: #F8FAFD; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.84rem; font-weight: 800;">
+                        <span style="color: var(--secondary);">🎒 오늘 챙길 물품 진행률</span>
+                        <span>${packDone}/${packing.length} (${packPercent}%)</span>
+                    </div>
+                    <div style="background: #E2E8F0; height: 8px; border-radius: var(--radius-full); overflow: hidden;">
+                        <div style="width: ${packPercent}%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: var(--radius-full);"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================================================
+        // [21. 데이트 장소 & 지도 위시리스트 비즈니스 로직]
+        // ==========================================================================
+        let placesData = [];
+        let currentPlaceCatFilter = '전체';
+        let currentPlaceStatusFilter = 'all';
+
+        async function loadPlacesData() {
+            try {
+                const res = await fetch('/api/places', { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        placesData = data;
+                    }
+                }
+            } catch(e) {}
+
+            if (!placesData || placesData.length === 0) {
+                try {
+                    const local = JSON.parse(localStorage.getItem('couple_places') || '[]');
+                    if (Array.isArray(local)) placesData = local;
+                } catch(e) {
+                    placesData = [];
+                }
+            }
+
+            renderPlacesList();
+            renderHomePlacesSummary();
+        }
+
+        function savePlacesLocal() {
+            try {
+                localStorage.setItem('couple_places', JSON.stringify(placesData));
+            } catch(e) {}
+        }
+
+        function setPlaceCategoryFilter(cat, btnEl) {
+            currentPlaceCatFilter = cat;
+            document.querySelectorAll('.places-filter-bar .place-cat-chip').forEach(b => {
+                if (!b.innerText.includes('가고') && !b.innerText.includes('다녀')) {
+                    b.classList.remove('active');
+                }
+            });
+            if (btnEl) btnEl.classList.add('active');
+            renderPlacesList();
+        }
+
+        function setPlaceStatusFilter(status, btnEl) {
+            currentPlaceStatusFilter = currentPlaceStatusFilter === status ? 'all' : status;
+            document.querySelectorAll('.places-filter-bar .place-cat-chip').forEach(b => {
+                if (b.innerText.includes('가고') || b.innerText.includes('다녀')) {
+                    b.classList.remove('active');
+                }
+            });
+            if (currentPlaceStatusFilter !== 'all' && btnEl) {
+                btnEl.classList.add('active');
+            }
+            renderPlacesList();
+        }
+
+        function searchNaverDirectly() {
+            const q = document.getElementById('naverSearchQuery').value.trim();
+            if (!q) return showToast("검색할 장소명을 입력해주세요.");
+            openNaverSearch(q);
+        }
+
+        function openNaverSearch(query) {
+            if (!query) return;
+            const url = `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
+            window.open(url, '_blank');
+        }
+
+        function openNaverDirections(dest) {
+            if (!dest) return;
+            const url = `https://map.naver.com/p/directions/-,,-,/${encodeURIComponent(dest)}`;
+            window.open(url, '_blank');
+        }
+
+        function renderPlacesList() {
+            const grid = document.getElementById('placesCardsGrid');
+            if (!grid) return;
+
+            let filtered = placesData;
+            if (currentPlaceCatFilter !== '전체') {
+                filtered = filtered.filter(p => (p.category || '기타').includes(currentPlaceCatFilter));
+            }
+            if (currentPlaceStatusFilter === 'wish') {
+                filtered = filtered.filter(p => !p.visited);
+            } else if (currentPlaceStatusFilter === 'visited') {
+                filtered = filtered.filter(p => p.visited);
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px 20px; background: white; border-radius: var(--radius-md); border: 1px dashed var(--border-light); color: var(--text-muted);">
+                        <i class="fa-solid fa-map-location-dot" style="font-size: 2.8rem; color: var(--secondary); opacity: 0.4; margin-bottom: 12px; display: block;"></i>
+                        <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">등록된 데이트 장소가 없습니다.</h4>
+                        <p style="font-size: 0.88rem; margin-bottom: 16px;">가고 싶은 장소나 하고 싶은 일들을 직접 등록해보세요!</p>
+                        <button class="btn-submit" style="width: auto; margin: 0 auto; padding: 10px 22px; font-size: 0.92rem;" onclick="openAddPlaceModal()">
+                            <i class="fa-solid fa-plus"></i> 새 장소 추가하기
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => {
+                const searchQ = encodeURIComponent(p.name || '');
+                const mapSearchUrl = p.naver_map_url || `https://map.naver.com/p/search/${searchQ}`;
+                const mapDirUrl = `https://map.naver.com/p/directions/-,,-,/${encodeURIComponent(p.address || p.name)}`;
+
+                return `
+                    <div class="place-card">
+                        <div>
+                            <div class="place-card-top">
+                                <span class="place-cat-badge">${p.category || '맛집'}</span>
+                                <span class="place-visited-chip ${p.visited ? 'visited' : 'wish'}" onclick="togglePlaceVisited(${p.id})">
+                                    ${p.visited ? '💖 다녀왔어요!' : '🤍 가고 싶어요'}
+                                </span>
+                            </div>
+                            <h3 class="place-name">${p.name}</h3>
+                            ${p.address ? `<div class="place-address"><i class="fa-solid fa-location-dot" style="color: var(--secondary);"></i> ${p.address}</div>` : ''}
+                            ${p.notes ? `<div class="place-notes-box">${p.notes}</div>` : ''}
+                        </div>
+                        <div>
+                            <div class="place-naver-actions">
+                                <a href="${mapSearchUrl}" target="_blank" rel="noopener noreferrer" class="btn-naver-link" style="background: var(--secondary);">
+                                    <i class="fa-solid fa-map-location-dot"></i> 지도 보기
+                                </a>
+                                <a href="${mapDirUrl}" target="_blank" rel="noopener noreferrer" class="btn-naver-dir-link" style="color: var(--secondary); border-color: var(--secondary);">
+                                    <i class="fa-solid fa-route"></i> 길찾기
+                                </a>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button type="button" class="btn-add-to-plan" onclick="addPlaceToItinerary(${p.id})">
+                                    <i class="fa-solid fa-calendar-plus"></i> 오늘 일정에 추가
+                                </button>
+                                <button type="button" class="icon-btn edit-mode-only-inline" onclick="deletePlace(${p.id})" title="삭제" style="width: 38px; height: 38px; color: #FC8181; flex-shrink: 0;">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAddPlaceModal() {
+            document.getElementById('placeNameInput').value = '';
+            document.getElementById('placeAddressInput').value = '';
+            document.getElementById('placeNaverUrlInput').value = '';
+            document.getElementById('placeNotesInput').value = '';
+            showModal('addPlaceModal');
+        }
+
+        function previewNaverSearchFromPlaceModal() {
+            const name = document.getElementById('placeNameInput').value.trim();
+            if (!name) return showToast("장소명을 먼저 입력해주세요.");
+            openNaverSearch(name);
+        }
+
+        async function submitPlace() {
+            const name = document.getElementById('placeNameInput').value.trim();
+            const category = document.getElementById('placeCategorySelect').value || '맛집';
+            const address = document.getElementById('placeAddressInput').value.trim();
+            let naverUrl = document.getElementById('placeNaverUrlInput').value.trim();
+            const notes = document.getElementById('placeNotesInput').value.trim();
+
+            if (!name) return showToast("장소 또는 하고 싶은 일의 이름을 입력해주세요.");
+
+            if (!naverUrl) {
+                naverUrl = `https://map.naver.com/p/search/${encodeURIComponent(name)}`;
+            }
+
+            const newPlace = {
+                id: Date.now(),
+                name,
+                category,
+                address,
+                naver_map_url: naverUrl,
+                notes,
+                author: user ? user.fullName : '우리',
+                visited: 0,
+                rating: 5,
+                created_at: new Date().toISOString()
+            };
+
+            placesData.unshift(newPlace);
+            savePlacesLocal();
+            hideModal('addPlaceModal');
+            renderPlacesList();
+            renderHomePlacesSummary();
+
+            try {
+                await fetch('/api/places', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newPlace)
+                });
+            } catch(e) {}
+
+            showToast("새로운 데이트 스팟이 저장되었습니다! 🗺️");
+        }
+
+        async function togglePlaceVisited(id) {
+            const target = placesData.find(p => p.id === id);
+            if (!target) return;
+            target.visited = target.visited ? 0 : 1;
+            savePlacesLocal();
+            renderPlacesList();
+
+            try {
+                await fetch('/api/places', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, toggleVisited: true, visited: target.visited })
+                });
+            } catch(e) {}
+
+            showToast(target.visited ? "다녀온 장소로 체크되었습니다! 💖" : "가고 싶은 위시리스트로 변경되었습니다 🤍");
+        }
+
+        function deletePlace(id) {
+            showConfirm(async () => {
+                placesData = placesData.filter(p => p.id !== id);
+                savePlacesLocal();
+                renderPlacesList();
+                renderHomePlacesSummary();
+
+                try {
+                    await fetch('/api/places', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                } catch(e) {}
+                showToast("장소가 삭제되었습니다.");
+            });
+        }
+
+        function addPlaceToItinerary(placeId) {
+            const p = placesData.find(x => x.id === placeId);
+            if (!p) return;
+
+            const plan = getDailyPlan(currentPlannerDate);
+            if (!plan.timetable) plan.timetable = [];
+
+            let timeStr = '14:00';
+            if (plan.timetable.length > 0) {
+                const last = plan.timetable[plan.timetable.length - 1];
+                if (last && last.time) {
+                    const [h, m] = last.time.split(':');
+                    const nextH = Math.min(23, Number(h) + 2);
+                    timeStr = `${String(nextH).padStart(2, '0')}:${m}`;
+                }
+            }
+
+            plan.timetable.push({
+                time: timeStr,
+                title: `${p.name} 방문`,
+                place: p.name,
+                cost: 0,
+                memo: p.notes || '',
+                done: false
+            });
+
+            savePlannerData(currentPlannerDate);
+            showToast(`'${p.name}' 장소가 오늘 데이트 일정에 추가되었습니다! 📅`);
+            showInteractiveToast({
+                icon: 'fa-solid fa-route',
+                title: '일정에 코스가 추가되었습니다 ✨',
+                desc: `${formatDateKoreanWithDay(currentPlannerDate)} 타임라인을 확인해보세요.`,
+                actionText: '플래너 보기 ❯',
+                onClick: () => switchView('planner', document.querySelectorAll('.nav-item')[2])
+            });
+        }
+
+        function renderHomePlacesSummary() {
+            const wrap = document.getElementById('homePlacesSummaryWrap');
+            if (!wrap) return;
+
+            const wishes = placesData.filter(p => !p.visited).slice(0, 2);
+            if (wishes.length === 0) {
+                wrap.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 12px 0;">가고 싶은 장소를 등록해보세요! 🗺️</div>`;
+                return;
+            }
+
+            wrap.innerHTML = wishes.map(p => `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #F8FAFD; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                    <div>
+                        <span style="font-size: 0.76rem; font-weight: 800; color: var(--primary);">${p.category || '핫플'}</span>
+                        <div style="font-size: 0.98rem; font-weight: 800; color: var(--text-main);">${p.name}</div>
+                    </div>
+                    <a href="${p.naver_map_url || `https://map.naver.com/p/search/${encodeURIComponent(p.name)}`}" target="_blank" rel="noopener noreferrer" style="background: var(--secondary); color: white; padding: 5px 10px; border-radius: var(--radius-full); font-size: 0.76rem; font-weight: 800; text-decoration: none;">
+                        지도보기
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        // ==========================================================================
+        // [22. 커플 문답 및 추가 질문 비즈니스 로직]
+        // ==========================================================================
+        let questionsData = [];
+        let currentQaTab = '전체';
+        let currentCoupleTab = 'qa';
+
+        async function loadQuestionsData() {
+            try {
+                const res = await fetch('/api/questions', { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        questionsData = data;
+                    }
+                }
+            } catch(e) {}
+
+            if (!questionsData || questionsData.length === 0) {
+                try {
+                    const local = JSON.parse(localStorage.getItem('couple_questions') || '[]');
+                    if (Array.isArray(local)) questionsData = local;
+                } catch(e) {
+                    questionsData = [];
+                }
+            }
+
+            renderQuestionsList();
+            renderHomeQaSummary();
+        }
+
+        function saveQuestionsLocal() {
+            try {
+                localStorage.setItem('couple_questions', JSON.stringify(questionsData));
+            } catch(e) {}
+        }
+
+        function switchCoupleTab(tabName, btnEl) {
+            currentCoupleTab = tabName;
+            document.querySelectorAll('#view-couple .planner-tab-btn').forEach(b => b.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+
+            const sQa = document.getElementById('coupleSectionQa');
+            const sCoupons = document.getElementById('coupleSectionCoupons');
+
+            if (sQa) sQa.style.display = tabName === 'qa' ? 'block' : 'none';
+            if (sCoupons) sCoupons.style.display = tabName === 'coupons' ? 'block' : 'none';
+
+            if (tabName === 'qa') renderQuestionsList();
+            if (tabName === 'coupons') renderCouponsList();
+        }
+
+        function renderCoupleView() {
+            if (currentCoupleTab === 'qa') renderQuestionsList();
+            if (currentCoupleTab === 'coupons') renderCouponsList();
+        }
+
+        function filterQuestionsTab(type, btnEl) {
+            currentQaTab = type;
+            document.querySelectorAll('.qa-filter-btn').forEach(b => b.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+            renderQuestionsList();
+        }
+
+        function renderQuestionsList() {
+            const listEl = document.getElementById('questionsCardsList');
+            if (!listEl) return;
+
+            const isBoyfriend = user && (user.fullName === '효니' || user.fullName.includes('효'));
+            const myKey = isBoyfriend ? 'answer_hyoni' : 'answer_hini';
+
+            let filtered = questionsData;
+            if (currentQaTab === '미답변') {
+                filtered = filtered.filter(q => !q[myKey]);
+            } else if (currentQaTab === '완료') {
+                filtered = filtered.filter(q => q.answer_hyoni && q.answer_hini);
+            }
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `
+                    <div style="text-align: center; padding: 45px 20px; background: white; border-radius: var(--radius-md); border: 1px dashed var(--border-light); color: var(--text-muted);">
+                        <i class="fa-regular fa-comments" style="font-size: 2.6rem; color: var(--primary); opacity: 0.4; margin-bottom: 12px; display: block;"></i>
+                        <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">아직 등록된 질문이 없습니다.</h4>
+                        <p style="font-size: 0.88rem; margin-bottom: 16px;">상단의 '새로운 질문 추가하기' 버튼을 눌러 둘만의 질문을 직접 등록해보세요!</p>
+                        <button class="btn-submit" style="width: auto; margin: 0 auto; padding: 10px 22px; font-size: 0.92rem;" onclick="openAddQuestionModal()">
+                            <i class="fa-solid fa-plus-circle"></i> 질문 추가하기
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = filtered.map(q => {
+                const hyoniTime = formatPostDetailTime('', q.answered_at_hyoni);
+                const hiniTime = formatPostDetailTime('', q.answered_at_hini);
+
+                return `
+                    <div class="qa-card">
+                        <div class="qa-card-meta">
+                            <span class="qa-cat-chip">${q.category || '일상'}</span>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">등록: ${q.created_by || '우리'}</span>
+                                <button class="btn-close edit-mode-only-inline" onclick="deleteQuestion(${q.id})" title="질문 삭제" style="color: #FC8181; font-size: 1.1rem; width: 28px; height: 28px;">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="qa-title">Q. ${q.question}</h3>
+
+                        <div class="qa-answers-grid">
+                            <!-- 효니 답변 -->
+                            <div class="qa-answer-box hyoni">
+                                <div>
+                                    <div class="qa-ans-header">
+                                        <span class="qa-ans-name hyoni"><i class="fa-solid fa-mars"></i> 효니</span>
+                                        ${hyoniTime ? `<span class="qa-ans-time">${hyoniTime}</span>` : ''}
+                                    </div>
+                                    ${q.answer_hyoni ? `
+                                        <div class="qa-ans-content">${q.answer_hyoni}</div>
+                                    ` : `
+                                        <div class="qa-ans-empty">아직 답변을 기다리고 있어요... 💭</div>
+                                    `}
+                                </div>
+                                ${isBoyfriend ? `
+                                    <button class="btn-submit" style="padding: 8px 14px; font-size: 0.85rem; background: #3182CE; margin-top: 10px;" onclick="openAnswerQuestionModal(${q.id})">
+                                        <i class="fa-solid fa-pen"></i> ${q.answer_hyoni ? '답변 수정하기' : '내 답변 남기기'}
+                                    </button>
+                                ` : ''}
+                            </div>
+
+                            <!-- 히니 답변 -->
+                            <div class="qa-answer-box hini">
+                                <div>
+                                    <div class="qa-ans-header">
+                                        <span class="qa-ans-name hini"><i class="fa-solid fa-venus"></i> 히니</span>
+                                        ${hiniTime ? `<span class="qa-ans-time">${hiniTime}</span>` : ''}
+                                    </div>
+                                    ${q.answer_hini ? `
+                                        <div class="qa-ans-content">${q.answer_hini}</div>
+                                    ` : `
+                                        <div class="qa-ans-empty">아직 답변을 기다리고 있어요... 💭</div>
+                                    `}
+                                </div>
+                                ${!isBoyfriend ? `
+                                    <button class="btn-submit" style="padding: 8px 14px; font-size: 0.85rem; background: #D53F8C; margin-top: 10px;" onclick="openAnswerQuestionModal(${q.id})">
+                                        <i class="fa-solid fa-pen"></i> ${q.answer_hini ? '답변 수정하기' : '내 답변 남기기'}
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAddQuestionModal() {
+            document.getElementById('newQuestionTextInput').value = '';
+            showModal('addQuestionModal');
+        }
+
+        async function submitAddQuestion() {
+            const question = document.getElementById('newQuestionTextInput').value.trim();
+            const category = document.getElementById('newQuestionCategory').value || '일상';
+
+            if (!question) return showToast("질문 내용을 입력해주세요.");
+
+            const newQ = {
+                id: Date.now(),
+                question,
+                category,
+                created_by: user ? user.fullName : '우리',
+                answer_hyoni: '',
+                answer_hini: '',
+                answered_at_hyoni: '',
+                answered_at_hini: '',
+                created_at: new Date().toISOString()
+            };
+
+            questionsData.unshift(newQ);
+            saveQuestionsLocal();
+            hideModal('addQuestionModal');
+            renderQuestionsList();
+            renderHomeQaSummary();
+
+            try {
+                await fetch('/api/questions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newQ)
+                });
+            } catch(e) {}
+
+            showToast("새로운 커플 질문이 등록되었습니다! 💖");
+        }
+
+        function openAnswerQuestionModal(qId) {
+            const q = questionsData.find(item => item.id === qId);
+            if (!q) return;
+
+            document.getElementById('answerQuestionId').value = q.id;
+            document.getElementById('answerQuestionCatBadge').innerText = q.category || '일상';
+            document.getElementById('answerQuestionTitleText').innerText = `Q. ${q.question}`;
+
+            const isBoyfriend = user && (user.fullName === '효니' || user.fullName.includes('효'));
+            document.getElementById('answerAuthorLabel').innerText = isBoyfriend ? '효니의 답변' : '히니의 답변';
+
+            const currentAns = isBoyfriend ? (q.answer_hyoni || '') : (q.answer_hini || '');
+            document.getElementById('answerContentTextarea').value = currentAns;
+
+            showModal('answerQuestionModal');
+        }
+
+        async function submitAnswerQuestion() {
+            const qId = parseInt(document.getElementById('answerQuestionId').value, 10);
+            const answer = document.getElementById('answerContentTextarea').value.trim();
+            if (!answer) return showToast("답변 내용을 입력해주세요.");
+
+            const q = questionsData.find(item => item.id === qId);
+            if (!q) return;
+
+            const isBoyfriend = user && (user.fullName === '효니' || user.fullName.includes('효'));
+            const nowIso = new Date().toISOString();
+
+            if (isBoyfriend) {
+                q.answer_hyoni = answer;
+                q.answered_at_hyoni = nowIso;
+            } else {
+                q.answer_hini = answer;
+                q.answered_at_hini = nowIso;
+            }
+
+            saveQuestionsLocal();
+            hideModal('answerQuestionModal');
+            renderQuestionsList();
+            renderHomeQaSummary();
+
+            try {
+                await fetch('/api/questions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'answer',
+                        id: qId,
+                        author: isBoyfriend ? '효니' : '히니',
+                        answer
+                    })
+                });
+            } catch(e) {}
+
+            showToast("소중한 답변이 등록되었습니다! 💕");
+        }
+
+        function deleteQuestion(qId) {
+            showConfirm(async () => {
+                questionsData = questionsData.filter(q => q.id !== qId);
+                saveQuestionsLocal();
+                renderQuestionsList();
+                renderHomeQaSummary();
+
+                try {
+                    await fetch('/api/questions', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: qId })
+                    });
+                } catch(e) {}
+                showToast("질문이 삭제되었습니다.");
+            });
+        }
+
+        function renderHomeQaSummary() {
+            const box = document.getElementById('homeQaSummaryBox');
+            if (!box) return;
+
+            const isBoyfriend = user && (user.fullName === '효니' || user.fullName.includes('효'));
+            const myKey = isBoyfriend ? 'answer_hyoni' : 'answer_hini';
+            const unanswered = questionsData.find(q => !q[myKey]) || questionsData[0];
+
+            if (!unanswered) {
+                box.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span class="qa-cat-chip" style="font-size:0.75rem;">커플 Q&A</span>
+                    </div>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">등록된 질문이 없습니다. 둘만의 질문을 등록해보세요!</p>
+                    <button class="btn-submit" style="padding:9px 16px; font-size:0.88rem; width:100%;" onclick="switchView('couple', document.querySelectorAll('.nav-item')[4]); openAddQuestionModal();">
+                        <i class="fa-solid fa-plus-circle"></i> 새 질문 등록하기
+                    </button>
+                `;
+                return;
+            }
+
+            box.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span class="qa-cat-chip" style="font-size:0.75rem;">${unanswered.category || '오늘의 질문'}</span>
+                    <span style="font-size:0.8rem; color:var(--text-muted); font-weight:700;">커플 Q&A</span>
+                </div>
+                <h4 style="font-size:1.05rem; font-weight:800; color:var(--text-main); margin-bottom:12px; line-height:1.45;">Q. ${unanswered.question}</h4>
+                <button class="btn-submit" style="padding:9px 16px; font-size:0.88rem; width:100%;" onclick="switchView('couple', document.querySelectorAll('.nav-item')[4]); openAnswerQuestionModal(${unanswered.id});">
+                    <i class="fa-solid fa-pen-nib"></i> ${unanswered[myKey] ? '내 답변 확인/수정' : '지금 답변 남기러 가기 💕'}
+                </button>
+            `;
+        }
+
+        // ==========================================================================
+        // [23. 사랑의 커플 쿠폰북 비즈니스 로직]
+        // ==========================================================================
+        let couponsData = [];
+
+        async function loadCouponsData() {
+            try {
+                const res = await fetch('/api/coupons', { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        couponsData = data;
+                    }
+                }
+            } catch(e) {}
+
+            if (!couponsData || couponsData.length === 0) {
+                try {
+                    const local = JSON.parse(localStorage.getItem('couple_coupons') || '[]');
+                    if (Array.isArray(local)) couponsData = local;
+                } catch(e) {
+                    couponsData = [];
+                }
+            }
+
+            renderCouponsList();
+            renderHomeCouponSummary();
+        }
+
+        function saveCouponsLocal() {
+            try {
+                localStorage.setItem('couple_coupons', JSON.stringify(couponsData));
+            } catch(e) {}
+        }
+
+        function renderCouponsList() {
+            const grid = document.getElementById('couponsCardsGrid');
+            if (!grid) return;
+
+            if (couponsData.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px 0;">아직 발행된 쿠폰이 없습니다. 연인에게 사랑의 쿠폰을 선물해보세요! 🎟️</div>`;
+                return;
+            }
+
+            grid.innerHTML = couponsData.map(c => {
+                const isUsed = c.status === 'used';
+                const usedTime = formatPostDetailTime('', c.used_at);
+
+                return `
+                    <div class="coupon-card ${isUsed ? 'used' : ''}">
+                        ${isUsed ? `<div class="coupon-stamp">USED · 사용완료</div>` : ''}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <span style="font-size: 0.78rem; font-weight: 800; background: var(--primary-light); color: var(--primary-dark); padding: 3px 8px; border-radius: var(--radius-full);">
+                                    ${c.issuer} ➔ ${c.receiver}
+                                </span>
+                                <button class="btn-close edit-mode-only-inline" onclick="deleteCoupon(${c.id})" title="쿠폰 삭제" style="color: #FC8181; font-size: 1.05rem; width: 26px; height: 26px;">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                            <h3 class="coupon-title">${c.title}</h3>
+                            <p class="coupon-desc">${c.description}</p>
+                        </div>
+                        <div class="coupon-footer">
+                            <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">
+                                ${isUsed ? `사용일: ${usedTime}` : '유효기간: 평생 💖'}
+                            </span>
+                            ${!isUsed ? `
+                                <button class="btn-submit" style="width: auto; padding: 7px 16px; font-size: 0.84rem; background: var(--primary);" onclick="useCoupon(${c.id})">
+                                    <i class="fa-solid fa-stamp"></i> 쿠폰 사용하기
+                                </button>
+                            ` : `
+                                <span style="font-size: 0.85rem; font-weight: 800; color: #E53E3E;">사용 완료 ✨</span>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAddCouponModal() {
+            document.getElementById('couponTitleInput').value = '';
+            document.getElementById('couponDescInput').value = '';
+            showModal('addCouponModal');
+        }
+
+        async function submitAddCoupon() {
+            const title = document.getElementById('couponTitleInput').value.trim();
+            const desc = document.getElementById('couponDescInput').value.trim();
+            const receiver = document.getElementById('couponReceiverSelect').value || '히니';
+
+            if (!title) return showToast("쿠폰 이름을 입력해주세요.");
+
+            const issuer = user && user.fullName ? user.fullName : (receiver === '히니' ? '효니' : '히니');
+            const newC = {
+                id: Date.now(),
+                title,
+                description: desc,
+                issuer,
+                receiver,
+                status: 'available',
+                used_at: '',
+                created_at: new Date().toISOString()
+            };
+
+            couponsData.unshift(newC);
+            saveCouponsLocal();
+            hideModal('addCouponModal');
+            renderCouponsList();
+            renderHomeCouponSummary();
+
+            try {
+                await fetch('/api/coupons', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newC)
+                });
+            } catch(e) {}
+
+            showToast("사랑의 쿠폰이 성공적으로 발행되었습니다! 🎟️");
+        }
+
+        async function useCoupon(cId) {
+            showConfirm(async () => {
+                const c = couponsData.find(item => item.id === cId);
+                if (!c) return;
+
+                c.status = 'used';
+                c.used_at = new Date().toISOString();
+                saveCouponsLocal();
+                renderCouponsList();
+                renderHomeCouponSummary();
+
+                try {
+                    await fetch('/api/coupons', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'use', id: cId })
+                    });
+                } catch(e) {}
+
+                showToast("쿠폰이 사용되었습니다! 행복한 시간 보내세요 💖");
+                spawnHeartParticles();
+            });
+        }
+
+        function deleteCoupon(cId) {
+            showConfirm(async () => {
+                couponsData = couponsData.filter(c => c.id !== cId);
+                saveCouponsLocal();
+                renderCouponsList();
+                renderHomeCouponSummary();
+
+                try {
+                    await fetch('/api/coupons', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: cId })
+                    });
+                } catch(e) {}
+                showToast("쿠폰이 삭제되었습니다.");
+            });
+        }
+
+        function renderHomeCouponSummary() {
+            const box = document.getElementById('homeCouponSummaryBox');
+            if (!box) return;
+
+            const availables = couponsData.filter(c => c.status === 'available');
+            if (availables.length === 0) {
+                box.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span style="font-size:0.75rem; font-weight:800; background:rgba(255,117,130,0.15); color:var(--primary); padding:2px 8px; border-radius:var(--radius-full);">사랑의 쿠폰북</span>
+                    </div>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">사용 가능한 쿠폰이 없습니다. 쿠폰을 선물해보세요!</p>
+                    <button class="btn-submit" style="padding:9px 16px; font-size:0.88rem; width:100%; background:var(--secondary);" onclick="switchView('couple', document.querySelectorAll('.nav-item')[4]); switchCoupleTab('coupons');">
+                        <i class="fa-solid fa-gift"></i> 쿠폰함 보러가기
+                    </button>
+                `;
+                return;
+            }
+
+            const topC = availables[0];
+            box.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-size:0.75rem; font-weight:800; background:rgba(255,117,130,0.15); color:var(--primary); padding:2px 8px; border-radius:var(--radius-full);">${topC.issuer} ➔ ${topC.receiver}</span>
+                    <span style="font-size:0.8rem; color:var(--text-muted); font-weight:700;">보유 쿠폰 ${availables.length}개</span>
+                </div>
+                <h4 style="font-size:1.05rem; font-weight:800; color:var(--text-main); margin-bottom:6px;">🎟️ ${topC.title}</h4>
+                <p style="font-size:0.84rem; color:var(--text-sub); margin-bottom:12px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${topC.description}</p>
+                <button class="btn-submit" style="padding:9px 16px; font-size:0.88rem; width:100%; background:var(--secondary);" onclick="switchView('couple', document.querySelectorAll('.nav-item')[4]); switchCoupleTab('coupons');">
+                    <i class="fa-solid fa-gift"></i> 쿠폰함 보러가기
+                </button>
+            `;
+        }
+
     </script>
 </body>
 </html>
