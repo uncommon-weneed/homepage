@@ -3910,6 +3910,205 @@
             color: var(--text-muted);
         }
     
+
+        /* ==========================================================================
+           [25. 배너 네모 비율 & 일시정지 컨트롤 및 스토리 다중 보기 모드 스타일]
+           ========================================================================== */
+        .banner-wrap.banner-square {
+            max-width: 520px;
+            height: 520px !important;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto 30px auto;
+        }
+        @media (max-width: 600px) {
+            .banner-wrap.banner-square {
+                max-width: 100%;
+                height: min(90vw, 440px) !important;
+                aspect-ratio: 1 / 1;
+            }
+        }
+        .banner-top-ctrls {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 5px 10px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .banner-ctrl-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .banner-ctrl-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+        .banner-counter-badge {
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 0 4px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 플로팅 하트 위젯: 순수 이모티콘 원형 뱃지 스타일 */
+        .floating-heart-badge {
+            width: 48px !important;
+            height: 48px !important;
+            border-radius: 50% !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 8px 24px rgba(255, 117, 130, 0.25) !important;
+        }
+        .floating-heart-badge:hover {
+            transform: scale(1.12) !important;
+        }
+
+        /* 스토리 상단 보기 모드 전환기 */
+        .board-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .board-view-mode-bar {
+            display: flex;
+            gap: 6px;
+            background: white;
+            padding: 4px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid var(--border-light);
+            box-shadow: var(--shadow-xs);
+        }
+        .btn-view-mode {
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            border: none;
+            background: transparent;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--text-sub);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn-view-mode:hover {
+            color: var(--primary);
+        }
+        .btn-view-mode.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px var(--primary-glow);
+        }
+
+        /* 갤러리 모드 2: 큰 피드 뷰 (인스타그램 타임라인 피드 스타일) */
+        .gallery-feed-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .gallery-feed-card {
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .gallery-feed-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: rgba(255, 117, 130, 0.35);
+            transform: translateY(-2px);
+        }
+        .gallery-feed-header {
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .gallery-feed-img-wrap {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            background: #0F172A;
+            position: relative;
+            overflow: hidden;
+        }
+        .gallery-feed-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-feed-body {
+            padding: 16px 18px;
+        }
+
+        /* 자유일상 모드 2: 컴팩트 리스트 뷰 (단정하고 깔끔한 목록형) */
+        .posts-compact-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .post-compact-item {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-xs);
+        }
+        .post-compact-item:hover {
+            background: var(--primary-light);
+            border-color: rgba(255, 117, 130, 0.35);
+            transform: translateX(4px);
+        }
+        .post-compact-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        .post-compact-title {
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
 </style>
 </head>
 <body>
@@ -3929,11 +4128,9 @@
         </div>
     </div>
 
-    <!-- 브라우저 옆 감성 플로팅 하트 위젯 -->
-    <aside id="floatingHeartBadge" class="floating-heart-badge" onclick="handleFloatingHeartClick(event)" title="클릭하여 하트 날리기 💖">
+    <!-- 브라우저 옆 감성 플로팅 하트 위젯 (이모티콘 전용) -->
+    <aside id="floatingHeartBadge" class="floating-heart-badge" onclick="handleFloatingHeartClick(event)" title="클릭하여 사랑 날리기 💖">
         <div class="floating-heart-icon-wrap" id="floatingHeartIcon">💖</div>
-        <div class="floating-heart-text" id="floatingHeartText">효니 ♥ 히니</div>
-        <button type="button" class="floating-heart-edit-trigger" onclick="event.stopPropagation(); showModal('heartSettingsModal')" title="하트 문구/아이콘 수정"><i class="fa-solid fa-pen"></i></button>
     </aside>
 
     <!-- 유니클로 / 자라 스타일 인터랙티브 토스트 알림 -->
@@ -3944,51 +4141,6 @@
             <span class="zara-toast-desc" id="zaraToastDesc">알림 내용을 확인하세요.</span>
         </div>
         <span class="zara-toast-action-btn" id="zaraToastActionBtn">확인 ❯</span>
-    </div>
-
-    <!-- 하트 설정 수정 모달 -->
-    <div class="modal-overlay" id="heartSettingsModal">
-        <div class="modal-content" style="max-width: 440px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fa-solid fa-heart" style="color: var(--primary);"></i> 브라우저 하트 위젯 설정</h3>
-                <button class="btn-close" onclick="hideModal('heartSettingsModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">하트 이모지 선택</label>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
-                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💖')">💖</button>
-                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💕')">💕</button>
-                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('❤️')">❤️</button>
-                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💘')">💘</button>
-                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💓')">💓</button>
-                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('💝')">💝</button>
-                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('🌸')">🌸</button>
-                        <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmoji('✨')">✨</button>
-                    </div>
-                </div>
-                <div class="form-group" style="margin-top: 14px;">
-                    <label class="form-label">표시할 문구</label>
-                    <input type="text" id="settingHeartText" class="form-input" placeholder="효니 ♥ 히니" value="효니 ♥ 히니">
-                </div>
-                <div style="background: #F9FAFD; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); margin-top: 10px;">
-                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 12px;">
-                        <i class="fa-solid fa-hand-pointer" style="color: var(--primary);"></i> <b>자유 이동 팁</b>: 하트를 손가락이나 마우스로 잡고 끌면 화면 어디든 자유롭게 이동할 수 있으며, 더블 클릭(더블 탭) 시 작은 미니 하트로 쏙 접어둘 수 있습니다.
-                    </p>
-                    <div style="display: flex; gap: 8px;">
-                        <button type="button" class="btn-submit" style="flex: 1; padding: 8px 12px; font-size: 0.82rem; background: var(--secondary);" onclick="toggleHeartMinimize()">
-                            <i class="fa-solid fa-compress"></i> 미니멀 접기/펼치기
-                        </button>
-                        <button type="button" class="btn-submit" style="flex: 1; padding: 8px 12px; font-size: 0.82rem; background: var(--text-muted);" onclick="resetHeartPosition()">
-                            <i class="fa-solid fa-rotate-left"></i> 위치 초기화
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-submit" onclick="saveHeartSettings()"><i class="fa-solid fa-check"></i> 하트 설정 저장</button>
-            </div>
-        </div>
     </div>
 
     <!-- 1. 토스트 알림 컴포넌트 -->
@@ -4113,21 +4265,36 @@
         <!-- [VIEW 1] 홈 화면 -->
         <main class="view-section active" id="view-home">
             <div class="home-container">
-                <!-- 감성 배너 영역 -->
-                <div class="banner-wrap">
+                <!-- 감성 배너 영역 (네모 비율 및 다중 사진 슬라이더 & 일시정지 지원) -->
+                <div class="banner-wrap" id="bannerWrap">
                     <div id="slideTrack">
-                        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1000&auto=format&fit=crop" class="banner-img active" id="bgImg1" alt="메인 배경 사진 1">
-                        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop" class="banner-img" id="bgImg2" alt="메인 배경 사진 2">
+                        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1000&auto=format&fit=crop" class="banner-img active" alt="메인 배경 사진 1">
                     </div>
                     <div class="banner-overlay"></div>
-                    <button class="edit-badge" onclick="triggerSiteImgUpload('banner_1')" style="left: 18px; right: auto;"><i class="fa-solid fa-camera"></i> 사진1 교체</button>
-                    <button class="edit-badge" onclick="triggerSiteImgUpload('banner_2')" style="left: 130px; right: auto;"><i class="fa-solid fa-camera"></i> 사진2 교체</button>
+
+                    <!-- 배너 상단 컨트롤러 (일시정지 / 이전 / 다음 / 카운터) -->
+                    <div class="banner-top-ctrls">
+                        <button type="button" class="banner-ctrl-btn" id="bannerPlayPauseBtn" onclick="toggleBannerAutoSlide()" title="배너 넘어가기 일시정지/재생">
+                            <i class="fa-solid fa-pause"></i>
+                        </button>
+                        <button type="button" class="banner-ctrl-btn" onclick="prevBannerSlide(event)" title="이전 사진">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <span class="banner-counter-badge" id="bannerCounterChip">1 / 1</span>
+                        <button type="button" class="banner-ctrl-btn" onclick="nextBannerSlide(event)" title="다음 사진">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- 편집 모드 배너 관리 버튼 -->
+                    <button class="edit-badge" onclick="openBannerUploadDialog()" style="left: 18px; right: auto;"><i class="fa-solid fa-camera"></i> 배너 사진 추가</button>
+                    <button class="edit-badge" onclick="showModal('settingsModal')" style="left: 150px; right: auto;"><i class="fa-solid fa-sliders"></i> 배너 설정</button>
                     
                     <div class="banner-content">
                         <div class="dday-badge"><i class="fa-solid fa-heart"></i> 우리 만난 지</div>
                         <div class="dday-num" id="ddayText">D+♥</div>
                         <div class="couple-name" id="coupleNamesText">정희원 & 정효재</div>
-                        <button class="edit-mode-only" onclick="showModal('settingsModal')" style="margin-top: 15px; background: rgba(255,255,255,0.3); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 7px 18px; border-radius: var(--radius-full); cursor: pointer; font-weight: 700;"><i class="fa-solid fa-pen"></i> 디데이/이름 변경</button>
+                        <button class="edit-mode-only" onclick="showModal('settingsModal')" style="margin-top: 15px; background: rgba(255,255,255,0.3); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 7px 18px; border-radius: var(--radius-full); cursor: pointer; font-weight: 700;"><i class="fa-solid fa-pen"></i> 디데이/배너/이름 설정</button>
                     </div>
                 </div>
 
@@ -4313,10 +4480,16 @@
         <!-- [VIEW 3] 스토리 / 갤러리 뷰 -->
         <main class="view-section" id="view-board">
             <div class="board-container">
-                <div class="board-tabs">
-                    <button class="board-tab active" onclick="setBoardCategory('전체', this)">전체보기</button>
-                    <button class="board-tab" onclick="setBoardCategory('갤러리', this)"><i class="fa-regular fa-image" style="margin-right:6px;"></i>사진 갤러리</button>
-                    <button class="board-tab" onclick="setBoardCategory('일상', this)"><i class="fa-solid fa-seedling" style="margin-right:6px;"></i>자유 일상</button>
+                <div class="board-header-row">
+                    <div class="board-tabs" style="margin-bottom: 0;">
+                        <button class="board-tab active" onclick="setBoardCategory('전체', this)">전체보기</button>
+                        <button class="board-tab" onclick="setBoardCategory('갤러리', this)"><i class="fa-regular fa-image" style="margin-right:6px;"></i>사진 갤러리</button>
+                        <button class="board-tab" onclick="setBoardCategory('일상', this)"><i class="fa-solid fa-seedling" style="margin-right:6px;"></i>자유 일상</button>
+                    </div>
+                    <!-- 갤러리 및 자유일상 각각 2가지 보기 모드 전환기 -->
+                    <div class="board-view-mode-bar" id="boardViewModeBar">
+                        <!-- JS renderBoardViewModeBar()로 렌더링 -->
+                    </div>
                 </div>
                 <div id="boardList"></div>
             </div>
@@ -4800,6 +4973,58 @@
                             <div class="color-dot" style="background: #52B788;" onclick="setTheme('green', this)" title="세이지 그린"></div>
                             <div class="color-dot" style="background: #9D7BE8;" onclick="setTheme('lavender', this)" title="미드나잇 라벤더"></div>
                             <div class="color-dot" style="background: #5B9EEA;" onclick="setTheme('blue', this)" title="스카이 오션"></div>
+                        </div>
+                    </div>
+
+                    <!-- 2.5 메인 배너 사진 관리 및 네모 프레임 설정 -->
+                    <div style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                        <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 8px; color: var(--text-main);">
+                            <i class="fa-solid fa-images" style="color: var(--primary);"></i> 메인 배너 사진 및 네모 비율 설정
+                        </h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">사진 크기에 맞춘 네모(1:1 정사각형) 비율 또는 와이드 비율을 선택하고, 여러 장의 배너 사진을 등록해보세요.</p>
+                        
+                        <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+                            <button type="button" class="btn-auth" id="btnBannerRatioRect" style="flex: 1; padding: 10px; font-size: 0.88rem; background: var(--primary-light); color: var(--primary); border: 1.5px solid var(--primary); box-shadow: none;" onclick="setBannerRatio('rect')">
+                                <i class="fa-solid fa-rectangle-ad"></i> 와이드 직사각형
+                            </button>
+                            <button type="button" class="btn-auth" id="btnBannerRatioSquare" style="flex: 1; padding: 10px; font-size: 0.88rem; background: #F8FAFD; color: var(--text-main); border: 1.5px solid var(--border-light); box-shadow: none;" onclick="setBannerRatio('square')">
+                                <i class="fa-regular fa-square"></i> 네모 (1:1 정사각형)
+                            </button>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 0.88rem; font-weight: 800; color: var(--text-main);">배너 사진 목록 (<span id="settingBannerCount">0</span>장)</span>
+                            <button type="button" class="btn-submit" style="width: auto; padding: 6px 14px; font-size: 0.82rem;" onclick="openBannerUploadDialog()">
+                                <i class="fa-solid fa-plus"></i> 새 배너 추가
+                            </button>
+                        </div>
+                        <div id="settingBannerThumbsList" style="display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 10px;">
+                            <!-- JS renderSettingBannerThumbs()로 렌더링 -->
+                        </div>
+                    </div>
+
+                    <!-- 2.6 브라우저 플로팅 하트 이모티콘 설정 (전체설정에서 통합 제어) -->
+                    <div style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                        <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 8px; color: var(--text-main);">
+                            <i class="fa-solid fa-heart" style="color: var(--primary);"></i> 브라우저 플로팅 하트 이모티콘
+                        </h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">화면에 떠다니는 하트 아이콘의 이모티콘을 선택하세요.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('💖')">💖</button>
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('💕')">💕</button>
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('❤️')">❤️</button>
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('💘')">💘</button>
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('💓')">💓</button>
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('💝')">💝</button>
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('🌸')">🌸</button>
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('✨')">✨</button>
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('🧸')">🧸</button>
+                            <button type="button" class="btn-auth" style="width: auto; padding: 8px 14px; font-size: 1.25rem; background: #F8FAFD; border: 1.5px solid var(--border-light); color: inherit; box-shadow: none;" onclick="selectHeartEmojiInSettings('💌')">💌</button>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <button type="button" class="btn-submit" style="flex: 1; padding: 8px 12px; font-size: 0.82rem; background: var(--text-muted);" onclick="resetHeartPosition()">
+                                <i class="fa-solid fa-rotate-left"></i> 하트 위치 초기화
+                            </button>
                         </div>
                     </div>
 
@@ -5446,16 +5671,175 @@
             showToast("테마 색상이 변경되었습니다. ✨");
         }
 
-        // ================= [배너 슬라이더] =================
+        // ================= [배너 슬라이더 & 다중 사진 & 일시정지 & 네모 비율 제어] =================
         let currentSlide = 0;
-        function nextSlide() {
-            const banners = document.querySelectorAll('.banner-img');
-            if (banners.length <= 1) return;
-            currentSlide = (currentSlide + 1) % banners.length;
-            banners.forEach((b, idx) => b.classList.toggle('active', idx === currentSlide));
+        let isBannerPaused = false;
+        let bannerIntervalTimer = null;
+        let bannerImagesList = [];
+        let currentBannerRatio = localStorage.getItem('couple_banner_ratio') || 'rect';
+
+        function initBannerSlider() {
+            // 1. 배너 이미지 목록 로드
+            try {
+                if (siteSettings.banner_images) {
+                    bannerImagesList = JSON.parse(siteSettings.banner_images);
+                }
+            } catch(e) {}
+
+            if (!Array.isArray(bannerImagesList) || bannerImagesList.length === 0) {
+                bannerImagesList = [
+                    siteSettings.banner_1 || 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1000&auto=format&fit=crop',
+                    siteSettings.banner_2 || 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop'
+                ].filter(Boolean);
+            }
+
+            // 2. 배너 비율 복원 (네모 or 직사각형)
+            applyBannerRatioClass(currentBannerRatio);
+
+            renderBannerImages();
+            startBannerSlider();
+            renderSettingBannerThumbs();
         }
+
+        function applyBannerRatioClass(ratio) {
+            const wrap = document.getElementById('bannerWrap');
+            if (!wrap) return;
+            wrap.classList.remove('banner-square', 'banner-rect');
+            if (ratio === 'square') {
+                wrap.classList.add('banner-square');
+            } else {
+                wrap.classList.add('banner-rect');
+            }
+
+            const btnRect = document.getElementById('btnBannerRatioRect');
+            const btnSquare = document.getElementById('btnBannerRatioSquare');
+            if (btnRect && btnSquare) {
+                if (ratio === 'square') {
+                    btnSquare.style.background = 'var(--primary-light)';
+                    btnSquare.style.color = 'var(--primary)';
+                    btnSquare.style.borderColor = 'var(--primary)';
+                    btnRect.style.background = '#F8FAFD';
+                    btnRect.style.color = 'var(--text-main)';
+                    btnRect.style.borderColor = 'var(--border-light)';
+                } else {
+                    btnRect.style.background = 'var(--primary-light)';
+                    btnRect.style.color = 'var(--primary)';
+                    btnRect.style.borderColor = 'var(--primary)';
+                    btnSquare.style.background = '#F8FAFD';
+                    btnSquare.style.color = 'var(--text-main)';
+                    btnSquare.style.borderColor = 'var(--border-light)';
+                }
+            }
+        }
+
+        function setBannerRatio(ratio) {
+            currentBannerRatio = ratio;
+            localStorage.setItem('couple_banner_ratio', ratio);
+            applyBannerRatioClass(ratio);
+            showToast(ratio === 'square' ? "배너가 정사각 네모(1:1) 비율로 설정되었습니다." : "배너가 와이드 직사각형 비율로 설정되었습니다.");
+        }
+
+        function renderBannerImages() {
+            const track = document.getElementById('slideTrack');
+            const counter = document.getElementById('bannerCounterChip');
+            if (!track) return;
+
+            if (currentSlide >= bannerImagesList.length) currentSlide = 0;
+
+            track.innerHTML = bannerImagesList.map((url, idx) => `
+                <img src="${url}" class="banner-img ${idx === currentSlide ? 'active' : ''}" alt="메인 배경 사진 ${idx + 1}">
+            `).join('');
+
+            if (counter) {
+                counter.innerText = `${currentSlide + 1} / ${bannerImagesList.length}`;
+            }
+        }
+
+        function nextBannerSlide(e) {
+            if (e) e.stopPropagation();
+            if (bannerImagesList.length <= 1) return;
+            currentSlide = (currentSlide + 1) % bannerImagesList.length;
+            updateBannerSlideView();
+        }
+
+        function prevBannerSlide(e) {
+            if (e) e.stopPropagation();
+            if (bannerImagesList.length <= 1) return;
+            currentSlide = (currentSlide - 1 + bannerImagesList.length) % bannerImagesList.length;
+            updateBannerSlideView();
+        }
+
+        function updateBannerSlideView() {
+            const banners = document.querySelectorAll('#slideTrack .banner-img');
+            banners.forEach((b, idx) => b.classList.toggle('active', idx === currentSlide));
+            const counter = document.getElementById('bannerCounterChip');
+            if (counter) counter.innerText = `${currentSlide + 1} / ${bannerImagesList.length}`;
+        }
+
+        function toggleBannerAutoSlide() {
+            isBannerPaused = !isBannerPaused;
+            const btn = document.getElementById('bannerPlayPauseBtn');
+            if (btn) {
+                btn.innerHTML = isBannerPaused ? '<i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-pause"></i>';
+                btn.title = isBannerPaused ? '자동 슬라이드 재생' : '자동 슬라이드 일시정지';
+            }
+            showToast(isBannerPaused ? "배너 넘어가기가 일시정지되었습니다." : "배너 자동 넘어가기가 시작되었습니다.");
+        }
+
         function startBannerSlider() {
-            setInterval(nextSlide, 6500);
+            if (bannerIntervalTimer) clearInterval(bannerIntervalTimer);
+            bannerIntervalTimer = setInterval(() => {
+                if (!isBannerPaused && bannerImagesList.length > 1) {
+                    nextBannerSlide();
+                }
+            }, 6500);
+        }
+
+        // 새 배너 사진 추가 업로드 창 열기
+        function openBannerUploadDialog() {
+            currentImgKey = 'banner_add';
+            const input = document.getElementById('siteImgFileInput');
+            if (input) input.click();
+        }
+
+        function renderSettingBannerThumbs() {
+            const listEl = document.getElementById('settingBannerThumbsList');
+            const countEl = document.getElementById('settingBannerCount');
+            if (countEl) countEl.innerText = bannerImagesList.length;
+            if (!listEl) return;
+
+            if (bannerImagesList.length === 0) {
+                listEl.innerHTML = `<span style="font-size:0.85rem; color:var(--text-muted);">등록된 배너 사진이 없습니다.</span>`;
+                return;
+            }
+
+            listEl.innerHTML = bannerImagesList.map((url, idx) => `
+                <div style="position:relative; width:72px; height:72px; border-radius:10px; overflow:hidden; border:2px solid var(--border-light); flex-shrink:0;">
+                    <img src="${url}" style="width:100%; height:100%; object-fit:cover;">
+                    <button type="button" onclick="deleteBannerImage(${idx})" title="이 사진 삭제" style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; cursor:pointer;">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <span style="position:absolute; bottom:2px; left:2px; background:rgba(0,0,0,0.6); color:white; font-size:0.65rem; padding:1px 5px; border-radius:4px; font-weight:800;">${idx+1}</span>
+                </div>
+            `).join('');
+        }
+
+        async function deleteBannerImage(idx) {
+            if (bannerImagesList.length <= 1) {
+                return showToast("배너 사진은 최소 1장 이상 유지되어야 합니다.");
+            }
+            showConfirm(async () => {
+                bannerImagesList.splice(idx, 1);
+                if (currentSlide >= bannerImagesList.length) currentSlide = 0;
+                renderBannerImages();
+                renderSettingBannerThumbs();
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ key: 'banner_images', value: JSON.stringify(bannerImagesList) })
+                });
+                showToast("배너 사진이 삭제되었습니다.");
+            });
         }
 
         // ================= [Z-Stack Layer Dismiss Engine] =================
@@ -5536,8 +5920,7 @@
                 const res = await fetch('/api/settings', { cache: 'no-store' });
                 siteSettings = await res.json();
                 
-                if (siteSettings.banner_1) document.getElementById('bgImg1').src = siteSettings.banner_1;
-                if (siteSettings.banner_2) document.getElementById('bgImg2').src = siteSettings.banner_2;
+                initBannerSlider();
                 if (siteSettings.profile_1) document.getElementById('profile1').src = siteSettings.profile_1;
                 if (siteSettings.profile_2) document.getElementById('profile2').src = siteSettings.profile_2;
 
@@ -5770,8 +6153,21 @@
             try {
                 const res = await fetch('/api/admin/site-image', { method:'POST', body:fd });
                 if (res.ok) {
-                    loadSettings();
-                    showToast("사진이 성공적으로 변경되었습니다.");
+                    const data = await res.json();
+                    if (currentImgKey === 'banner_add' && data && data.imageUrl) {
+                        bannerImagesList.push(data.imageUrl);
+                        renderBannerImages();
+                        renderSettingBannerThumbs();
+                        await fetch('/api/settings', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({ key: 'banner_images', value: JSON.stringify(bannerImagesList) })
+                        });
+                        showToast("새로운 배너 사진이 추가되었습니다! 🖼️");
+                    } else {
+                        loadSettings();
+                        showToast("사진이 성공적으로 변경되었습니다.");
+                    }
                 } else {
                     showToast('업로드에 실패했습니다.');
                 }
@@ -5884,12 +6280,8 @@
 
             updateCalSlideContent(dateStr);
 
-            // 슬라이드 열기
+            // 슬라이드 열기 (자동 스크롤 제거하여 날짜 클릭 시 화면 위치 그대로 유지!)
             panel.classList.add('open');
-
-            setTimeout(() => {
-                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
         }
 
         function updateCalSlideContent(dateStr) {
@@ -6356,20 +6748,13 @@
                 };
             }).filter(item => {
                 if (item.category === '일정' && item.dateStr) {
-                    const parts = item.dateStr.split('-');
-                    if (parts.length === 3) {
-                        const targetDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-                        targetDate.setHours(0, 0, 0, 0);
-                        const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
-                        // 오늘부터 30일 이내의 다가오는 일정 표시
-                        return diffDays >= 0 && diffDays <= 30;
-                    }
+                    const diffDays = getDaysDiffFromToday(item.dateStr);
+                    // 오늘부터 30일 이내의 다가오는 일정 표시
+                    return diffDays >= 0 && diffDays <= 30;
                 }
                 return false;
             }).sort((a, b) => {
-                const da = new Date(a.dateStr);
-                const db = new Date(b.dateStr);
-                return da - db;
+                return parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr);
             });
 
             if (countEl) countEl.innerText = `${upcomingList.length}개`;
@@ -6386,10 +6771,7 @@
             }
 
             listEl.innerHTML = upcomingList.map(item => {
-                const parts = item.dateStr.split('-');
-                const targetDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-                targetDate.setHours(0, 0, 0, 0);
-                const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
+                const diffDays = getDaysDiffFromToday(item.dateStr);
                 
                 let chipClass = 'd-soon';
                 let chipText = `D-${diffDays}`;
@@ -6441,6 +6823,24 @@
             } catch(err) {}
         }
 
+        // 로컬 자정 기준 날짜 파서 및 정확한 일수 차이 계산 헬퍼
+        function parseLocalDate(dateStr) {
+            if (!dateStr) return new Date();
+            const p = String(dateStr).split('-');
+            if (p.length !== 3) return new Date(dateStr);
+            const d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+            d.setHours(0, 0, 0, 0);
+            return d;
+        }
+
+        function getDaysDiffFromToday(dateStr) {
+            if (!dateStr) return 0;
+            const target = parseLocalDate(dateStr);
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            return Math.round((target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        }
+
         function checkUpcomingSchedule() {
             const now = new Date();
             now.setHours(0,0,0,0);
@@ -6448,21 +6848,69 @@
             
             const upcoming = postsData.map(p => (p.author||'').split('|')).filter(prts => {
                 if (prts[3] === '일정' && prts[4]) {
-                    const eDate = new Date(prts[4]);
+                    const eDate = parseLocalDate(prts[4]);
                     return eDate >= now && eDate <= nextWeek;
                 }
                 return false;
-            }).sort((a,b) => new Date(a[4]) - new Date(b[4]))[0];
+            }).sort((a,b) => parseLocalDate(a[4]) - parseLocalDate(b[4]))[0];
 
             if (upcoming) {
-                const diff = Math.ceil((new Date(upcoming[4]) - now) / (1000*60*60*24));
-                const diffTxt = diff === 0 ? "오늘!" : `${diff}일 뒤`;
+                const diff = getDaysDiffFromToday(upcoming[4]);
+                let diffTxt = '';
+                if (diff === 0) diffTxt = "오늘 D-Day!";
+                else if (diff === 1) diffTxt = "내일 (1일 뒤)";
+                else if (diff > 1) diffTxt = `${diff}일 뒤`;
+                else diffTxt = `D+${Math.abs(diff)}`;
                 document.getElementById('scheduleAlertMsg').innerText = `[${diffTxt}] ${upcoming[2]}`;
                 document.getElementById('scheduleAlert').classList.add('show');
             }
         }
 
+        let galleryViewMode = localStorage.getItem('couple_gallery_view_mode') || 'grid'; // 'grid' | 'feed'
+        let dailyViewMode = localStorage.getItem('couple_daily_view_mode') || 'card'; // 'card' | 'list'
+
+        function setGalleryViewMode(mode) {
+            galleryViewMode = mode;
+            localStorage.setItem('couple_gallery_view_mode', mode);
+            renderBoardViewModeBar();
+            renderBoardList();
+        }
+
+        function setDailyViewMode(mode) {
+            dailyViewMode = mode;
+            localStorage.setItem('couple_daily_view_mode', mode);
+            renderBoardViewModeBar();
+            renderBoardList();
+        }
+
+        function renderBoardViewModeBar() {
+            const bar = document.getElementById('boardViewModeBar');
+            if (!bar) return;
+
+            if (currentBoardTab === '갤러리') {
+                bar.innerHTML = `
+                    <button type="button" class="btn-view-mode ${galleryViewMode === 'grid' ? 'active' : ''}" onclick="setGalleryViewMode('grid')" title="바둑판 그리드 뷰">
+                        <i class="fa-solid fa-table-cells"></i> 그리드
+                    </button>
+                    <button type="button" class="btn-view-mode ${galleryViewMode === 'feed' ? 'active' : ''}" onclick="setGalleryViewMode('feed')" title="큰 사진 피드 뷰">
+                        <i class="fa-regular fa-square"></i> 피드형
+                    </button>
+                `;
+            } else {
+                bar.innerHTML = `
+                    <button type="button" class="btn-view-mode ${dailyViewMode === 'card' ? 'active' : ''}" onclick="setDailyViewMode('card')" title="카드형 뷰">
+                        <i class="fa-solid fa-grip-lines"></i> 카드형
+                    </button>
+                    <button type="button" class="btn-view-mode ${dailyViewMode === 'list' ? 'active' : ''}" onclick="setDailyViewMode('list')" title="컴팩트 목록형 뷰">
+                        <i class="fa-solid fa-list-ul"></i> 목록형
+                    </button>
+                `;
+            }
+        }
+
         function renderBoardList() {
+            renderBoardViewModeBar();
+
             const list = document.getElementById('boardList');
             if (!list) return;
             list.innerHTML = '';
@@ -6480,7 +6928,6 @@
                 return;
             }
 
-            // [요구사항 4] 10개마다 1페이지 페이지네이션 계산
             const totalPosts = filtered.length;
             const totalPages = Math.ceil(totalPosts / postsPerPage) || 1;
             if (boardCurrentPage > totalPages) boardCurrentPage = totalPages;
@@ -6491,99 +6938,175 @@
             const pagedPosts = filtered.slice(startIndex, endIndex);
 
             let htmlContent = '';
-            if (currentBoardTab === '갤러리') {
-                htmlContent += '<div class="gallery-grid-insta">';
-                pagedPosts.forEach(p => {
-                    const parts = (p.author || '').split('|');
-                    const ccount = Array.isArray(commentsData) ? commentsData.filter(c => Number(c.post_id || c.postId) === Number(p.id)).length : 0;
-                    const timeDisplay = formatPostDateTime(parts[4], parts[6]);
-                    const authorName = parts[0] || '익명';
-                    const postTitle = parts[2] || '우리의 추억 📸';
-                    const imgList = parseImageUrls(p.image_url);
-                    const imgUrl = imgList[0] || 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=600&auto=format&fit=crop';
-                    const isMulti = imgList.length > 1;
-                    
-                    htmlContent += `
-                        <div class="gallery-card-insta" onclick="openDetail(${p.id})">
-                            <div class="gallery-media-frame">
-                                <img id="galleryImg-${p.id}" src="${imgUrl}" alt="${postTitle}" loading="lazy">
-                                
-                                ${isMulti ? `
-                                    <div class="gallery-multi-badge" id="galleryBadge-${p.id}" title="사진 ${imgList.length}장">
-                                        <i class="fa-solid fa-clone"></i> 1/${imgList.length}
-                                    </div>
-                                    <button type="button" class="thumb-nav-btn prev" onclick="slideGalleryCardThumb(${p.id}, -1, event)" title="이전 사진">
-                                        <i class="fa-solid fa-chevron-left"></i>
-                                    </button>
-                                    <button type="button" class="thumb-nav-btn next" onclick="slideGalleryCardThumb(${p.id}, 1, event)" title="다음 사진">
-                                        <i class="fa-solid fa-chevron-right"></i>
-                                    </button>
-                                    <div class="thumb-dots" id="galleryDots-${p.id}">
-                                        ${imgList.map((_, idx) => `<span class="thumb-dot ${idx === 0 ? 'active' : ''}"></span>`).join('')}
-                                    </div>
-                                ` : ''}
 
-                                <div class="gallery-overlay-zoom" id="galleryZoom-${p.id}" onclick="event.stopPropagation(); openLightbox('${imgUrl}')" title="사진 원본 확대">
-                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
-                                </div>
-                            </div>
-                            <div class="gallery-bottom-bar">
-                                <div class="gallery-title-row">
-                                    <div class="gallery-insta-title" title="${postTitle}">${postTitle}</div>
-                                    <span class="gallery-comment-chip" title="댓글 ${ccount}개">
-                                        <i class="fa-regular fa-comment-dots"></i> ${ccount}
-                                    </span>
-                                </div>
-                                <div class="gallery-meta-row">
-                                    <span class="gallery-author-tag">
-                                        <i class="fa-solid fa-heart" style="font-size:0.65rem;"></i> ${authorName}
-                                    </span>
-                                    <span><i class="fa-regular fa-clock"></i> ${timeDisplay}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                htmlContent += '</div>';
-            } else {
-                htmlContent += '<div class="posts-list-wrap">';
-                pagedPosts.forEach(p => {
-                    const parts = (p.author||'').split('|');
-                    const ccount = Array.isArray(commentsData) ? commentsData.filter(c => c.post_id === p.id).length : 0;
-                    const timeDisplay = formatPostDateTime(parts[4], parts[6]);
-                    htmlContent += `
-                        <div class="post-card" onclick="openDetail(${p.id})">
-                            <div class="post-content-flex">
-                                <div>
-                                    <div class="post-top-meta">
-                                        <span class="post-cat-badge">${parts[3] || '일상'}</span>
-                                        <span class="post-date"><i class="fa-regular fa-clock"></i> ${timeDisplay}</span>
-                                    </div>
-                                    <div class="post-title">${parts[2] || '무제'}</div>
-                                    <div class="post-preview">${p.content}</div>
-                                </div>
-                                <div class="post-footer-meta">
-                                    <span><i class="fa-solid fa-pen-nib"></i> ${parts[0]}</span>
-                                    <span><i class="fa-regular fa-comment-dots"></i> 댓글 ${ccount}개</span>
-                                </div>
-                            </div>
-                            ${(() => {
+            // [사용자 요청 3]: 갤러리와 자유일상 각각 2가지 보기 모드 완벽 지원!
+            if (currentBoardTab === '갤러리') {
+                if (galleryViewMode === 'grid') {
+                    // 모드 1: 바둑판 그리드 뷰
+                    htmlContent += '<div class="gallery-grid-insta">';
+                    pagedPosts.forEach(p => {
+                        const parts = (p.author || '').split('|');
+                        const ccount = Array.isArray(commentsData) ? commentsData.filter(c => Number(c.post_id || c.postId) === Number(p.id)).length : 0;
+                        const timeDisplay = formatPostDateTime(parts[4], parts[6]);
+                        const authorName = parts[0] || '익명';
+                        const postTitle = parts[2] || '우리의 추억 📸';
                         const imgList = parseImageUrls(p.image_url);
-                        if (imgList.length === 0) return '';
-                        return `
-                            <div style="position:relative; flex-shrink:0;">
-                                <img src="${imgList[0]}" class="post-thumb" alt="썸네일">
-                                ${imgList.length > 1 ? `<span class="post-multi-badge"><i class="fa-solid fa-clone"></i> ${imgList.length}</span>` : ''}
+                        const imgUrl = imgList[0] || 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=600&auto=format&fit=crop';
+                        const isMulti = imgList.length > 1;
+                        
+                        htmlContent += `
+                            <div class="gallery-card-insta" onclick="openDetail(${p.id})">
+                                <div class="gallery-media-frame">
+                                    <img id="galleryImg-${p.id}" src="${imgUrl}" alt="${postTitle}" loading="lazy">
+                                    ${isMulti ? `
+                                        <div class="gallery-multi-badge" id="galleryBadge-${p.id}" title="사진 ${imgList.length}장">
+                                            <i class="fa-solid fa-clone"></i> 1/${imgList.length}
+                                        </div>
+                                        <button type="button" class="thumb-nav-btn prev" onclick="slideGalleryCardThumb(${p.id}, -1, event)" title="이전 사진">
+                                            <i class="fa-solid fa-chevron-left"></i>
+                                        </button>
+                                        <button type="button" class="thumb-nav-btn next" onclick="slideGalleryCardThumb(${p.id}, 1, event)" title="다음 사진">
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </button>
+                                        <div class="thumb-dots" id="galleryDots-${p.id}">
+                                            ${imgList.map((_, idx) => `<span class="thumb-dot ${idx === 0 ? 'active' : ''}"></span>`).join('')}
+                                        </div>
+                                    ` : ''}
+                                    <div class="gallery-overlay-zoom" id="galleryZoom-${p.id}" onclick="event.stopPropagation(); openLightbox('${imgUrl}')" title="사진 원본 확대">
+                                        <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                    </div>
+                                </div>
+                                <div class="gallery-bottom-bar">
+                                    <div class="gallery-title-row">
+                                        <div class="gallery-insta-title" title="${postTitle}">${postTitle}</div>
+                                        <span class="gallery-comment-chip" title="댓글 ${ccount}개">
+                                            <i class="fa-regular fa-comment-dots"></i> ${ccount}
+                                        </span>
+                                    </div>
+                                    <div class="gallery-meta-row">
+                                        <span class="gallery-author-tag">
+                                            <i class="fa-solid fa-heart" style="font-size:0.65rem;"></i> ${authorName}
+                                        </span>
+                                        <span><i class="fa-regular fa-clock"></i> ${timeDisplay}</span>
+                                    </div>
+                                </div>
                             </div>
                         `;
-                    })()}
-                        </div>
-                    `;
-                });
-                htmlContent += '</div>';
+                    });
+                    htmlContent += '</div>';
+                } else {
+                    // 모드 2: 큰 피드 뷰 (인스타그램 타임라인 피드 스타일)
+                    htmlContent += '<div class="gallery-feed-wrap">';
+                    pagedPosts.forEach(p => {
+                        const parts = (p.author || '').split('|');
+                        const ccount = Array.isArray(commentsData) ? commentsData.filter(c => Number(c.post_id || c.postId) === Number(p.id)).length : 0;
+                        const timeDisplay = formatPostDateTime(parts[4], parts[6]);
+                        const authorName = parts[0] || '익명';
+                        const postTitle = parts[2] || '우리의 추억 📸';
+                        const imgList = parseImageUrls(p.image_url);
+                        const imgUrl = imgList[0] || 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1000&auto=format&fit=crop';
+                        const isMulti = imgList.length > 1;
+
+                        htmlContent += `
+                            <div class="gallery-feed-card" onclick="openDetail(${p.id})">
+                                <div class="gallery-feed-header">
+                                    <div style="display:flex; align-items:center; gap:10px;">
+                                        <div style="width:36px; height:36px; border-radius:50%; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-weight:800;">
+                                            ${authorName.slice(0, 1)}
+                                        </div>
+                                        <div>
+                                            <div style="font-size:0.95rem; font-weight:800; color:var(--text-main);">${authorName}</div>
+                                            <div style="font-size:0.78rem; color:var(--text-muted);"><i class="fa-regular fa-clock"></i> ${timeDisplay}</div>
+                                        </div>
+                                    </div>
+                                    <span class="post-cat-badge">📸 갤러리</span>
+                                </div>
+                                <div class="gallery-feed-img-wrap">
+                                    <img src="${imgUrl}" alt="${postTitle}" loading="lazy">
+                                    ${isMulti ? `<div class="gallery-multi-badge"><i class="fa-solid fa-clone"></i> 사진 ${imgList.length}장</div>` : ''}
+                                </div>
+                                <div class="gallery-feed-body">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                        <h4 style="font-size:1.2rem; font-weight:800; color:var(--text-main);">${postTitle}</h4>
+                                        <span class="gallery-comment-chip"><i class="fa-regular fa-comment-dots"></i> 댓글 ${ccount}</span>
+                                    </div>
+                                    ${p.content ? `<p style="font-size:0.96rem; color:var(--text-sub); line-height:1.6; margin-bottom:8px;">${p.content}</p>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    htmlContent += '</div>';
+                }
+            } else {
+                // 자유 일상 및 전체보기
+                if (dailyViewMode === 'card') {
+                    // 모드 1: 카드형 뷰 (리치 카드)
+                    htmlContent += '<div class="posts-list-wrap">';
+                    pagedPosts.forEach(p => {
+                        const parts = (p.author||'').split('|');
+                        const ccount = Array.isArray(commentsData) ? commentsData.filter(c => Number(c.post_id || c.postId) === Number(p.id)).length : 0;
+                        const timeDisplay = formatPostDateTime(parts[4], parts[6]);
+                        htmlContent += `
+                            <div class="post-card" onclick="openDetail(${p.id})">
+                                <div class="post-content-flex">
+                                    <div>
+                                        <div class="post-top-meta">
+                                            <span class="post-cat-badge">${parts[3] || '일상'}</span>
+                                            <span class="post-date"><i class="fa-regular fa-clock"></i> ${timeDisplay}</span>
+                                        </div>
+                                        <div class="post-title">${parts[2] || '무제'}</div>
+                                        <div class="post-preview">${p.content}</div>
+                                    </div>
+                                    <div class="post-footer-meta">
+                                        <span><i class="fa-solid fa-pen-nib"></i> ${parts[0]}</span>
+                                        <span><i class="fa-regular fa-comment-dots"></i> 댓글 ${ccount}개</span>
+                                    </div>
+                                </div>
+                                ${(() => {
+                            const imgList = parseImageUrls(p.image_url);
+                            if (imgList.length === 0) return '';
+                            return `
+                                <div style="position:relative; flex-shrink:0;">
+                                    <img src="${imgList[0]}" class="post-thumb" alt="썸네일">
+                                    ${imgList.length > 1 ? `<span class="post-multi-badge"><i class="fa-solid fa-clone"></i> ${imgList.length}</span>` : ''}
+                                </div>
+                            `;
+                        })()}
+                            </div>
+                        `;
+                    });
+                    htmlContent += '</div>';
+                } else {
+                    // 모드 2: 컴팩트 목록형 뷰 (단정하고 깔끔한 아티클 타임라인)
+                    htmlContent += '<div class="posts-compact-wrap">';
+                    pagedPosts.forEach(p => {
+                        const parts = (p.author||'').split('|');
+                        const ccount = Array.isArray(commentsData) ? commentsData.filter(c => Number(c.post_id || c.postId) === Number(p.id)).length : 0;
+                        const timeDisplay = formatPostDateTime(parts[4], parts[6]);
+                        const imgList = parseImageUrls(p.image_url);
+
+                        htmlContent += `
+                            <div class="post-compact-item" onclick="openDetail(${p.id})">
+                                <div class="post-compact-left">
+                                    <span style="font-size:0.75rem; font-weight:800; background:var(--primary-light); color:var(--primary-dark); padding:3px 9px; border-radius:var(--radius-full); white-space:nowrap;">
+                                        ${parts[3] || '일상'}
+                                    </span>
+                                    <span class="post-compact-title">${parts[2] || '무제'}</span>
+                                    <span style="font-size:0.8rem; color:var(--text-muted); white-space:nowrap;">· ${parts[0]}</span>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:12px; flex-shrink:0;">
+                                    <span style="font-size:0.82rem; color:var(--text-muted);"><i class="fa-regular fa-clock"></i> ${timeDisplay}</span>
+                                    <span style="font-size:0.82rem; color:var(--text-muted);"><i class="fa-regular fa-comment-dots"></i> ${ccount}</span>
+                                    ${imgList.length > 0 ? `<img src="${imgList[0]}" style="width:38px; height:38px; border-radius:8px; object-fit:cover; border:1px solid var(--border-light);" alt="썸네일">` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    htmlContent += '</div>';
+                }
             }
 
-            // 페이지네이션 컨트롤 바 렌더링 (10개 초과 시 또는 페이지 이동 지원)
+            // 페이지네이션 바
             if (totalPages > 1) {
                 let paginationHtml = '<div class="board-pagination">';
                 paginationHtml += `
@@ -6881,6 +7404,19 @@
         // ================= [브라우저 옆 플로팅 하트 위젯 & 설정] =================
         let currentHeartEmoji = '💖';
         let currentHeartText = '효니 ♥ 히니';
+
+                function selectHeartEmojiInSettings(emoji) {
+            currentHeartEmoji = emoji;
+            const iconEl = document.getElementById('floatingHeartIcon');
+            if (iconEl) iconEl.innerText = emoji;
+            localStorage.setItem('couple_heart_emoji', emoji);
+            fetch('/api/settings', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ key: 'floating_heart_emoji', value: emoji })
+            }).catch(() => {});
+            showToast(`${emoji} 하트 이모티콘으로 변경되었습니다! ✨`);
+        }
 
         function selectHeartEmoji(emoji) {
             currentHeartEmoji = emoji;

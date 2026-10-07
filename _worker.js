@@ -11,8 +11,7 @@
  * 7. [네이버 지도 연동 데이트 장소 API] /api/places (GET, POST, PUT, DELETE)
  * 8. [하루 일정 계획 & 챙길 물품 메모 API] /api/planner (GET, POST, PUT, DELETE)
  * 9. [사랑의 커플 쿠폰북 API] /api/coupons (GET, POST, PUT, DELETE)
- * 10. [커플 밸런스 게임 API] /api/balance-game (GET, POST, DELETE)
- * 11. [R2 버킷 미디어 서빙] /api/images/* (GET)
+ * 10. [R2 버킷 미디어 서빙] /api/images/* (GET)
  */
 
 export default {
