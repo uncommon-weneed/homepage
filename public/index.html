@@ -18,109 +18,382 @@
 
     <style>
         /* ==========================================================================
-           [5. 화면 레이아웃 엔진: 모바일 최적화(기본) & PC 최적화 와이드 배치]
-           - 기본값: 모바일 뷰 (480px 스마트폰 프레임, 하단 탭바)
-           - PC 모드: 좌측 고정 사이드바(270px) + 우측 메인 레이아웃 와이드 2~3열 대시보드
+           [1. CSS 테마 및 디자인 시스템]
+           - 하이엔드 글래스모피즘 & 부드러운 파스텔 감성 팔레트
            ========================================================================== */
+        :root {
+            /* 테마 컬러 (동적 변경 지원) */
+            --primary: #FF7582;
+            --primary-light: #FFF0F2;
+            --primary-soft: rgba(255, 117, 130, 0.12);
+            --primary-dark: #E65A68;
+            --primary-glow: rgba(255, 117, 130, 0.35);
+            
+            --secondary: #7FA9C6;
+            --secondary-light: #EEF5FA;
+            
+            --accent-warm: #FFA07A;
+            --accent-green: #7BC676;
+            --accent-purple: #B388FF;
 
-        /* 공통 메인 레이아웃 래퍼 */
-        .app-main-layout {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            min-height: 100vh;
-            min-width: 0;
-            position: relative;
+            /* 배경 & 표면 */
+            --bg-base: #F8F9FC;
+            --bg-gradient: linear-gradient(135deg, #FFF6F7 0%, #F5F7FB 100%);
+            --surface: #FFFFFF;
+            --surface-glass: rgba(255, 255, 255, 0.88);
+            --surface-elevated: #FFFFFF;
+
+            /* 텍스트 컬러 */
+            --text-main: #232733;
+            --text-sub: #4E5566;
+            --text-muted: #8E95A5;
+            --text-light: #B4BAC7;
+
+            /* 보더 & 섀도우 */
+            --border-light: #E9EDF5;
+            --border-soft: rgba(0, 0, 0, 0.04);
+            --shadow-xs: 0 2px 6px rgba(0, 0, 0, 0.02);
+            --shadow-sm: 0 4px 14px rgba(35, 39, 51, 0.04);
+            --shadow-md: 0 10px 28px rgba(255, 117, 130, 0.08);
+            --shadow-lg: 0 20px 48px rgba(35, 39, 51, 0.09);
+            --shadow-float: 0 14px 36px rgba(0, 0, 0, 0.12);
+
+            /* 라운딩 */
+            --radius-xs: 8px;
+            --radius-sm: 14px;
+            --radius-md: 22px;
+            --radius-lg: 32px;
+            --radius-full: 9999px;
+
+            /* 치수 & 네비게이션 */
+            --nav-height: 68px;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+            
+            /* 애니메이션 타이밍 */
+            --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* ----------------------------------------------------
-           [모바일 모드 (기본 layout-mobile)]
-           ---------------------------------------------------- */
+        /* 그린 테마 */
+        body.theme-green {
+            --primary: #52B788;
+            --primary-light: #EDF7F2;
+            --primary-soft: rgba(82, 183, 136, 0.12);
+            --primary-dark: #3F9A6F;
+            --primary-glow: rgba(82, 183, 136, 0.35);
+            --bg-gradient: linear-gradient(135deg, #F0F9F4 0%, #F5F7FB 100%);
+        }
+
+        /* 라벤더 테마 */
+        body.theme-lavender {
+            --primary: #9D7BE8;
+            --primary-light: #F4F0FC;
+            --primary-soft: rgba(157, 123, 232, 0.12);
+            --primary-dark: #8461D1;
+            --primary-glow: rgba(157, 123, 232, 0.35);
+            --bg-gradient: linear-gradient(135deg, #F8F4FD 0%, #F5F7FB 100%);
+        }
+
+        /* 블루 오션 테마 */
+        body.theme-blue {
+            --primary: #5B9EEA;
+            --primary-light: #EEF5FC;
+            --primary-soft: rgba(91, 158, 234, 0.12);
+            --primary-dark: #4383CD;
+            --primary-glow: rgba(91, 158, 234, 0.35);
+            --bg-gradient: linear-gradient(135deg, #F0F6FD 0%, #F5F7FB 100%);
+        }
+
+        /* 사생활 보호 모드 제거됨 (사용자 요청에 따라 클린 UI 적용) */
+
+        /* ==========================================================================
+           [2. 기본 리셋 & 공통 스타일]
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scrollbar-gutter: stable;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-base);
+            background-image: var(--bg-gradient);
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* 스크롤바 미려화 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 117, 130, 0.25);
+            border-radius: var(--radius-full);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* ==========================================================================
+           [3. 레이아웃 구조 (모바일 & 데스크톱)]
+           ========================================================================== */
+        #app-container {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .view-section {
+            display: none;
+            flex-grow: 1;
+            padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 80px);
+            animation: fadeInView 0.35s var(--ease-smooth);
+        }
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeInView {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseHeart {
+            0% { transform: scale(1); filter: drop-shadow(0 2px 6px var(--primary-glow)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 6px 14px var(--primary-glow)); }
+            100% { transform: scale(1); filter: drop-shadow(0 2px 6px var(--primary-glow)); }
+        }
+
+        /* ==========================================================================
+           [4. 상단 헤더 & 네비게이션]
+           ========================================================================== */
+        .app-header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: var(--header-height);
+            background: var(--surface-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 900;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .brand-icon-wrap {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-xs);
+        }
+        .header-title-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .header-title-text span {
+            color: var(--primary);
+            font-style: italic;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-clock-chip {
+            background: white;
+            border: 1px solid var(--border-light);
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow-xs);
+        }
+        .header-clock-chip i {
+            color: var(--primary);
+            font-size: 0.85rem;
+        }
+
+        .icon-btn {
+            background: white;
+            border: 1px solid var(--border-light);
+            color: var(--text-sub);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.25s var(--ease-spring);
+            box-shadow: var(--shadow-xs);
+        }
+        .icon-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .icon-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* 하단 모바일 바텀 네비게이션 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: calc(var(--nav-height) + env(safe-area-inset-bottom));
+            background: var(--surface-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-light);
+            z-index: 950;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 30%;
+            height: var(--nav-height);
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+        }
+        .nav-item i {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+            transition: all 0.25s var(--ease-spring);
+        }
+        .nav-item span {
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .nav-item.active {
+            color: var(--primary);
+        }
+        .nav-item.active i {
+            transform: translateY(-3px) scale(1.12);
+            filter: drop-shadow(0 3px 6px var(--primary-glow));
+        }
+
+        /* ==========================================================================
+           [5. 화면 레이아웃 엔진: 모바일 최적화(기본) & PC 최적화 와이드 배치]
+           - 기본값: 모바일 뷰 (480px 스마트폰 프레임, 하단 탭바)
+           - PC 모드 선택 시: 좌측 사이드바 + 와이드 3열 위젯 대시보드
+           ========================================================================== */
+
+        /* [모바일 모드 (기본)]: 데스크톱 화면에서도 모바일 앱 비율(최대 480px)로 단정하게 중앙 집중 */
         body.layout-mobile #app-container {
             max-width: 480px;
-            width: 100%;
             margin: 0 auto;
             min-height: 100vh;
             display: flex !important;
             flex-direction: column !important;
             position: relative;
             background: var(--bg-base);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.08);
             border-left: 1px solid var(--border-light);
             border-right: 1px solid var(--border-light);
-        }
-        body.layout-mobile .app-main-layout {
-            width: 100%;
-            margin-left: 0 !important;
         }
         body.layout-mobile .app-header {
             position: sticky;
             top: 0;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
             width: 100% !important;
-            max-width: 100% !important;
+            max-width: 480px;
             margin: 0 auto;
-            padding: 0 16px !important;
+            padding: 0 20px !important;
             z-index: 900;
-            transform: none !important;
-            left: auto !important;
-        }
-        body.layout-mobile .sidebar-brand {
-            display: none !important;
         }
         body.layout-mobile .bottom-nav {
             position: fixed;
             bottom: 0;
-            z-index: 950;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            width: 100% !important;
+            max-width: 480px !important;
             height: calc(var(--nav-height) + env(safe-area-inset-bottom)) !important;
-            background: var(--surface-glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border-light) !important;
-            border-right: none !important;
-            display: flex !important;
             flex-direction: row !important;
             justify-content: space-around !important;
             align-items: center !important;
             padding: 0 0 env(safe-area-inset-bottom) 0 !important;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04) !important;
+            border-top: 1px solid var(--border-light) !important;
+            border-right: none !important;
             top: auto !important;
-        }
-        @media (max-width: 480px) {
-            body.layout-mobile .bottom-nav {
-                left: 0 !important;
-                right: 0 !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                transform: none !important;
-            }
-        }
-        @media (min-width: 481px) {
-            body.layout-mobile .bottom-nav {
-                left: 50% !important;
-                transform: translateX(-50%) !important;
-                width: 100% !important;
-                max-width: 480px !important;
-            }
+            background: var(--surface-glass);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04) !important;
+            z-index: 950;
         }
         body.layout-mobile .nav-item {
-            width: 25% !important;
+            width: 30% !important;
             height: var(--nav-height) !important;
             flex-direction: column !important;
             justify-content: center !important;
-            align-items: center !important;
-            padding: 0 !important;
-            gap: 2px !important;
+            padding-left: 0 !important;
+            gap: 0 !important;
             margin-bottom: 0 !important;
             background: transparent !important;
-            border-radius: var(--radius-sm);
         }
         body.layout-mobile .nav-item i {
-            font-size: 1.25rem !important;
-            margin-bottom: 2px !important;
+            font-size: 1.3rem !important;
+            margin-bottom: 4px !important;
         }
         body.layout-mobile .nav-item span {
-            font-size: 0.72rem !important;
-            font-weight: 700 !important;
+            font-size: 0.78rem !important;
         }
         body.layout-mobile .view-section {
             padding-left: 0 !important;
@@ -129,13 +402,6 @@
         }
         body.layout-mobile .sidebar-profile-card {
             display: none !important;
-        }
-        body.layout-mobile .home-container,
-        body.layout-mobile .calendar-container,
-        body.layout-mobile .board-container,
-        body.layout-mobile .planner-container {
-            max-width: 100% !important;
-            padding: 20px 16px !important;
         }
         body.layout-mobile .widgets-grid {
             grid-template-columns: 1fr !important;
@@ -146,7 +412,16 @@
         }
         body.layout-mobile .gallery-grid-insta {
             grid-template-columns: repeat(2, 1fr) !important;
-            gap: 12px !important;
+            gap: 14px !important;
+        }
+        body.layout-mobile .fab {
+            right: calc(50% - 240px + 20px) !important;
+            bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 20px) !important;
+        }
+        @media (max-width: 520px) {
+            body.layout-mobile .fab {
+                right: 20px !important;
+            }
         }
         body.layout-mobile .banner-wrap {
             height: 350px !important;
@@ -155,239 +430,112 @@
             max-width: 440px !important;
             width: 90% !important;
         }
-        @media (max-width: 520px) {
-            body.layout-mobile .fab {
-                right: 18px !important;
-                bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 18px) !important;
+
+        /* [PC 최적화 모드]: 992px 이상에서 와이드 사이드바 + 2~3열 위젯 대시보드 확장 */
+        @media (min-width: 992px) {
+            body.layout-pc #app-container {
+                display: flex !important;
+                flex-direction: row !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            body.layout-pc .bottom-nav {
+                top: 0 !important;
+                left: 0 !important;
+                width: var(--sidebar-width) !important;
+                max-width: var(--sidebar-width) !important;
+                height: 100vh !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+                padding-top: 100px !important;
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+                border-top: none !important;
+                border-right: 1px solid var(--border-light) !important;
+                align-items: stretch !important;
+                box-shadow: var(--shadow-sm) !important;
+                background: white !important;
+                transform: none !important;
+            }
+            body.layout-pc .nav-item {
+                width: 100% !important;
+                height: 56px !important;
+                flex-direction: row !important;
+                justify-content: flex-start !important;
+                padding-left: 24px !important;
+                gap: 16px !important;
+                border-radius: var(--radius-md) !important;
+                margin-bottom: 8px !important;
+            }
+            body.layout-pc .nav-item i {
+                font-size: 1.25rem !important;
+                margin-bottom: 0 !important;
+            }
+            body.layout-pc .nav-item span {
+                font-size: 1.02rem !important;
+            }
+            body.layout-pc .nav-item:hover {
+                background: var(--bg-base) !important;
+                color: var(--primary) !important;
+            }
+            body.layout-pc .nav-item.active {
+                background: var(--primary-light) !important;
+                color: var(--primary) !important;
+                font-weight: 800 !important;
+            }
+            body.layout-pc .app-header {
+                left: var(--sidebar-width) !important;
+                width: calc(100% - var(--sidebar-width)) !important;
+                max-width: 100% !important;
+                transform: none !important;
+                padding: 0 40px !important;
+            }
+            body.layout-pc .view-section {
+                padding-left: var(--sidebar-width) !important;
+                padding-bottom: 50px !important;
+                width: calc(100% - var(--sidebar-width)) !important;
+            }
+            body.layout-pc .sidebar-profile-card {
+                display: flex !important;
+                margin-top: auto !important;
+                margin-bottom: 30px !important;
+                padding: 16px !important;
+                background: var(--bg-base) !important;
+                border-radius: var(--radius-md) !important;
+                align-items: center !important;
+                gap: 12px !important;
+                border: 1px solid var(--border-light) !important;
+            }
+            body.layout-pc .home-container,
+            body.layout-pc .calendar-container,
+            body.layout-pc .board-container {
+                max-width: 1280px !important;
+                padding: 30px 40px !important;
+            }
+            body.layout-pc .widgets-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 24px !important;
+            }
+            body.layout-pc .grid-full-width {
+                grid-column: span 2 !important;
+            }
+            body.layout-pc .gallery-grid-insta {
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 22px !important;
+            }
+            body.layout-pc .fab {
+                bottom: 40px !important;
+                right: 40px !important;
+                width: 66px !important;
+                height: 66px !important;
+            }
+            body.layout-pc .banner-wrap {
+                height: 420px !important;
             }
         }
-        @media (min-width: 521px) {
-            body.layout-mobile .fab {
-                right: calc(50% - 240px + 18px) !important;
-                bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 18px) !important;
-            }
-        }
-
-        /* ----------------------------------------------------
-           [PC 최적화 모드 (layout-pc)]
-           - 992px 이상에서 좌측 사이드바 270px + 우측 메인 영역
-           ---------------------------------------------------- */
-        body.layout-pc #app-container {
-            display: flex !important;
-            flex-direction: row !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            margin: 0 !important;
-            box-shadow: none !important;
-            border: none !important;
-            min-height: 100vh !important;
-        }
-        body.layout-pc .sidebar-brand {
-            display: flex !important;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 24px;
-            padding: 4px 8px;
-            cursor: pointer;
-        }
-        body.layout-pc .sidebar-brand .brand-icon-wrap {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            background: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 1.15rem;
-        }
-        body.layout-pc .sidebar-brand-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-        body.layout-pc .sidebar-brand-title span {
-            color: var(--primary);
-            font-style: italic;
-        }
-
-        body.layout-pc .bottom-nav {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: var(--sidebar-width) !important;
-            max-width: var(--sidebar-width) !important;
-            height: 100vh !important;
-            flex-direction: column !important;
-            justify-content: flex-start !important;
-            padding: 24px 18px 20px !important;
-            border-top: none !important;
-            border-right: 1px solid var(--border-light) !important;
-            align-items: stretch !important;
-            box-shadow: 2px 0 16px rgba(0, 0, 0, 0.03) !important;
-            background: white !important;
-            transform: none !important;
-            z-index: 950 !important;
-            overflow-y: auto;
-        }
-        body.layout-pc .nav-item {
-            width: 100% !important;
-            height: 52px !important;
-            flex-direction: row !important;
-            justify-content: flex-start !important;
-            align-items: center !important;
-            padding-left: 20px !important;
-            gap: 14px !important;
-            border-radius: var(--radius-md) !important;
-            margin-bottom: 6px !important;
-            color: var(--text-sub) !important;
-            background: transparent !important;
-        }
-        body.layout-pc .nav-item i {
-            font-size: 1.25rem !important;
-            margin-bottom: 0 !important;
-            width: 24px;
-            text-align: center;
-        }
-        body.layout-pc .nav-item span {
-            font-size: 1rem !important;
-            font-weight: 700 !important;
-        }
-        body.layout-pc .nav-item:hover {
-            background: var(--bg-base) !important;
-            color: var(--primary) !important;
-        }
-        body.layout-pc .nav-item.active {
-            background: var(--primary-light) !important;
-            color: var(--primary) !important;
-            font-weight: 800 !important;
-        }
-        /* [PC 사이드바 하단 프로필 컴팩트 미니 뱃지 - 시야 방해 완전 해결] */
-        body.layout-pc .sidebar-profile-card {
-            display: flex !important;
-            margin-top: auto !important;
-            margin-bottom: 10px !important;
-            padding: 8px 12px !important;
-            background: #F8FAFD !important;
-            border-radius: var(--radius-full) !important;
-            align-items: center !important;
-            gap: 10px !important;
-            border: 1.5px solid var(--border-light) !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
-            cursor: pointer;
-            transition: all 0.25s var(--ease-spring);
-            max-width: 100% !important;
-            overflow: hidden !important;
-        }
-        body.layout-pc .sidebar-profile-card:hover {
-            background: var(--primary-light) !important;
-            border-color: rgba(255, 117, 130, 0.45) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 117, 130, 0.16) !important;
-        }
-        .sidebar-profile-avatar {
-            width: 38px !important;
-            height: 38px !important;
-            min-width: 38px !important;
-            min-height: 38px !important;
-            max-width: 38px !important;
-            max-height: 38px !important;
-            border-radius: 50% !important;
-            object-fit: cover !important;
-            border: 2px solid white !important;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
-            display: block !important;
-            cursor: zoom-in !important;
-            transition: transform 0.25s var(--ease-spring);
-        }
-        .sidebar-profile-avatar:hover {
-            transform: scale(1.08);
-        }
-        .sidebar-avatar-cam-badge {
-            position: absolute;
-            bottom: -1px;
-            right: -1px;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.52rem;
-            border: 1.5px solid white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-        }
-        .sidebar-profile-info {
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            min-width: 0;
-            flex-grow: 1;
-        }
-        .sidebar-profile-info h4 {
-            font-size: 0.82rem !important;
-            font-weight: 800 !important;
-            color: var(--text-main) !important;
-            margin: 0 !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            line-height: 1.2 !important;
-        }
-        .sidebar-profile-info p {
-            font-size: 0.72rem !important;
-            color: var(--primary) !important;
-            font-weight: 700 !important;
-            margin: 0 !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            line-height: 1.2 !important;
-        }
-
-        body.layout-pc .app-main-layout {
-            margin-left: var(--sidebar-width) !important;
-            width: calc(100% - var(--sidebar-width)) !important;
-            min-height: 100vh;
-            display: flex !important;
-            flex-direction: column !important;
-            flex: 1 1 auto;
-            min-width: 0;
-        }
-        body.layout-pc .app-header {
-            position: sticky !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            transform: none !important;
-            padding: 0 40px !important;
-            height: var(--header-height);
-            z-index: 900;
-        }
-        body.layout-pc .view-section {
-            padding-left: 0 !important;
-            padding-bottom: 60px !important;
-            width: 100% !important;
-            min-width: 0;
-        }
-        body.layout-pc .home-container,
-        body.layout-pc .calendar-container,
-        body.layout-pc .board-container,
-        body.layout-pc .planner-container {
-            max-width: 1360px !important;
-            padding: 30px 40px !important;
-            margin: 0 auto !important;
-        }
-        body.layout-pc .widgets-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 24px !important;
-        }
-        @media (min-width: 1360px) {
+        @media (min-width: 1350px) {
             body.layout-pc .widgets-grid {
                 grid-template-columns: repeat(3, 1fr) !important;
             }
@@ -395,27 +543,14 @@
                 grid-column: span 3 !important;
             }
         }
-        @media (max-width: 1359px) {
-            body.layout-pc .grid-full-width {
-                grid-column: span 2 !important;
+        @media (max-width: 991px) {
+            .sidebar-profile-card {
+                display: none !important;
             }
         }
-        body.layout-pc .gallery-grid-insta {
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 22px !important;
-        }
-        body.layout-pc .fab {
-            bottom: 40px !important;
-            right: 40px !important;
-            width: 64px !important;
-            height: 64px !important;
-            font-size: 1.5rem !important;
-        }
-        body.layout-pc .banner-wrap {
-            height: 420px !important;
-        }
-
-        /* [6. 시크릿 로그인 화면 (단일 비밀번호 전용)]
+        
+/* ==========================================================================
+           [6. 시크릿 로그인 화면 (단일 비밀번호 전용)]
            ========================================================================== */
         #auth-wall {
             position: fixed;
@@ -3598,740 +3733,6 @@
             color: var(--text-main);
         }
 
-    
-        /* ==========================================================================
-           [20. 네이버 지도 연동 & 초록 뱃지 버튼 스타일]
-           ========================================================================== */
-        .naver-map-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: #03C75A;
-            color: white !important;
-            text-decoration: none;
-            font-size: 0.76rem;
-            font-weight: 800;
-            padding: 3px 9px;
-            border-radius: var(--radius-full);
-            transition: all 0.2s var(--ease-spring);
-            box-shadow: 0 2px 6px rgba(3, 199, 90, 0.25);
-            flex-shrink: 0;
-            line-height: 1.2;
-            cursor: pointer;
-        }
-        .naver-map-btn:hover {
-            background: #02b150;
-            transform: translateY(-2px) scale(1.04);
-            box-shadow: 0 4px 10px rgba(3, 199, 90, 0.4);
-        }
-        .naver-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 14px;
-            height: 14px;
-            border-radius: 3px;
-            background: white;
-            color: #03C75A;
-            font-weight: 900;
-            font-size: 0.65rem;
-            line-height: 1;
-        }
-        .btn-naver-preview {
-            background: #F0FBF4;
-            border: 1.5px solid #A3E6B9;
-            color: #028A3E;
-            padding: 8px 14px;
-            border-radius: var(--radius-sm);
-            font-size: 0.84rem;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-naver-preview:hover {
-            background: #03C75A;
-            color: white;
-            border-color: #03C75A;
-        }
-        .btn-naver-preview .naver-badge {
-            background: #03C75A;
-            color: white;
-        }
-        .btn-naver-preview:hover .naver-badge {
-            background: white;
-            color: #03C75A;
-        }
-
-        /* ==========================================================================
-           [21. 100문 커플 Q&A 카탈로그 & 추가 질문 & 히스토리 모달 스타일]
-           ========================================================================== */
-        .qa-action-row {
-            display: flex;
-            gap: 6px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-        .btn-qa-action {
-            background: white;
-            border: 1px solid var(--border-light);
-            color: var(--text-sub);
-            padding: 6px 11px;
-            border-radius: var(--radius-full);
-            font-size: 0.78rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-qa-action:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-            background: var(--primary-light);
-            transform: translateY(-1px);
-        }
-        .qa-catalog-search-wrap {
-            margin-bottom: 14px;
-            position: relative;
-        }
-        .qa-catalog-search-wrap i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary);
-            font-size: 0.95rem;
-        }
-        .qa-catalog-search-wrap input {
-            width: 100%;
-            padding: 10px 14px 10px 38px;
-            border: 1.5px solid var(--border-light);
-            border-radius: var(--radius-sm);
-            font-size: 0.92rem;
-            outline: none;
-        }
-        .qa-catalog-search-wrap input:focus {
-            border-color: var(--primary);
-        }
-        .qa-catalog-cats {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 14px;
-        }
-        .qa-cat-chip {
-            padding: 6px 12px;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--border-light);
-            background: white;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .qa-cat-chip.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            font-weight: 800;
-        }
-        .qa-catalog-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 480px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-        .qa-catalog-card {
-            background: #F9FAFD;
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-sm);
-            padding: 12px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.2s;
-        }
-        .qa-catalog-card:hover {
-            background: white;
-            border-color: var(--primary);
-            box-shadow: var(--shadow-xs);
-            transform: translateY(-1px);
-        }
-        .qa-catalog-q-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex-grow: 1;
-        }
-        .qa-catalog-meta {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.74rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-        .qa-catalog-q-text {
-            font-size: 0.94rem;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1.4;
-        }
-        .btn-select-qa {
-            background: var(--primary-light);
-            border: 1px solid var(--primary);
-            color: var(--primary-dark);
-            padding: 6px 12px;
-            border-radius: var(--radius-full);
-            font-size: 0.76rem;
-            font-weight: 800;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .btn-select-qa:hover {
-            background: var(--primary);
-            color: white;
-        }
-        .qa-history-item {
-            background: #F8FAFD;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-light);
-            padding: 14px 16px;
-            margin-bottom: 12px;
-        }
-        .qa-history-q {
-            font-size: 0.98rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* ==========================================================================
-           [22. 하루 일정 계획 & 여행 짐싸기/메모 플래너 뷰 스타일]
-           ========================================================================== */
-        .planner-container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 24px 20px;
-        }
-        .planner-segmented-wrap {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-        .planner-segmented-control {
-            background: #EDF2F7;
-            padding: 5px;
-            border-radius: var(--radius-full);
-            display: inline-flex;
-            gap: 6px;
-            border: 1px solid var(--border-light);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
-        }
-        .planner-seg-btn {
-            background: transparent;
-            border: none;
-            padding: 9px 22px;
-            border-radius: var(--radius-full);
-            font-size: 0.92rem;
-            font-weight: 800;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.25s var(--ease-spring);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .planner-seg-btn:hover {
-            color: var(--primary);
-        }
-        .planner-seg-btn.active {
-            background: white;
-            color: var(--primary-dark);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        /* 하루 일정 계획표 헤더 및 날짜 선택기 */
-        .itinerary-day-header {
-            background: white;
-            border-radius: var(--radius-md);
-            padding: 22px 24px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 20px;
-        }
-        .itinerary-nav-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-        .itinerary-date-title {
-            font-size: 1.45rem;
-            font-weight: 800;
-            font-family: 'Playfair Display', serif;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .itinerary-quick-dates {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .itinerary-theme-badge {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            padding: 6px 14px;
-            border-radius: var(--radius-full);
-            font-size: 0.9rem;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .itinerary-theme-badge:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .itinerary-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        /* 타임라인 카드 */
-        .itinerary-timeline-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .itinerary-card {
-            background: white;
-            border-radius: var(--radius-sm);
-            border: 1.5px solid var(--border-light);
-            padding: 16px 18px;
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            transition: all 0.25s var(--ease-spring);
-            box-shadow: var(--shadow-xs);
-            position: relative;
-        }
-        .itinerary-card:hover {
-            border-color: var(--primary);
-            box-shadow: var(--shadow-sm);
-            transform: translateX(3px);
-        }
-        .itinerary-card.done {
-            background: #FAFAFD;
-            opacity: 0.6;
-        }
-        .itinerary-card.done .itinerary-place-title {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
-        .itinerary-time-chip {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-size: 0.82rem;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: var(--radius-full);
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            flex-shrink: 0;
-        }
-        .itinerary-content {
-            flex-grow: 1;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .itinerary-top-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .itinerary-cat-tag {
-            font-size: 0.72rem;
-            font-weight: 800;
-            padding: 2px 8px;
-            border-radius: var(--radius-full);
-            white-space: nowrap;
-        }
-        .itinerary-place-title {
-            font-size: 1.05rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-        .itinerary-memo {
-            font-size: 0.88rem;
-            color: var(--text-sub);
-            line-height: 1.45;
-        }
-        .itinerary-bottom-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 4px;
-            flex-wrap: wrap;
-        }
-        .itinerary-cost-chip {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #C05621;
-            background: #FFF5EB;
-            padding: 2px 8px;
-            border-radius: var(--radius-full);
-        }
-        .itinerary-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: auto;
-        }
-
-        /* 🧳 여행 짐싸기 체크리스트 & 메모 스타일 */
-        .packing-header-card {
-            background: white;
-            border-radius: var(--radius-md);
-            padding: 24px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 20px;
-        }
-        .packing-title-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-        .packing-trip-title {
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .packing-progress-bar-wrap {
-            background: #EDF2F7;
-            height: 10px;
-            border-radius: var(--radius-full);
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-        .packing-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #7FA9C6 0%, #FF7582 100%);
-            border-radius: var(--radius-full);
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-        .packing-stats-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.84rem;
-            font-weight: 700;
-            color: var(--text-muted);
-        }
-        .packing-filters {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 18px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-        .packing-filter-btn {
-            padding: 7px 16px;
-            border-radius: var(--radius-full);
-            border: 1.5px solid var(--border-light);
-            background: white;
-            font-size: 0.84rem;
-            font-weight: 800;
-            color: var(--text-sub);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .packing-filter-btn:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-        .packing-filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 10px var(--primary-glow);
-        }
-
-        .packing-cat-group {
-            background: white;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-light);
-            margin-bottom: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow-xs);
-        }
-        .packing-cat-header {
-            background: #F8FAFD;
-            padding: 12px 18px;
-            font-size: 0.92rem;
-            font-weight: 800;
-            color: var(--text-main);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-light);
-        }
-        .packing-items-list {
-            padding: 8px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .packing-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            border-radius: 8px;
-            transition: background 0.2s;
-        }
-        .packing-item:hover {
-            background: #F8FAFD;
-        }
-        .packing-item.checked {
-            opacity: 0.5;
-        }
-        .packing-item.checked .packing-item-name {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
-        .packing-item-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-grow: 1;
-            cursor: pointer;
-        }
-        .packing-assignee-badge {
-            font-size: 0.72rem;
-            font-weight: 800;
-            padding: 2px 7px;
-            border-radius: var(--radius-full);
-            white-space: nowrap;
-        }
-        .packing-assignee-badge.hini { background: #FFF0F2; color: var(--primary); }
-        .packing-assignee-badge.hyoni { background: #EEF5FC; color: var(--secondary); }
-        .packing-assignee-badge.common { background: #EDF2F7; color: var(--text-sub); }
-
-        /* 여행 메모장 카드 */
-        .travel-memo-card {
-            background: white;
-            border-radius: var(--radius-md);
-            padding: 22px 24px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-sm);
-            margin-top: 24px;
-        }
-        .travel-memo-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .travel-memo-textarea {
-            width: 100%;
-            min-height: 180px;
-            padding: 16px;
-            border: 1.5px solid var(--border-light);
-            border-radius: var(--radius-sm);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text-main);
-            outline: none;
-            background: #F9FAFD;
-            transition: border-color 0.2s;
-            resize: vertical;
-        }
-        .travel-memo-textarea:focus {
-            background: white;
-            border-color: var(--primary);
-        }
-
-    
-        /* ==========================================================================
-           [23. 인스타그램 요즘감성 부드러운 모션 & 인터랙션 디자인 시스템]
-           ========================================================================== */
-
-        /* 1) 뷰 전환 시 부드러운 페이드인 & 슬라이드 업 모션 */
-        .view-section {
-            display: none;
-            opacity: 0;
-        }
-        .view-section.active {
-            display: block !important;
-            animation: instaViewFadeIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes instaViewFadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(14px) scale(0.995);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* 2) 카드 컴포넌트 인스타그램 감성 소프트 플로팅 & 보더 글로우 */
-        .widget-card {
-            background: rgba(255, 255, 255, 0.94) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
-            border: 1px solid rgba(226, 232, 240, 0.85) !important;
-            transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease, border-color 0.28s ease !important;
-        }
-        .widget-card:hover {
-            transform: translateY(-3px) !important;
-            box-shadow: 0 12px 30px rgba(255, 117, 130, 0.1), 0 4px 10px rgba(0, 0, 0, 0.02) !important;
-            border-color: rgba(255, 117, 130, 0.35) !important;
-        }
-
-        /* 3) 모든 클릭 요소 인스타그램 감성 햅틱 스프링 피드백 (Active Scale) */
-        .btn-submit, .btn-auth, .icon-btn, .wish-filter-chip, .planner-seg-btn,
-        .cal-seg-btn, .board-tab, .qa-cat-chip, .packing-filter-btn, .btn-qa-action,
-        .naver-map-btn, .btn-naver-preview, .cat-chip-item, .nav-item, .mood-picker-btn {
-            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .btn-submit:active, .btn-auth:active, .icon-btn:active, .wish-filter-chip:active,
-        .planner-seg-btn:active, .cal-seg-btn:active, .board-tab:active, .qa-cat-chip:active,
-        .packing-filter-btn:active, .btn-qa-action:active, .naver-map-btn:active,
-        .btn-naver-preview:active, .cat-chip-item:active, .nav-item:active, .mood-picker-btn:active {
-            transform: scale(0.95) !important;
-            transition: transform 0.1s ease !important;
-        }
-
-        /* 4) 버킷리스트 & 일정 & 짐싸기 원형 체크박스 쫀득한 팝 애니메이션 */
-        .bucket-custom-check {
-            width: 24px !important;
-            height: 24px !important;
-            border-radius: 50% !important;
-            border: 2px solid var(--border-light) !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-            flex-shrink: 0;
-            background: white !important;
-        }
-        .bucket-custom-check:hover {
-            border-color: var(--primary) !important;
-            transform: scale(1.12);
-        }
-        .itinerary-card.done .bucket-custom-check,
-        .packing-item.checked .bucket-custom-check,
-        .date-wish-item.done .bucket-custom-check,
-        .bucket-item.checked .bucket-custom-check {
-            background: var(--primary) !important;
-            border-color: var(--primary) !important;
-            color: white !important;
-            box-shadow: 0 2px 8px var(--primary-glow) !important;
-        }
-        .bucket-custom-check i {
-            font-size: 0.72rem !important;
-            animation: checkPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        @keyframes checkPop {
-            0% { transform: scale(0.3); opacity: 0; }
-            60% { transform: scale(1.3); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* 5) 모달 팝업 인스타그램 시트 팝업 모션 & 글래스 블러 */
-        .modal-overlay {
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
-            transition: opacity 0.28s ease, visibility 0.28s ease !important;
-        }
-        .modal-overlay.active .modal-content {
-            animation: instaModalPop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
-        }
-        @keyframes instaModalPop {
-            0% {
-                opacity: 0;
-                transform: translateY(20px) scale(0.96);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* 6) 플로팅 로맨틱 하트 & 사랑 팝업 부드러운 호흡 모션 */
-        @keyframes romanticFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-6px) rotate(1.2deg); }
-        }
-        .floating-heart-badge {
-            animation: romanticFloat 3.8s ease-in-out infinite !important;
-        }
-        @keyframes pulseHeart {
-            0% { transform: scale(1); filter: drop-shadow(0 2px 6px var(--primary-glow)); }
-            50% { transform: scale(1.12); filter: drop-shadow(0 6px 16px var(--primary-glow)); }
-            100% { transform: scale(1); filter: drop-shadow(0 2px 6px var(--primary-glow)); }
-        }
-
-        /* 7) 캘린더 및 스토리 피드 카드 호버 미세 줌 */
-        .insta-feed-media-wrap img, .insta-card-img-slide img {
-            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease !important;
-        }
-        .insta-feed-card:hover .insta-feed-media-wrap img {
-            transform: scale(1.035) !important;
-        }
-
-        /* 8) 툴팁 및 뱃지 부드러운 트랜지션 */
-        .naver-map-btn {
-            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-        }
-        .naver-map-btn:hover {
-            transform: translateY(-2px) scale(1.05) !important;
-        }
-
     </style>
 </head>
 <body>
@@ -4479,16 +3880,28 @@
         </div>
     </div>
 
-        <!-- 5. 메인 앱 컨테이너 -->
+    <!-- 5. 메인 앱 컨테이너 -->
     <div id="app-container">
-        <!-- 사이드바 & 하단 반응형 네비게이션 -->
-        <nav class="bottom-nav" id="appNav">
-            <!-- PC 전용 사이드바 상단 브랜드 로고 -->
-            <div class="sidebar-brand" onclick="switchView('home', document.querySelector('.nav-item'))">
+        <!-- 상단 고정 헤더 -->
+        <header class="app-header">
+            <div class="header-brand" onclick="switchView('home', document.querySelector('.nav-item'))">
                 <div class="brand-icon-wrap"><i class="fa-solid fa-heart"></i></div>
-                <div class="sidebar-brand-title">Our <span>Story</span></div>
+                <div class="header-title-text">Our <span>Story</span></div>
             </div>
+            <div class="header-actions">
+                <div class="header-clock-chip" id="top-clock-chip">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="top-clock">2026. 10. 03</span>
+                </div>
+                <!-- 상단 설정 & 제어 통합 단일 버튼 (모바일 화면 옆 넘침 100% 방지) -->
+                <button class="icon-btn" id="headerMenuBtn" onclick="showModal('settingsModal')" title="통합 설정 및 제어" style="background: var(--primary-light); color: var(--primary); border-color: var(--primary); width: 42px; height: 42px;">
+                    <i class="fa-solid fa-sliders" style="font-size: 1.15rem;"></i>
+                </button>
+            </div>
+        </header>
 
+        <!-- 사이드바 & 하단 반응형 네비게이션 -->
+        <nav class="bottom-nav">
             <a class="nav-item active" onclick="switchView('home', this)">
                 <i class="fa-solid fa-house"></i>
                 <span>홈</span>
@@ -4501,12 +3914,8 @@
                 <i class="fa-regular fa-images"></i>
                 <span>스토리</span>
             </a>
-            <a class="nav-item" onclick="switchView('planner', this)">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span>일정·여행</span>
-            </a>
 
-            <!-- 데스크톱 사이드바 하단 프로필 요약 카드 -->
+            <!-- 데스크톱 사이드바 하단 프로필 요약 카드 (상대방 애칭 & 사진 동적 연동) -->
             <div class="sidebar-profile-card" id="sidebarProfileCard" title="클릭하여 상대방 사진 변경">
                 <div style="position: relative; flex-shrink: 0;">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop" class="sidebar-profile-avatar" id="sidebarAvatar" alt="프로필 아바타">
@@ -4519,32 +3928,8 @@
             </div>
         </nav>
 
-        <!-- 우측(모바일은 중앙) 메인 레이아웃 래퍼 -->
-        <div class="app-main-layout" id="appMainLayout">
-            <!-- 상단 고정 헤더 -->
-            <header class="app-header">
-                <div class="header-brand" onclick="switchView('home', document.querySelector('.nav-item'))">
-                    <div class="brand-icon-wrap"><i class="fa-solid fa-heart"></i></div>
-                    <div class="header-title-text">Our <span>Story</span></div>
-                </div>
-                <div class="header-actions">
-                    <div class="header-clock-chip" id="top-clock-chip">
-                        <i class="fa-regular fa-clock"></i>
-                        <span id="top-clock">2026. 10. 07</span>
-                    </div>
-                    <!-- 빠른 화면 모드 토글 버튼 (모바일 📱 / PC 와이드 💻) -->
-                    <button type="button" class="icon-btn" id="quickLayoutToggleBtn" onclick="toggleLayoutModeQuick()" title="모바일 뷰 / PC 와이드 뷰 즉시 전환" style="width: auto; padding: 0 12px; border-radius: var(--radius-full); font-size: 0.82rem; font-weight: 700; gap: 6px; display: inline-flex;">
-                        <i class="fa-solid fa-display" style="color: var(--primary);"></i>
-                        <span id="quickLayoutText">PC 모드</span>
-                    </button>
-                    <!-- 상단 설정 & 제어 통합 단일 버튼 -->
-                    <button class="icon-btn" id="headerMenuBtn" onclick="showModal('settingsModal')" title="통합 설정 및 제어" style="background: var(--primary-light); color: var(--primary); border-color: var(--primary); width: 40px; height: 40px;">
-                        <i class="fa-solid fa-sliders" style="font-size: 1.1rem;"></i>
-                    </button>
-                </div>
-            </header>
-
-            <main class="view-section active" id="view-home">
+        <!-- [VIEW 1] 홈 화면 -->
+        <main class="view-section active" id="view-home">
             <div class="home-container">
                 <!-- 감성 배너 영역 -->
                 <div class="banner-wrap">
@@ -4581,55 +3966,7 @@
                         <div id="homeUpcomingList" class="upcoming-entries-wrap">
                             <!-- JS renderHomeUpcomingSchedule()로 실시간 렌더링 -->
                         </div>
-                    
-                    <!-- [신규 홈 위젯] 하루 일정 & 여행 짐싸기 요약 위젯 -->
-                    <div class="widget-card grid-full-width" id="homePlannerWidget" style="background: linear-gradient(135deg, #F0F7FD 0%, #FFFFFF 100%); border: 1.5px solid rgba(127, 169, 198, 0.35);">
-                        <div class="widget-title">
-                            <div class="widget-title-left">
-                                <i class="fa-solid fa-map-location-dot" style="color: var(--secondary);"></i>
-                                <span>오늘의 일정 & 여행 준비</span>
-                            </div>
-                            <button type="button" class="icon-btn" onclick="switchView('planner', document.querySelectorAll('.nav-item')[3])" title="플래너 바로가기" style="width: 34px; height: 34px;">
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 4px;">
-                            <!-- 오늘의 일정 현황 -->
-                            <div style="background: white; border-radius: var(--radius-sm); padding: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-xs);">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                    <span style="font-size: 0.84rem; font-weight: 800; color: var(--secondary);"><i class="fa-solid fa-calendar-day"></i> 오늘 하루 일정</span>
-                                    <span class="upcoming-count-badge" id="homeDailyPlanCount" style="background: var(--secondary);">0개</span>
-                                </div>
-                                <div id="homeDailyPlanSummary" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); min-height: 40px; display: flex; align-items: center;">
-                                    오늘 예정된 일정이 없습니다.
-                                </div>
-                                <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
-                                    <button type="button" class="btn-submit" style="width: auto; padding: 6px 14px; font-size: 0.8rem; background: var(--secondary);" onclick="switchView('planner', document.querySelectorAll('.nav-item')[3]); setPlannerSubTab('daily');">
-                                        일정 작성하기 ❯
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- 여행 짐싸기 현황 -->
-                            <div style="background: white; border-radius: var(--radius-sm); padding: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-xs);">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                    <span style="font-size: 0.84rem; font-weight: 800; color: var(--primary);"><i class="fa-solid fa-suitcase-rolling"></i> 여행 짐싸기</span>
-                                    <span id="homePackingPercent" style="font-size: 0.88rem; font-weight: 800; color: var(--primary);">0%</span>
-                                </div>
-                                <div class="packing-progress-bar-wrap" style="margin-bottom: 8px; height: 8px;">
-                                    <div class="packing-progress-bar" id="homePackingProgressBar" style="width: 0%;"></div>
-                                </div>
-                                <div id="homePackingStats" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 700; margin-bottom: 6px;">
-                                    0개 챙김 / 총 0개
-                                </div>
-                                <div style="display: flex; justify-content: flex-end;">
-                                    <button type="button" class="btn-submit" style="width: auto; padding: 6px 14px; font-size: 0.8rem; background: var(--primary);" onclick="switchView('planner', document.querySelectorAll('.nav-item')[3]); setPlannerSubTab('packing');">
-                                        짐 챙기기 ❯
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-</div>
 
                     <!-- 위젯 1: 우리들의 프로필 -->
                     <div class="widget-card">
@@ -4710,44 +4047,34 @@
                         </div>
                     </div>
 
-                                        <!-- [신규 커플 위젯 2] 커플 1문 1답 100문 Q&A 위젯 -->
+                    <!-- [신규 커플 위젯 2] 커플 1문 1답 Q&A 위젯 -->
                     <div class="widget-card" id="coupleQaWidget">
                         <div class="widget-title">
                             <div class="widget-title-left">
                                 <i class="fa-solid fa-comments" style="color: var(--primary);"></i>
-                                <span>둘만의 1문 1답 100문 Q&A</span>
+                                <span>둘만의 1문 1답 Q&A</span>
                             </div>
-                            <div style="display: flex; gap: 6px; align-items: center;">
-                                <button class="icon-btn" onclick="nextRandomQuestion()" title="랜덤 질문 뽑기" style="width: 34px; height: 34px;">
-                                    <i class="fa-solid fa-shuffle"></i>
-                                </button>
-                                <button class="icon-btn" onclick="openQaCatalogModal()" title="100문 전체 목록 보기" style="width: 34px; height: 34px;">
-                                    <i class="fa-solid fa-book-open"></i>
-                                </button>
-                            </div>
+                            <button class="icon-btn" onclick="nextRandomQuestion()" title="다른 질문 뽑기" style="width: 34px; height: 34px;">
+                                <i class="fa-solid fa-shuffle"></i>
+                            </button>
                         </div>
                         <div class="qa-box">
                             <div class="qa-question-bar">
-                                <span class="qa-badge" id="qaCategoryBadge">설렘·첫만남</span>
-                                <span class="qa-question-text" id="qaQuestionText">우리가 처음 만났던 날, 나에 대한 너의 첫인상은 어땠어?</span>
-                            </div>
-                            <div class="qa-action-row">
-                                <button type="button" class="btn-qa-action" onclick="openQaCatalogModal()"><i class="fa-solid fa-list-ol"></i> 100문 모음집</button>
-                                <button type="button" class="btn-qa-action" onclick="openAddCustomQaModal()"><i class="fa-solid fa-plus"></i> 직접 질문 만들기</button>
-                                <button type="button" class="btn-qa-action" onclick="openQaHistoryModal()"><i class="fa-solid fa-clock-rotate-left"></i> 지난 답변 기록</button>
+                                <span class="qa-badge">Today's Q</span>
+                                <span class="qa-question-text" id="qaQuestionText">서로에게 가장 심쿵했던 순간은 언제인가요?</span>
                             </div>
                             <div class="qa-answers-list">
                                 <div class="qa-answer-item">
-                                    <span class="qa-author-tag girl">히니 💕</span>
+                                    <span class="qa-author-tag girl">히니</span>
                                     <div class="qa-answer-bubble" id="qaHiniAnswer">아직 답변을 작성하지 않았어요 💕</div>
                                 </div>
                                 <div class="qa-answer-item">
-                                    <span class="qa-author-tag boy">효니 💖</span>
+                                    <span class="qa-author-tag boy">효니</span>
                                     <div class="qa-answer-bubble" id="qaHyoniAnswer">아직 답변을 작성하지 않았어요 💖</div>
                                 </div>
                             </div>
                             <div class="qa-input-row">
-                                <input type="text" id="qaInputText" placeholder="내 진심이 담긴 답변을 남겨보세요..." onkeydown="if(event.key==='Enter') submitQaAnswer()">
+                                <input type="text" id="qaInputText" placeholder="내 답변을 남겨보세요..." onkeydown="if(event.key==='Enter') submitQaAnswer()">
                                 <button type="button" class="btn-submit" style="width: auto; padding: 10px 16px; font-size: 0.88rem;" onclick="submitQaAnswer()">답변</button>
                             </div>
                         </div>
@@ -4860,138 +4187,6 @@
                 <div id="boardList"></div>
             </div>
         </main>
-
-        <!-- [VIEW 4] 일정·여행 플래너 뷰 (하루 일정 계획표 & 여행 짐싸기/메모) -->
-        <main class="view-section" id="view-planner">
-            <div class="planner-container">
-                <!-- 플래너 서브탭 (인스타그램 감성 세그먼트) -->
-                <div class="planner-segmented-wrap">
-                    <div class="planner-segmented-control">
-                        <button type="button" class="planner-seg-btn active" id="subtabDailyBtn" onclick="setPlannerSubTab('daily')">
-                            <i class="fa-regular fa-calendar-check"></i> 하루 일정 계획표
-                        </button>
-                        <button type="button" class="planner-seg-btn" id="subtabPackingBtn" onclick="setPlannerSubTab('packing')">
-                            <i class="fa-solid fa-suitcase-rolling"></i> 여행 짐싸기 & 메모
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 서브탭 1: 하루 일정 계획표 (Daily Itinerary) -->
-                <div id="plannerDailyTabContent">
-                    <div class="itinerary-day-header">
-                        <div class="itinerary-nav-row">
-                            <button type="button" class="cal-nav-btn" onclick="changeItineraryDate(-1)" title="이전 날"><i class="fa-solid fa-chevron-left"></i></button>
-                            <div class="itinerary-date-title">
-                                <i class="fa-regular fa-calendar-days" style="color: var(--primary);"></i>
-                                <span id="itineraryDateDisplay">2026. 10. 07 (수)</span>
-                            </div>
-                            <button type="button" class="cal-nav-btn" onclick="changeItineraryDate(1)" title="다음 날"><i class="fa-solid fa-chevron-right"></i></button>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                            <div class="itinerary-quick-dates">
-                                <button type="button" class="wish-filter-chip" onclick="setItineraryQuickDate(0)">오늘</button>
-                                <button type="button" class="wish-filter-chip" onclick="setItineraryQuickDate(1)">내일</button>
-                                <button type="button" class="wish-filter-chip" onclick="setItineraryQuickDate(2)">모레</button>
-                                <input type="date" id="itineraryDatePicker" class="form-input" style="width: auto; padding: 6px 12px; font-size: 0.82rem;" onchange="setItineraryCustomDate(this.value)">
-                            </div>
-                            <div class="itinerary-theme-badge" onclick="editItineraryTheme()" title="일정 테마/제목 수정">
-                                <i class="fa-solid fa-pen"></i>
-                                <span id="itineraryThemeText">성수동 감성 데이트 코스 🌿</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 툴바 -->
-                    <div class="itinerary-toolbar">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-main);">방문 코스</span>
-                            <span class="upcoming-count-badge" id="itineraryStopCount">0곳</span>
-                        </div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <button type="button" class="btn-submit" style="width: auto; padding: 8px 14px; font-size: 0.85rem; background: var(--secondary);" onclick="copyItinerarySummary()">
-                                <i class="fa-regular fa-copy"></i> 일정 복사
-                            </button>
-                            <button type="button" class="btn-submit" style="width: auto; padding: 8px 16px; font-size: 0.85rem;" onclick="openAddDailyPlanModal()">
-                                <i class="fa-solid fa-plus"></i> 코스 추가
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 타임라인 코스 목록 -->
-                    <div class="itinerary-timeline-wrap" id="itineraryTimelineList">
-                        <!-- JS 렌더링 -->
-                    </div>
-                </div>
-
-                <!-- 서브탭 2: 여행 짐싸기 체크리스트 & 메모 (Travel Packing & Memo) -->
-                <div id="plannerPackingTabContent" style="display: none;">
-                    <div class="packing-header-card">
-                        <div class="packing-title-row">
-                            <div class="packing-trip-title">
-                                <i class="fa-solid fa-plane-departure" style="color: var(--primary);"></i>
-                                <span id="packingTripTitleText">우리의 힐링 여행 짐싸기 🧳</span>
-                                <button type="button" class="icon-btn" onclick="editPackingTripTitle()" title="여행 제목 수정" style="width: 30px; height: 30px; font-size: 0.85rem;">
-                                    <i class="fa-solid fa-pen"></i>
-                                </button>
-                            </div>
-                            <button type="button" class="btn-submit" style="width: auto; padding: 8px 14px; font-size: 0.82rem; background: #68D391; box-shadow: none;" onclick="loadPackingPreset30()">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i> 필수 짐 30선 담기
-                            </button>
-                        </div>
-                        <div class="packing-progress-bar-wrap">
-                            <div class="packing-progress-bar" id="packingProgressBar"></div>
-                        </div>
-                        <div class="packing-stats-row">
-                            <span>달성률 <b id="packingPercentText" style="color: var(--primary);">0%</b></span>
-                            <span id="packingStatsDetailText">0개 준비됨 / 총 0개</span>
-                        </div>
-                    </div>
-
-                    <!-- 담당자 필터 -->
-                    <div class="packing-filters">
-                        <button type="button" class="packing-filter-btn active" onclick="filterPackingAssignee('전체', this)">전체 항목</button>
-                        <button type="button" class="packing-filter-btn" onclick="filterPackingAssignee('공통', this)">👫 함께 챙길 짐</button>
-                        <button type="button" class="packing-filter-btn" onclick="filterPackingAssignee('히니', this)">💕 히니 짐</button>
-                        <button type="button" class="packing-filter-btn" onclick="filterPackingAssignee('효니', this)">💖 효니 짐</button>
-                    </div>
-
-                    <!-- 짐 추가 버튼 및 리스트 -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                        <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-main);">체크리스트</span>
-                        <div style="display: flex; gap: 8px;">
-                            <button type="button" class="wish-filter-chip" onclick="toggleAllPackingItems()">전체 완료/해제</button>
-                            <button type="button" class="btn-submit" style="width: auto; padding: 8px 16px; font-size: 0.85rem;" onclick="openAddPackingItemModal()">
-                                <i class="fa-solid fa-plus"></i> 물품 추가
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="packingCategorizedList">
-                        <!-- JS 렌더링 -->
-                    </div>
-
-                    <!-- 여행 필수 정보 & 메모장 -->
-                    <div class="travel-memo-card">
-                        <div class="travel-memo-header">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <i class="fa-solid fa-note-sticky" style="color: #DD6B20; font-size: 1.2rem;"></i>
-                                <span style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">여행 준비 메모장</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span id="travelMemoSaveTime" style="font-size: 0.78rem; color: var(--text-muted);">자동 저장됨</span>
-                                <button type="button" class="btn-submit" style="width: auto; padding: 6px 12px; font-size: 0.78rem; background: var(--secondary);" onclick="copyTravelMemo()">
-                                    <i class="fa-regular fa-copy"></i> 메모 복사
-                                </button>
-                            </div>
-                        </div>
-                        <textarea id="travelMemoInput" class="travel-memo-textarea" placeholder="항공권/KTX 예매번호, 숙소 체크인 시간, 렌터카 인수 장소, 가고 싶은 맛집 후보 등을 자유롭게 기록해보세요. 입력하는 즉시 안전하게 자동 저장됩니다 📝" oninput="handleTravelMemoInput()"></textarea>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-
-                </div> <!-- end app-main-layout -->
 
         <!-- 플로팅 글쓰기 버튼 -->
         <button class="fab" onclick="handleFabClick()" title="새 기록 남기기"><i class="fa-solid fa-pen"></i></button>
@@ -5491,12 +4686,7 @@
                 </div>
                 <div class="form-group input-with-icon">
                     <i class="fa-solid fa-location-dot"></i>
-                    <div style="display:flex; gap:8px;">
-                        <input type="text" id="wishTitleInput" class="form-input" placeholder="장소명 (예: 성수동 카페, 한남동 파스타)" style="flex:1;">
-                        <button type="button" class="btn-naver-preview" onclick="openNaverSearchFromInput('wishTitleInput')">
-                            <span class="naver-badge">N</span> 검색
-                        </button>
-                    </div>
+                    <input type="text" id="wishTitleInput" class="form-input" placeholder="장소명 (예: 성수동 카페 00, 한남동 파스타)">
                 </div>
                 <div class="form-group input-with-icon">
                     <i class="fa-solid fa-comment-dots"></i>
@@ -5505,171 +4695,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-submit" onclick="addDateWishItem()"><i class="fa-solid fa-check"></i> 위시리스트에 담기</button>
-            </div>
-        </div>
-    </div>
-
-    
-    <!-- (11) 100문 커플 Q&A 카탈로그 모달 -->
-    <div class="modal-overlay" id="qaCatalogModal">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fa-solid fa-book-open" style="color: var(--primary);"></i> 커플 100문 Q&A 모음집</h3>
-                <button type="button" class="btn-close" onclick="hideModal('qaCatalogModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="qa-catalog-search-wrap">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="qaSearchInput" placeholder="질문 키워드 검색 (예: 첫인상, 고백, 밸런스, 버킷리스트)..." oninput="filterQaCatalog()">
-                </div>
-                <div class="qa-catalog-cats" id="qaCatalogCategoryChips">
-                    <button type="button" class="qa-cat-chip active" onclick="setQaCatalogCategory('전체', this)">전체 (100)</button>
-                    <button type="button" class="qa-cat-chip" onclick="setQaCatalogCategory('설렘·첫만남', this)">설렘·첫만남</button>
-                    <button type="button" class="qa-cat-chip" onclick="setQaCatalogCategory('취향·일상', this)">취향·일상</button>
-                    <button type="button" class="qa-cat-chip" onclick="setQaCatalogCategory('감정·소통', this)">감정·소통</button>
-                    <button type="button" class="qa-cat-chip" onclick="setQaCatalogCategory('가치관·깊은대화', this)">가치관·깊은대화</button>
-                    <button type="button" class="qa-cat-chip" onclick="setQaCatalogCategory('미래·버킷리스트', this)">미래·버킷리스트</button>
-                    <button type="button" class="qa-cat-chip" onclick="setQaCatalogCategory('유쾌한상상·밸런스', this)">유쾌한상상·밸런스</button>
-                    <button type="button" class="qa-cat-chip" onclick="setQaCatalogCategory('우리만의 질문', this)">우리만의 질문</button>
-                </div>
-                <div class="qa-catalog-list" id="qaCatalogItemsList">
-                    <!-- JS 렌더링 -->
-                </div>
-            </div>
-            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
-                <button type="button" class="btn-submit" style="width: auto; padding: 10px 18px; font-size: 0.88rem; background: var(--secondary);" onclick="openAddCustomQaModal(); hideModal('qaCatalogModal');">
-                    <i class="fa-solid fa-plus"></i> 새 질문 만들기
-                </button>
-                <button type="button" class="btn-submit" style="width: auto; padding: 10px 18px; font-size: 0.88rem; background: #EDF2F7; color: var(--text-main); box-shadow: none;" onclick="hideModal('qaCatalogModal')">닫기</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- (12) 직접 커플 질문 추가 모달 -->
-    <div class="modal-overlay" id="addCustomQaModal">
-        <div class="modal-content" style="max-width: 440px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fa-solid fa-pen-fancy" style="color: var(--primary);"></i> 나만의 커플 질문 추가</h3>
-                <button type="button" class="btn-close" onclick="hideModal('addCustomQaModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">카테고리</label>
-                    <select id="customQaCategory" class="form-select">
-                        <option value="우리만의 질문">💌 우리만의 특별한 질문</option>
-                        <option value="설렘·첫만남">🌸 설렘·첫만남</option>
-                        <option value="취향·일상">☕ 취향·일상</option>
-                        <option value="감정·소통">💬 감정·소통</option>
-                        <option value="가치관·깊은대화">💎 가치관·깊은대화</option>
-                        <option value="미래·버킷리스트">✈️ 미래·버킷리스트</option>
-                        <option value="유쾌한상상·밸런스">🎲 유쾌한상상·밸런스</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">질문 내용</label>
-                    <textarea id="customQaText" class="form-textarea" rows="4" placeholder="상대방에게 묻고 싶은 달콤하거나 솔직한 질문을 적어보세요. (예: 만약 내일 당장 휴가가 생긴다면 나랑 어디로 떠나고 싶어?)"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-submit" onclick="submitCustomQuestion()"><i class="fa-solid fa-check"></i> 질문 추가 및 오늘 질문으로 설정</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- (13) 지난 답변 기록 모달 -->
-    <div class="modal-overlay" id="qaHistoryModal">
-        <div class="modal-content" style="max-width: 540px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fa-solid fa-clock-rotate-left" style="color: var(--primary);"></i> 둘만의 Q&A 답변 기록</h3>
-                <button type="button" class="btn-close" onclick="hideModal('qaHistoryModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body" id="qaHistoryBody" style="max-height: 500px; overflow-y: auto;">
-                <!-- JS 렌더링 -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-submit" onclick="hideModal('qaHistoryModal')">닫기</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- (14) 하루 일정 코스 추가 모달 -->
-    <div class="modal-overlay" id="addDailyPlanModal">
-        <div class="modal-content" style="max-width: 460px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fa-solid fa-map-pin" style="color: var(--primary);"></i> 새로운 일정 코스 추가</h3>
-                <button type="button" class="btn-close" onclick="hideModal('addDailyPlanModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">시간 및 카테고리</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="time" id="planTimeInput" class="form-input" value="12:00" style="flex: 1;">
-                        <select id="planCatInput" class="form-select" style="flex: 1.2;">
-                            <option value="🍽️ 식사">🍽️ 식사/맛집</option>
-                            <option value="☕ 카페">☕ 카페/디저트</option>
-                            <option value="🚗 이동">🚗 이동/드라이브</option>
-                            <option value="🎬 활동">🎬 활동/체험</option>
-                            <option value="🏨 숙소">🏨 숙소/체크인</option>
-                            <option value="🛍️ 쇼핑">🛍️ 쇼핑/소품샵</option>
-                            <option value="✨ 기타">✨ 기타 일정</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">장소 또는 일정 이름</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="text" id="planPlaceInput" class="form-input" placeholder="예: 성수동 소문난감자탕, 더현대 서울" style="flex: 1;">
-                        <button type="button" class="btn-naver-preview" onclick="openNaverSearchFromInput('planPlaceInput')">
-                            <span class="naver-badge">N</span> 검색
-                        </button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">메모 및 예상 예산 (선택)</label>
-                    <input type="text" id="planMemoInput" class="form-input" placeholder="예: 2인 세트 주문, 웨이팅 20분 예상" style="margin-bottom: 8px;">
-                    <input type="text" id="planCostInput" class="form-input" placeholder="예: 35,000원">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-submit" onclick="addDailyPlanStop()"><i class="fa-solid fa-check"></i> 코스에 추가하기</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- (15) 여행 짐 추가 모달 -->
-    <div class="modal-overlay" id="addPackingItemModal">
-        <div class="modal-content" style="max-width: 440px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fa-solid fa-suitcase" style="color: var(--primary);"></i> 챙길 짐 물품 추가</h3>
-                <button type="button" class="btn-close" onclick="hideModal('addPackingItemModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">물품 분류 (카테고리)</label>
-                    <select id="packingCatSelect" class="form-select">
-                        <option value="📄 필수품/신분증">📄 필수품 / 신분증</option>
-                        <option value="👕 의류/잡화">👕 의류 / 잡화</option>
-                        <option value="💄 화장품/세면도구">💄 화장품 / 세면도구</option>
-                        <option value="🔌 전자기기/충전기">🔌 전자기기 / 충전기</option>
-                        <option value="💊 상비약/비상용품">💊 상비약 / 비상용품</option>
-                        <option value="🎀 기타/힐링용품">🎀 기타 / 힐링용품</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">물품명</label>
-                    <input type="text" id="packingItemNameInput" class="form-input" placeholder="예: 삼각대, 보조배터리, 여권, 수영복">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">챙길 사람 (담당자)</label>
-                    <select id="packingAssigneeSelect" class="form-select">
-                        <option value="공통">👫 공통 준비물</option>
-                        <option value="히니">💕 히니</option>
-                        <option value="효니">💖 효니</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-submit" onclick="addPackingItem()"><i class="fa-solid fa-check"></i> 체크리스트에 추가</button>
             </div>
         </div>
     </div>
@@ -5691,522 +4716,6 @@
         let siteSettings = {};
         let timelineData = [];
         let bucketData = [];
-        
-        // ================= [100문 커플 Q&A 풀 & 플래너 전역 상태] =================
-        const qa100DefaultPool = [
-        {
-                "id": 1,
-                "cat": "설렘·첫만남",
-                "q": "우리가 처음 만났던 날, 나에 대한 너의 첫인상은 어땠어?"
-        },
-        {
-                "id": 2,
-                "cat": "설렘·첫만남",
-                "q": "나를 보고 '아, 이 사람이랑 사귀고 싶다'고 확신했던 순간은 언제야?"
-        },
-        {
-                "id": 3,
-                "cat": "설렘·첫만남",
-                "q": "우리가 처음 손잡았을 때 속으로 무슨 생각을 하고 있었어?"
-        },
-        {
-                "id": 4,
-                "cat": "설렘·첫만남",
-                "q": "고백받았을 때(혹은 고백했을 때) 심장이 얼마나 뛰었어?"
-        },
-        {
-                "id": 5,
-                "cat": "설렘·첫만남",
-                "q": "우리 연애 초기에 내가 했던 행동 중 가장 귀여웠거나 심쿵했던 건?"
-        },
-        {
-                "id": 6,
-                "cat": "설렘·첫만남",
-                "q": "나를 좋아하기 시작하면서 가장 먼저 친구들에게 자랑했던 내 매력은?"
-        },
-        {
-                "id": 7,
-                "cat": "설렘·첫만남",
-                "q": "첫 데이트가 끝나고 집에 돌아가는 길에 들었던 노래나 기분은?"
-        },
-        {
-                "id": 8,
-                "cat": "설렘·첫만남",
-                "q": "우리가 처음으로 찍었던 사진을 보면 지금 어떤 느낌이 들어?"
-        },
-        {
-                "id": 9,
-                "cat": "설렘·첫만남",
-                "q": "내가 입었던 옷 스타일 중에서 가장 기억에 남고 예뻤던/멋졌던 착장은?"
-        },
-        {
-                "id": 10,
-                "cat": "설렘·첫만남",
-                "q": "처음 나를 부를 때 썼던 호칭이나 어색했던 순간 중 기억나는 장면은?"
-        },
-        {
-                "id": 11,
-                "cat": "설렘·첫만남",
-                "q": "우리가 처음으로 함께 먹었던 음식과 그날의 분위기는?"
-        },
-        {
-                "id": 12,
-                "cat": "설렘·첫만남",
-                "q": "나랑 연락을 주고받으면서 메시지 답장을 기다리며 설렜던 적 있어?"
-        },
-        {
-                "id": 13,
-                "cat": "설렘·첫만남",
-                "q": "첫 키스(혹은 첫 뽀뽀)했던 날의 날씨나 주변 분위기가 기억나?"
-        },
-        {
-                "id": 14,
-                "cat": "설렘·첫만남",
-                "q": "내가 무심코 했던 말이나 행동에 밤잠을 설칠 만큼 설렜던 적은?"
-        },
-        {
-                "id": 15,
-                "cat": "설렘·첫만남",
-                "q": "우리 처음 만난 날로 타임머신을 타고 돌아간다면 나한테 무슨 말을 해주고 싶어?"
-        },
-        {
-                "id": 16,
-                "cat": "설렘·첫만남",
-                "q": "나랑 연애하기 전에 나를 향해 몰래 마음을 졸였던 순간이 있어?"
-        },
-        {
-                "id": 17,
-                "cat": "설렘·첫만남",
-                "q": "우리가 처음으로 서로에게 주었던 선물은 무엇이었고 그때 기분은?"
-        },
-        {
-                "id": 18,
-                "cat": "설렘·첫만남",
-                "q": "첫 100일이 되었을 때 우리 관계가 어떨 거라고 상상했었어?"
-        },
-        {
-                "id": 19,
-                "cat": "취향·일상",
-                "q": "나랑 함께 보내는 주말 데이트 중에서 가장 힐링되는 시간대는 언제야?"
-        },
-        {
-                "id": 20,
-                "cat": "취향·일상",
-                "q": "내가 제일 좋아하는 음식 세 가지를 정확히 맞힐 수 있어?"
-        },
-        {
-                "id": 21,
-                "cat": "취향·일상",
-                "q": "내가 기분이 안 좋아 보이거나 우울할 때 나를 가장 빨리 웃게 만드는 비법은?"
-        },
-        {
-                "id": 22,
-                "cat": "취향·일상",
-                "q": "너의 플레이리스트 중에서 나한테 꼭 들려주고 싶은 '우리의 노래'는?"
-        },
-        {
-                "id": 23,
-                "cat": "취향·일상",
-                "q": "함께 먹어본 배달 음식이나 외식 메뉴 중 최고로 꼽는 인생 맛집은?"
-        },
-        {
-                "id": 24,
-                "cat": "취향·일상",
-                "q": "평일 퇴근/하교 후 나랑 딱 1시간만 데이트할 수 있다면 뭘 하고 싶어?"
-        },
-        {
-                "id": 25,
-                "cat": "취향·일상",
-                "q": "집에서 둘이 넷플릭스나 영화를 볼 때 가장 좋아하는 스낵과 분위기는?"
-        },
-        {
-                "id": 26,
-                "cat": "취향·일상",
-                "q": "내가 요리를 해준다면 어떤 음식을 가장 먹어보고 싶어?"
-        },
-        {
-                "id": 27,
-                "cat": "취향·일상",
-                "q": "사계절(봄, 여름, 가을, 겨울) 중 우리 둘에게 가장 잘 어울리는 계절은?"
-        },
-        {
-                "id": 28,
-                "cat": "취향·일상",
-                "q": "내가 가장 자주 쓰는 말버릇이나 특유의 제스처가 있다면 뭐야?"
-        },
-        {
-                "id": 29,
-                "cat": "취향·일상",
-                "q": "스트레스를 많이 받았을 때 혼자 있고 싶어, 아니면 나랑 붙어있고 싶어?"
-        },
-        {
-                "id": 30,
-                "cat": "취향·일상",
-                "q": "나랑 찍은 사진 중에서 너의 휴대전화 배경화면으로 삼고 싶은 베스트 샷은?"
-        },
-        {
-                "id": 31,
-                "cat": "취향·일상",
-                "q": "서로 취향이 정반대인데도 신기하게 잘 맞는다고 느낀 부분은?"
-        },
-        {
-                "id": 32,
-                "cat": "취향·일상",
-                "q": "쉬는 날 비가 하루 종일 온다면 나랑 집에서 뭘 하면서 놀고 싶어?"
-        },
-        {
-                "id": 33,
-                "cat": "취향·일상",
-                "q": "지금까지 우리가 함께 본 영화나 드라마 중 가장 인상 깊었던 작품은?"
-        },
-        {
-                "id": 34,
-                "cat": "취향·일상",
-                "q": "나랑 같이 쇼핑할 때 내가 입어봤으면 하는 스타일이나 색상은?"
-        },
-        {
-                "id": 35,
-                "cat": "취향·일상",
-                "q": "너만 알고 있는 내 아주 사소하고 귀여운 습관 한 가지는?"
-        },
-        {
-                "id": 36,
-                "cat": "취향·일상",
-                "q": "아침에 눈떴을 때 나한테 가장 먼저 받고 싶은 모닝 카톡 내용은?"
-        },
-        {
-                "id": 37,
-                "cat": "감정·소통",
-                "q": "내가 널 얼마나 사랑하는지 온몸으로 온전히 느껴질 때는 언제야?"
-        },
-        {
-                "id": 38,
-                "cat": "감정·소통",
-                "q": "우리가 사소하게 다투거나 서운했을 때 가장 빨리 화해하는 좋은 방법은?"
-        },
-        {
-                "id": 39,
-                "cat": "감정·소통",
-                "q": "나한테 고맙거나 감동받았는데 쑥스러워서 표현을 다 못 했던 순간이 있어?"
-        },
-        {
-                "id": 40,
-                "cat": "감정·소통",
-                "q": "최근에 나 때문에 가장 크게 웃었거나 행복했던 순간은 언제야?"
-        },
-        {
-                "id": 41,
-                "cat": "감정·소통",
-                "q": "내가 힘들어하거나 지쳐 보일 때 너는 어떤 위로를 건네주고 싶어?"
-        },
-        {
-                "id": 42,
-                "cat": "감정·소통",
-                "q": "나한테 서운했지만 '이해하니까' 그냥 조용히 넘어갔던 일이 혹시 있어?"
-        },
-        {
-                "id": 43,
-                "cat": "감정·소통",
-                "q": "너의 가장 연약하거나 숨기고 싶었던 모습을 나에게 보여주었을 때 기분은?"
-        },
-        {
-                "id": 44,
-                "cat": "감정·소통",
-                "q": "나랑 대화할 때 '이 사람과는 정말 말이 잘 통한다'고 느끼는 순간은?"
-        },
-        {
-                "id": 45,
-                "cat": "감정·소통",
-                "q": "내가 질투를 느끼거나 삐졌을 때 너의 눈에는 어떻게 보여?"
-        },
-        {
-                "id": 46,
-                "cat": "감정·소통",
-                "q": "'이 사람 곁에 내가 꼭 있어줘야겠다'고 책임감이나 애틋함을 느낀 순간은?"
-        },
-        {
-                "id": 47,
-                "cat": "감정·소통",
-                "q": "내가 건넸던 말 중에서 가슴 깊이 오래도록 위로가 되었던 한마디는?"
-        },
-        {
-                "id": 48,
-                "cat": "감정·소통",
-                "q": "연애하면서 스스로 '나 정말 좋은 사람으로 변하고 있구나' 느낀 점은?"
-        },
-        {
-                "id": 49,
-                "cat": "감정·소통",
-                "q": "우리 둘만의 비밀이나 둘만 아는 암호 같은 특별한 추억이 있다면?"
-        },
-        {
-                "id": 50,
-                "cat": "감정·소통",
-                "q": "상대방이 바빠서 연락이 뜸할 때 서운함을 건강하게 표현하는 방법은?"
-        },
-        {
-                "id": 51,
-                "cat": "감정·소통",
-                "q": "내가 다른 사람들과 있을 때와 단둘이 있을 때 어떻게 달라져?"
-        },
-        {
-                "id": 52,
-                "cat": "감정·소통",
-                "q": "나를 생각하면 마음속에 가장 먼저 떠오르는 따뜻한 색깔이나 온도는?"
-        },
-        {
-                "id": 53,
-                "cat": "감정·소통",
-                "q": "나에게 꼭 듣고 싶은 칭찬이나 사랑의 표현 한마디가 있다면?"
-        },
-        {
-                "id": 54,
-                "cat": "감정·소통",
-                "q": "아무 말 없이 나를 꼬옥 안아줄 때 너의 품에서 느끼는 감정은?"
-        },
-        {
-                "id": 55,
-                "cat": "가치관·깊은대화",
-                "q": "연인 사이에 '서로의 개인 시간과 사생활'은 어느 정도가 가장 적당할까?"
-        },
-        {
-                "id": 56,
-                "cat": "가치관·깊은대화",
-                "q": "우리가 함께 돈을 모으거나 재정적인 계획을 세울 때 가장 중요하게 여길 가치는?"
-        },
-        {
-                "id": 57,
-                "cat": "가치관·깊은대화",
-                "q": "서로의 친구들이나 가족들을 만나는 자리에 대해 어떤 생각을 가지고 있어?"
-        },
-        {
-                "id": 58,
-                "cat": "가치관·깊은대화",
-                "q": "연애에서 '신뢰'가 깨지지 않기 위해 절대 해서는 안 될 행동 한 가지는?"
-        },
-        {
-                "id": 59,
-                "cat": "가치관·깊은대화",
-                "q": "인생에서 '일/성공'과 '사랑/가정'의 균형을 몇 대 몇으로 유지하고 싶어?"
-        },
-        {
-                "id": 60,
-                "cat": "가치관·깊은대화",
-                "q": "화가 났을 때 감정을 바로 표현하는 편이야, 아니면 시간을 두고 정리하는 편이야?"
-        },
-        {
-                "id": 61,
-                "cat": "가치관·깊은대화",
-                "q": "우리가 함께 살게 된다면 가사 분담이나 집안일은 어떻게 나누는 게 좋을까?"
-        },
-        {
-                "id": 62,
-                "cat": "가치관·깊은대화",
-                "q": "둘만의 기념일을 챙기는 방식(소소한 일상 vs 특별한 이벤트)에 대한 생각은?"
-        },
-        {
-                "id": 63,
-                "cat": "가치관·깊은대화",
-                "q": "서로의 취미 생활을 존중하는 것과 함께 즐기는 것 중 어느 쪽을 더 선호해?"
-        },
-        {
-                "id": 64,
-                "cat": "가치관·깊은대화",
-                "q": "건강하게 오래오래 연애하기 위해 둘이 함께 지켜야 할 약속 세 가지는?"
-        },
-        {
-                "id": 65,
-                "cat": "가치관·깊은대화",
-                "q": "힘든 역경이나 위기가 닥쳤을 때 우리 둘은 어떻게 헤쳐 나갈 수 있을까?"
-        },
-        {
-                "id": 66,
-                "cat": "가치관·깊은대화",
-                "q": "부모님이나 주변 사람들에게 나를 소개할 때 가장 자랑하고 싶은 점은?"
-        },
-        {
-                "id": 67,
-                "cat": "가치관·깊은대화",
-                "q": "휴가를 보낼 때 '휴양과 여유' vs '부지런한 관광과 맛집 탐방' 중 너의 취향은?"
-        },
-        {
-                "id": 68,
-                "cat": "가치관·깊은대화",
-                "q": "인간관계에서 오는 피로감을 나랑 있을 때는 어떻게 해소하는 편이야?"
-        },
-        {
-                "id": 69,
-                "cat": "가치관·깊은대화",
-                "q": "우리가 나중에 나이가 들어서도 지금처럼 다정하게 지낼 수 있는 비결은 뭘까?"
-        },
-        {
-                "id": 70,
-                "cat": "가치관·깊은대화",
-                "q": "사랑이란 감정 외에 우리 관계를 지탱해 주는 가장 단단한 힘은 무엇일까?"
-        },
-        {
-                "id": 71,
-                "cat": "미래·버킷리스트",
-                "q": "1년 뒤, 3년 뒤, 5년 뒤의 우리 둘의 모습은 어떤 모습일까?"
-        },
-        {
-                "id": 72,
-                "cat": "미래·버킷리스트",
-                "q": "둘이서 꼭 함께 떠나보고 싶은 해외 여행지 1순위와 그곳에서 할 일은?"
-        },
-        {
-                "id": 73,
-                "cat": "미래·버킷리스트",
-                "q": "우리가 함께 만들고 싶은 '둘만의 드림 하우스'의 인테리어나 분위기는?"
-        },
-        {
-                "id": 74,
-                "cat": "미래·버킷리스트",
-                "q": "나중에 반려동물을 키우게 된다면 강아지, 고양이 중 누구와 함께하고 싶어?"
-        },
-        {
-                "id": 75,
-                "cat": "미래·버킷리스트",
-                "q": "우리 둘이 꼭 배워보고 싶은 이색 취미나 커플 운동(테니스, 서핑 등)은?"
-        },
-        {
-                "id": 76,
-                "cat": "미래·버킷리스트",
-                "q": "제주도 한 달 살기나 낯선 도시에서의 장기 여행을 둘이서 해볼 수 있다면?"
-        },
-        {
-                "id": 77,
-                "cat": "미래·버킷리스트",
-                "q": "10년 뒤에도 여전히 서로의 손을 잡고 걸으며 나누고 싶은 대화는?"
-        },
-        {
-                "id": 78,
-                "cat": "미래·버킷리스트",
-                "q": "우리가 꼭 함께 가보고 싶은 둘만의 페스티벌, 콘서트, 혹은 문화 행사는?"
-        },
-        {
-                "id": 79,
-                "cat": "미래·버킷리스트",
-                "q": "은퇴 후나 노년에 둘이서 소박하게 가꾸고 싶은 삶의 풍경은?"
-        },
-        {
-                "id": 80,
-                "cat": "미래·버킷리스트",
-                "q": "서로의 생일날 꼭 한번 해주고 싶은 특별한 서프라이즈 이벤트는?"
-        },
-        {
-                "id": 81,
-                "cat": "미래·버킷리스트",
-                "q": "둘만의 작은 기념 앨범이나 사진집을 만든다면 첫 장에 어떤 사진을 넣을까?"
-        },
-        {
-                "id": 82,
-                "cat": "미래·버킷리스트",
-                "q": "우리가 꼭 함께 성공시키고 싶은 우리만의 버킷리스트 1위는?"
-        },
-        {
-                "id": 83,
-                "cat": "미래·버킷리스트",
-                "q": "둘이서 차를 타고 전국을 일주하는 로드트립을 떠난다면 꼭 들를 곳은?"
-        },
-        {
-                "id": 84,
-                "cat": "미래·버킷리스트",
-                "q": "힘든 날 서로를 꼭 안아주며 '고생했어'라고 말할 수 있는 우리의 보금자리는?"
-        },
-        {
-                "id": 85,
-                "cat": "미래·버킷리스트",
-                "q": "세상 모든 것이 변해도 우리 둘 사이에 절대 변하지 않았으면 하는 것은?"
-        },
-        {
-                "id": 86,
-                "cat": "유쾌한상상·밸런스",
-                "q": "만약 우리가 하루 동안 서로의 몸이 바뀐다면 가장 먼저 무엇을 해볼 거야?"
-        },
-        {
-                "id": 87,
-                "cat": "유쾌한상상·밸런스",
-                "q": "나랑 무인도에 단둘이 떨어진다면 꼭 챙겨갈 세 가지 물건은?"
-        },
-        {
-                "id": 88,
-                "cat": "유쾌한상상·밸런스",
-                "q": "[밸런스] 평생 나랑 스킨십 없이 살기 vs 평생 나랑 대화 없이 살기"
-        },
-        {
-                "id": 89,
-                "cat": "유쾌한상상·밸런스",
-                "q": "[밸런스] 매일매일 나한테 사랑한다고 100번 말하기 vs 매일 10분씩 꽉 안아주기"
-        },
-        {
-                "id": 90,
-                "cat": "유쾌한상상·밸런스",
-                "q": "[밸런스] 내가 요리를 정말 못하지만 매일 해주는 것 vs 요리를 엄청 잘하지만 1년에 한 번만 해주는 것"
-        },
-        {
-                "id": 91,
-                "cat": "유쾌한상상·밸런스",
-                "q": "만약 로또 1등에 당첨된다면 나한테 가장 먼저 사주고 싶은 선물은?"
-        },
-        {
-                "id": 92,
-                "cat": "유쾌한상상·밸런스",
-                "q": "내가 갑자기 바퀴벌레로 변해버린다면 어떻게 할 거야?"
-        },
-        {
-                "id": 93,
-                "cat": "유쾌한상상·밸런스",
-                "q": "[밸런스] 내가 친구들과 밤새 술 마시고 연락 두절 vs 전 애인과 낮에 단둘이 커피 한잔"
-        },
-        {
-                "id": 94,
-                "cat": "유쾌한상상·밸런스",
-                "q": "나를 동물에 비유한다면 어떤 동물이고, 그 이유는 뭐야?"
-        },
-        {
-                "id": 95,
-                "cat": "유쾌한상상·밸런스",
-                "q": "우리 둘의 연애를 영화 장르로 만든다면 로맨틱 코미디, 멜로, 액션 중 뭐야?"
-        },
-        {
-                "id": 96,
-                "cat": "유쾌한상상·밸런스",
-                "q": "[밸런스] 내가 사소한 거짓말을 자주 하는 것 vs 너무 솔직해서 매번 팩폭하는 것"
-        },
-        {
-                "id": 97,
-                "cat": "유쾌한상상·밸런스",
-                "q": "타임머신이 있다면 우리의 과거 첫 만남으로 가볼래, 아니면 30년 뒤 미래로 가볼래?"
-        },
-        {
-                "id": 98,
-                "cat": "유쾌한상상·밸런스",
-                "q": "[밸런스] 평생 데이트 코스 내가 전부 다 짜기 vs 평생 상대방이 짠 코스 군말 없이 따르기"
-        },
-        {
-                "id": 99,
-                "cat": "유쾌한상상·밸런스",
-                "q": "만약 내가 기억상실증에 걸려 널 기억하지 못한다면 나를 어떻게 다시 반하게 만들래?"
-        },
-        {
-                "id": 100,
-                "cat": "유쾌한상상·밸런스",
-                "q": "지금 이 순간, 나에게 하고 싶은 가장 솔직하고 따뜻한 한마디는?"
-        }
-];
-        let qa100Pool = [...qa100DefaultPool];
-        let customQaList = [];
-        let coupleQaHistory = [];
-        let currentQaCatalogCat = '전체';
-        let currentPlannerSubTab = 'daily';
-        let currentItineraryDate = new Date().toISOString().split('T')[0];
-        let dailyItineraries = {};
-        let travelPackingList = [];
-        let travelMemo = '';
-        let packingTripTitle = '우리의 힐링 여행 짐싸기 🧳';
-        let currentPackingAssigneeFilter = '전체';
-
         let coupleMoods = {
             hini: { emoji: '🥰', label: '사랑충전 100%', quote: '오늘 하루도 힘내고 저녁에 맛있는거 먹자!' },
             hyoni: { emoji: '💖', label: '보고싶음', quote: '퇴근하고 얼른 달려갈게, 언제나 사랑해!' }
@@ -6299,19 +4808,9 @@
             if (mBtn) mBtn.classList.toggle('active', currentLayoutMode === 'mobile');
             if (pBtn) pBtn.classList.toggle('active', currentLayoutMode === 'pc');
 
-            const quickText = document.getElementById('quickLayoutText');
-            if (quickText) {
-                quickText.innerText = currentLayoutMode === 'pc' ? '모바일 모드' : 'PC 모드';
-            }
-
             if (showFeedback) {
                 showToast(currentLayoutMode === 'pc' ? 'PC 최적화 와이드 화면으로 전환되었습니다 💻' : '모바일 앱 화면으로 전환되었습니다 📱');
             }
-        }
-
-        function toggleLayoutModeQuick() {
-            const nextMode = currentLayoutMode === 'pc' ? 'mobile' : 'pc';
-            setLayoutMode(nextMode, true);
         }
 
         function toggleAuthKeepLogin() {
@@ -6608,9 +5107,6 @@
             loadPosts();
             renderHomeUpcomingSchedule();
             loadCoupleFeatures();
-            initQaPool();
-            initPlannerData();
-            updateHomePlannerWidget();
             startBannerSlider();
             requestNotificationPermission();
             startNotificationPolling();
@@ -6652,15 +5148,14 @@
         // 뷰 전환 (홈 / 캘린더 / 스토리)
         function switchView(viewId, btnElement) {
             currentView = viewId;
+            // [요구사항 3]: 새로고침해도 홈으로 가지 않고 현재 탭을 그대로 유지하도록 저장!
             sessionStorage.setItem('couple_active_view', viewId);
 
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             if (btnElement) {
                 btnElement.classList.add('active');
             } else {
-                const viewNameMap = { 'home': '홈', 'calendar': '캘린더', 'board': '스토리', 'planner': '일정·여행' };
-                const matchText = viewNameMap[viewId] || '홈';
-                const targetNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes(matchText));
+                const targetNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.includes(viewId === 'home' ? '홈' : (viewId === 'calendar' ? '캘린더' : '스토리')));
                 if (targetNav) targetNav.classList.add('active');
             }
             
@@ -6671,16 +5166,9 @@
             if (target) {
                 target.classList.add('active');
             }
-            if (viewId === 'home') {
-                renderHomeUpcomingSchedule();
-                updateHomePlannerWidget();
-            }
+            if (viewId === 'home') renderHomeUpcomingSchedule();
             if (viewId === 'calendar') renderCalendar();
             if (viewId === 'board') renderBoardList();
-            if (viewId === 'planner') {
-                renderDailyItinerary();
-                renderTravelPacking();
-            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -6981,10 +5469,7 @@
                         </div>
                         <span class="bucket-text">${b.title}</span>
                     </div>
-                    <div class="bucket-actions" style="display:flex; align-items:center; gap:6px;">
-                        <a href="${getNaverMapUrl(b.title)}" target="_blank" rel="noopener noreferrer" class="naver-map-btn" style="padding:2px 7px; font-size:0.72rem;" title="네이버 지도에서 검색" onclick="event.stopPropagation();">
-                            <span class="naver-badge">N</span> 검색
-                        </a>
+                    <div class="bucket-actions">
                         <button class="bucket-del-btn" onclick="deleteBucket(${idx})" title="삭제"><i class="fa-regular fa-trash-can"></i></button>
                     </div>
                 </div>
@@ -9066,12 +7551,9 @@
                             ${item.done ? '<i class="fa-solid fa-check"></i>' : ''}
                         </div>
                         <div>
-                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <div style="display:flex; align-items:center; gap:6px;">
                                 <span class="wish-cat-tag">${item.category}</span>
                                 <span class="wish-item-title">${item.title}</span>
-                                <a href="${getNaverMapUrl(item.title)}" target="_blank" rel="noopener noreferrer" class="naver-map-btn" title="네이버 지도에서 보기" onclick="event.stopPropagation();">
-                                    <span class="naver-badge">N</span> 지도보기
-                                </a>
                             </div>
                             ${item.memo ? `<div class="wish-item-memo">${item.memo}</div>` : ''}
                         </div>
@@ -9120,745 +7602,6 @@
                 renderDateWishlist(currentWishFilter);
                 showToast("삭제되었습니다.");
             });
-        }
-
-    
-        // ==========================================================================
-        // [신규 기능 1] 네이버 지도 연동 엔진
-        // ==========================================================================
-        function getNaverMapUrl(query) {
-            if (!query) return 'https://map.naver.com/';
-            return `https://map.naver.com/p/search/${encodeURIComponent(query.trim())}`;
-        }
-
-        function openNaverSearchFromInput(inputId) {
-            const input = document.getElementById(inputId);
-            const val = input ? input.value.trim() : '';
-            if (!val) {
-                showToast("검색할 장소나 일정 이름을 먼저 입력해주세요 🗺️");
-                return;
-            }
-            window.open(getNaverMapUrl(val), '_blank', 'noopener,noreferrer');
-            showToast(`네이버 지도에서 "${val}" 검색 결과를 엽니다 💚`);
-        }
-
-        // ==========================================================================
-        // [신규 기능 2] 100문 커플 Q&A 카탈로그, 직접 질문 추가, 답변 기록 관리
-        // ==========================================================================
-        function initQaPool() {
-            try {
-                const savedCustom = localStorage.getItem('couple_custom_qa');
-                if (savedCustom) {
-                    customQaList = JSON.parse(savedCustom);
-                }
-                const savedHistory = localStorage.getItem('couple_qa_history');
-                if (savedHistory) {
-                    coupleQaHistory = JSON.parse(savedHistory);
-                }
-            } catch(e) {}
-            qa100Pool = [...customQaList, ...qa100DefaultPool];
-        }
-
-        function renderCoupleQa() {
-            const qEl = document.getElementById('qaQuestionText');
-            const catBadge = document.getElementById('qaCategoryBadge');
-            const hiniAns = document.getElementById('qaHiniAnswer');
-            const hyoniAns = document.getElementById('qaHyoniAnswer');
-
-            if (qEl) qEl.innerText = coupleQa.question || '우리가 처음 만났던 날, 나에 대한 너의 첫인상은 어땠어?';
-            if (catBadge) catBadge.innerText = coupleQa.category || '설렘·첫만남';
-            if (hiniAns) hiniAns.innerText = coupleQa.hini || '아직 답변을 작성하지 않았어요 💕';
-            if (hyoniAns) hyoniAns.innerText = coupleQa.hyoni || '아직 답변을 작성하지 않았어요 💖';
-        }
-
-        function nextRandomQuestion() {
-            initQaPool();
-            const candidates = qa100Pool.filter(q => q.q !== coupleQa.question);
-            if (candidates.length === 0) return;
-            const chosen = candidates[Math.floor(Math.random() * candidates.length)];
-            
-            // 기존 답변이 둘 중 하나라도 작성되어 있다면 히스토리에 아카이빙
-            archiveCurrentQaIfAnswered();
-
-            coupleQa = {
-                id: chosen.id,
-                category: chosen.cat || '설렘·첫만남',
-                question: chosen.q,
-                hini: '',
-                hyoni: '',
-                updatedAt: new Date().toISOString()
-            };
-            saveCoupleFeatures();
-            renderCoupleQa();
-            showToast(`[${chosen.cat}] 새 질문이 선정되었습니다! 🎲`);
-        }
-
-        function archiveCurrentQaIfAnswered() {
-            if ((coupleQa.hini && coupleQa.hini.trim()) || (coupleQa.hyoni && coupleQa.hyoni.trim())) {
-                const exists = coupleQaHistory.some(h => h.question === coupleQa.question && h.hini === coupleQa.hini && h.hyoni === coupleQa.hyoni);
-                if (!exists) {
-                    coupleQaHistory.unshift({
-                        id: Date.now(),
-                        category: coupleQa.category || '1문1답',
-                        question: coupleQa.question,
-                        hini: coupleQa.hini || '',
-                        hyoni: coupleQa.hyoni || '',
-                        answeredAt: new Date().toISOString()
-                    });
-                    if (coupleQaHistory.length > 100) coupleQaHistory = coupleQaHistory.slice(0, 100);
-                    try {
-                        localStorage.setItem('couple_qa_history', JSON.stringify(coupleQaHistory));
-                    } catch(e) {}
-                }
-            }
-        }
-
-        function openQaCatalogModal() {
-            initQaPool();
-            currentQaCatalogCat = '전체';
-            const sInput = document.getElementById('qaSearchInput');
-            if (sInput) sInput.value = '';
-            document.querySelectorAll('#qaCatalogCategoryChips .qa-cat-chip').forEach(c => {
-                c.classList.toggle('active', c.innerText.includes('전체'));
-            });
-            renderQaCatalogItems();
-            showModal('qaCatalogModal');
-        }
-
-        function setQaCatalogCategory(cat, btnEl) {
-            currentQaCatalogCat = cat;
-            document.querySelectorAll('#qaCatalogCategoryChips .qa-cat-chip').forEach(c => c.classList.remove('active'));
-            if (btnEl) btnEl.classList.add('active');
-            renderQaCatalogItems();
-        }
-
-        function filterQaCatalog() {
-            renderQaCatalogItems();
-        }
-
-        function renderQaCatalogItems() {
-            const listEl = document.getElementById('qaCatalogItemsList');
-            const searchInput = document.getElementById('qaSearchInput');
-            const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
-
-            let filtered = qa100Pool.filter(item => {
-                const matchCat = (currentQaCatalogCat === '전체') || (item.cat === currentQaCatalogCat);
-                const matchQuery = !query || item.q.toLowerCase().includes(query) || (item.cat && item.cat.toLowerCase().includes(query));
-                return matchCat && matchQuery;
-            });
-
-            if (filtered.length === 0) {
-                listEl.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-weight:700;">검색 결과가 없습니다 💬</div>`;
-                return;
-            }
-
-            listEl.innerHTML = filtered.map(item => `
-                <div class="qa-catalog-card">
-                    <div class="qa-catalog-q-info">
-                        <div class="qa-catalog-meta">
-                            <span>Q.${item.id}</span>
-                            <span>·</span>
-                            <span class="qa-badge" style="font-size:0.68rem; padding:2px 6px;">${item.cat}</span>
-                        </div>
-                        <div class="qa-catalog-q-text">${item.q}</div>
-                    </div>
-                    <button type="button" class="btn-select-qa" onclick="selectQaFromCatalog(${item.id})">
-                        이 질문 선택 💌
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function selectQaFromCatalog(qId) {
-            const item = qa100Pool.find(q => q.id === qId);
-            if (!item) return;
-
-            archiveCurrentQaIfAnswered();
-
-            coupleQa = {
-                id: item.id,
-                category: item.cat,
-                question: item.q,
-                hini: '',
-                hyoni: '',
-                updatedAt: new Date().toISOString()
-            };
-            saveCoupleFeatures();
-            renderCoupleQa();
-            hideModal('qaCatalogModal');
-            showToast(`"${item.q}" 질문이 설정되었습니다! 💖`);
-        }
-
-        function openAddCustomQaModal() {
-            const txt = document.getElementById('customQaText');
-            if (txt) txt.value = '';
-            showModal('addCustomQaModal');
-        }
-
-        function submitCustomQuestion() {
-            const cat = document.getElementById('customQaCategory').value;
-            const text = document.getElementById('customQaText').value.trim();
-            if (!text) return showToast("질문 내용을 입력해주세요!");
-
-            const newQ = {
-                id: 1000 + customQaList.length + 1,
-                cat: cat,
-                q: text
-            };
-            customQaList.unshift(newQ);
-            try {
-                localStorage.setItem('couple_custom_qa', JSON.stringify(customQaList));
-            } catch(e) {}
-            initQaPool();
-
-            archiveCurrentQaIfAnswered();
-            coupleQa = {
-                id: newQ.id,
-                category: newQ.cat,
-                question: newQ.q,
-                hini: '',
-                hyoni: '',
-                updatedAt: new Date().toISOString()
-            };
-            saveCoupleFeatures();
-            renderCoupleQa();
-            hideModal('addCustomQaModal');
-            showToast("직접 만든 질문이 오늘의 질문으로 설정되었습니다! 💌");
-        }
-
-        function openQaHistoryModal() {
-            const body = document.getElementById('qaHistoryBody');
-            archiveCurrentQaIfAnswered();
-
-            if (coupleQaHistory.length === 0) {
-                body.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-weight:700;"><i class="fa-solid fa-clock-rotate-left" style="font-size:2rem; opacity:0.4; margin-bottom:8px; display:block;"></i>아직 완료된 질문 답변 기록이 없습니다.<br>오늘의 1문 1답을 나누어보세요 💕</div>`;
-            } else {
-                body.innerHTML = coupleQaHistory.map((item, idx) => `
-                    <div class="qa-history-item">
-                        <div class="qa-history-q">
-                            <span class="qa-badge" style="font-size:0.7rem; padding:2px 7px;">${item.category}</span>
-                            <span>${item.question}</span>
-                        </div>
-                        <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px;">
-                            <div style="font-size:0.88rem; color:var(--text-main); background:white; padding:8px 12px; border-radius:8px; border:1px solid var(--border-light);">
-                                <b style="color:var(--primary);">히니 💕:</b> ${item.hini || '(답변 없음)'}
-                            </div>
-                            <div style="font-size:0.88rem; color:var(--text-main); background:white; padding:8px 12px; border-radius:8px; border:1px solid var(--border-light);">
-                                <b style="color:var(--secondary);">효니 💖:</b> ${item.hyoni || '(답변 없음)'}
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            showModal('qaHistoryModal');
-        }
-
-        // ==========================================================================
-        // [신규 기능 3] 하루 일정 계획표 (Daily Itinerary Planner) 로직
-        // ==========================================================================
-        function setPlannerSubTab(tab) {
-            currentPlannerSubTab = tab;
-            const dBtn = document.getElementById('subtabDailyBtn');
-            const pBtn = document.getElementById('subtabPackingBtn');
-            const dContent = document.getElementById('plannerDailyTabContent');
-            const pContent = document.getElementById('plannerPackingTabContent');
-
-            if (dBtn) dBtn.classList.toggle('active', tab === 'daily');
-            if (pBtn) pBtn.classList.toggle('active', tab === 'packing');
-            if (dContent) dContent.style.display = tab === 'daily' ? 'block' : 'none';
-            if (pContent) pContent.style.display = tab === 'packing' ? 'block' : 'none';
-
-            if (tab === 'daily') renderDailyItinerary();
-            if (tab === 'packing') renderTravelPacking();
-        }
-
-        function initPlannerData() {
-            try {
-                const savedItinerary = localStorage.getItem('couple_daily_itineraries');
-                if (savedItinerary) dailyItineraries = JSON.parse(savedItinerary);
-                const savedPacking = localStorage.getItem('couple_travel_packing');
-                if (savedPacking) travelPackingList = JSON.parse(savedPacking);
-                const savedMemo = localStorage.getItem('couple_travel_memo');
-                if (savedMemo) travelMemo = savedMemo;
-                const savedTripTitle = localStorage.getItem('couple_packing_trip_title');
-                if (savedTripTitle) packingTripTitle = savedTripTitle;
-            } catch(e) {}
-
-            // 기본 예시 데이터 초기화 (처음 실행 시)
-            const todayStr = new Date().toISOString().split('T')[0];
-            if (!dailyItineraries[todayStr]) {
-                dailyItineraries[todayStr] = {
-                    title: "성수동 감성 데이트 코스 🌿",
-                    stops: [
-                        { id: 1, time: "11:30", category: "🍽️ 식사", place: "성수동 소문난감자탕", memo: "점심 든든하게 먹고 출발하기", cost: "32,000원", done: true },
-                        { id: 2, time: "13:30", category: "☕ 카페", place: "성수 대림창고 갤러리 카페", memo: "시그니처 라떼 마시며 사진 찍기", cost: "18,000원", done: false },
-                        { id: 3, time: "15:30", category: "🎬 활동", place: "서울숲 산책 & 사슴방사장", memo: "손잡고 가을 바람 느끼며 힐링", cost: "무료", done: false },
-                        { id: 4, time: "18:00", category: "🍽️ 식사", place: "뚝섬 한강공원 일몰 & 라면", memo: "노을 보면서 따뜻한 라면 먹기", cost: "10,000원", done: false }
-                    ]
-                };
-                saveDailyItineraries();
-            }
-
-            if (travelPackingList.length === 0) {
-                loadPackingPreset30(false);
-            }
-        }
-
-        function saveDailyItineraries() {
-            try {
-                localStorage.setItem('couple_daily_itineraries', JSON.stringify(dailyItineraries));
-            } catch(e) {}
-            updateHomePlannerWidget();
-        }
-
-        function changeItineraryDate(offset) {
-            const cur = new Date(currentItineraryDate);
-            cur.setDate(cur.getDate() + offset);
-            currentItineraryDate = cur.toISOString().split('T')[0];
-            renderDailyItinerary();
-        }
-
-        function setItineraryQuickDate(offsetDays) {
-            const cur = new Date();
-            cur.setDate(cur.getDate() + offsetDays);
-            currentItineraryDate = cur.toISOString().split('T')[0];
-            renderDailyItinerary();
-        }
-
-        function setItineraryCustomDate(val) {
-            if (!val) return;
-            currentItineraryDate = val;
-            renderDailyItinerary();
-        }
-
-        function editItineraryTheme() {
-            const currentPlan = dailyItineraries[currentItineraryDate] || { title: "데이트 코스", stops: [] };
-            const newTitle = prompt("오늘의 데이트/일정 테마 제목을 입력해주세요:", currentPlan.title);
-            if (newTitle !== null && newTitle.trim()) {
-                currentPlan.title = newTitle.trim();
-                dailyItineraries[currentItineraryDate] = currentPlan;
-                saveDailyItineraries();
-                renderDailyItinerary();
-                showToast("일정 테마가 수정되었습니다 ✨");
-            }
-        }
-
-        function renderDailyItinerary() {
-            const displayEl = document.getElementById('itineraryDateDisplay');
-            const pickerEl = document.getElementById('itineraryDatePicker');
-            const themeEl = document.getElementById('itineraryThemeText');
-            const countEl = document.getElementById('itineraryStopCount');
-            const listEl = document.getElementById('itineraryTimelineList');
-
-            const parts = currentItineraryDate.split('-');
-            const dObj = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-            const dayName = dayNames[dObj.getDay()];
-
-            if (displayEl) displayEl.innerText = `${parts[0]}. ${parts[1]}. ${parts[2]} (${dayName})`;
-            if (pickerEl) pickerEl.value = currentItineraryDate;
-
-            const dayData = dailyItineraries[currentItineraryDate] || { title: "새로운 하루 일정 계획 🌿", stops: [] };
-            if (themeEl) themeEl.innerText = dayData.title;
-
-            const stops = (dayData.stops || []).slice().sort((a, b) => (a.time || '').localeCompare(b.time || ''));
-            if (countEl) countEl.innerText = `${stops.length}곳`;
-
-            if (stops.length === 0) {
-                listEl.innerHTML = `
-                    <div style="text-align:center; padding:45px 20px; background:white; border-radius:var(--radius-md); border:1px dashed var(--border-light);">
-                        <i class="fa-regular fa-calendar-plus" style="font-size:2.4rem; color:var(--primary); opacity:0.4; margin-bottom:10px; display:block;"></i>
-                        <p style="font-size:1.02rem; font-weight:700; color:var(--text-main);">오늘 등록된 방문 코스가 없습니다.</p>
-                        <p style="font-size:0.86rem; color:var(--text-muted); margin-top:4px;">우측 상단 <b>[+ 코스 추가]</b> 버튼을 눌러 데이트 일정을 계획해보세요 🗺️</p>
-                    </div>
-                `;
-                return;
-            }
-
-            listEl.innerHTML = stops.map((s, idx) => `
-                <div class="itinerary-card ${s.done ? 'done' : ''}">
-                    <div class="bucket-custom-check" style="margin-top:2px;" onclick="toggleDailyPlanDone(${s.id})">
-                        ${s.done ? '<i class="fa-solid fa-check"></i>' : ''}
-                    </div>
-                    <div class="itinerary-content">
-                        <div class="itinerary-top-row">
-                            <span class="itinerary-time-chip"><i class="fa-regular fa-clock"></i> ${s.time}</span>
-                            <span class="itinerary-cat-tag" style="background:#EDF2F7; color:var(--text-main); font-weight:800;">${s.category}</span>
-                            <span class="itinerary-place-title">${s.place}</span>
-                            <a href="${getNaverMapUrl(s.place)}" target="_blank" rel="noopener noreferrer" class="naver-map-btn" title="네이버 지도에서 위치/리뷰 확인">
-                                <span class="naver-badge">N</span> 지도
-                            </a>
-                        </div>
-                        ${s.memo ? `<div class="itinerary-memo">${s.memo}</div>` : ''}
-                        <div class="itinerary-bottom-row">
-                            ${s.cost ? `<span class="itinerary-cost-chip"><i class="fa-solid fa-coins"></i> ${s.cost}</span>` : ''}
-                            <div class="itinerary-actions">
-                                <button type="button" class="bucket-del-btn" onclick="deleteDailyPlanStop(${s.id})" title="코스 삭제">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function openAddDailyPlanModal() {
-            document.getElementById('planPlaceInput').value = '';
-            document.getElementById('planMemoInput').value = '';
-            document.getElementById('planCostInput').value = '';
-            showModal('addDailyPlanModal');
-        }
-
-        function addDailyPlanStop() {
-            const time = document.getElementById('planTimeInput').value || '12:00';
-            const cat = document.getElementById('planCatInput').value;
-            const place = document.getElementById('planPlaceInput').value.trim();
-            const memo = document.getElementById('planMemoInput').value.trim();
-            const cost = document.getElementById('planCostInput').value.trim();
-
-            if (!place) return showToast("장소 또는 일정 이름을 입력해주세요!");
-
-            if (!dailyItineraries[currentItineraryDate]) {
-                dailyItineraries[currentItineraryDate] = {
-                    title: "우리의 하루 일정 🌿",
-                    stops: []
-                };
-            }
-
-            dailyItineraries[currentItineraryDate].stops.push({
-                id: Date.now(),
-                time: time,
-                category: cat,
-                place: place,
-                memo: memo,
-                cost: cost,
-                done: false
-            });
-
-            saveDailyItineraries();
-            renderDailyItinerary();
-            hideModal('addDailyPlanModal');
-            showToast(`"${place}" 일정이 추가되었습니다 🗺️`);
-        }
-
-        function toggleDailyPlanDone(id) {
-            const plan = dailyItineraries[currentItineraryDate];
-            if (!plan || !plan.stops) return;
-            const target = plan.stops.find(s => s.id === id);
-            if (target) {
-                target.done = !target.done;
-                saveDailyItineraries();
-                renderDailyItinerary();
-                if (target.done) showToast("일정 코스를 완료했습니다! 🌟");
-            }
-        }
-
-        function deleteDailyPlanStop(id) {
-            showConfirm(() => {
-                const plan = dailyItineraries[currentItineraryDate];
-                if (!plan || !plan.stops) return;
-                plan.stops = plan.stops.filter(s => s.id !== id);
-                saveDailyItineraries();
-                renderDailyItinerary();
-                showToast("일정 코스가 삭제되었습니다.");
-            });
-        }
-
-        function copyItinerarySummary() {
-            const plan = dailyItineraries[currentItineraryDate];
-            if (!plan || !plan.stops || plan.stops.length === 0) {
-                return showToast("복사할 일정이 없습니다!");
-            }
-            let text = `[📅 ${currentItineraryDate} ${plan.title}]
-`;
-            plan.stops.sort((a,b)=>(a.time||'').localeCompare(b.time||'')).forEach((s, i) => {
-                text += `${i+1}. [${s.time}] ${s.place} (${s.category})`;
-                if (s.memo) text += ` - ${s.memo}`;
-                if (s.cost) text += ` (예산: ${s.cost})`;
-                text += `
-   지도: ${getNaverMapUrl(s.place)}
-`;
-            });
-            navigator.clipboard.writeText(text).then(() => {
-                showToast("하루 일정이 클립보드에 깔끔하게 복사되었습니다! 📋");
-            }).catch(() => {
-                showToast("클립보드 복사 권한을 확인해주세요.");
-            });
-        }
-
-        // ==========================================================================
-        // [신규 기능 4] 여행 짐싸기 체크리스트 & 메모장 로직
-        // ==========================================================================
-        const packingPreset30List = [
-            { cat: "📄 필수품/신분증", name: "주민등록증 / 운전면허증", assignee: "공통" },
-            { cat: "📄 필수품/신분증", name: "신용카드 & 비상용 현금", assignee: "공통" },
-            { cat: "📄 필수품/신분증", name: "항공권 / KTX 모바일 바우처", assignee: "공통" },
-            { cat: "📄 필수품/신분증", name: "숙소 및 렌터카 예약 내역 확인", assignee: "효니" },
-            { cat: "👕 의류/잡화", name: "일자별 여벌 옷 (상의/하의)", assignee: "히니" },
-            { cat: "👕 의류/잡화", name: "일자별 여벌 옷 (상의/하의)", assignee: "효니" },
-            { cat: "👕 의류/잡화", name: "편안한 잠옷 & 실내복", assignee: "공통" },
-            { cat: "👕 의류/잡화", name: "속옷 및 양말 넉넉히", assignee: "공통" },
-            { cat: "👕 의류/잡화", name: "일교차 대비 겉옷/가디건", assignee: "공통" },
-            { cat: "👕 의류/잡화", name: "모자 & 선글라스", assignee: "공통" },
-            { cat: "👕 의류/잡화", name: "접이식 휴대용 3단 우산", assignee: "효니" },
-            { cat: "💄 화장품/세면도구", name: "기초 스킨케어 (토너/로션/수분크림)", assignee: "히니" },
-            { cat: "💄 화장품/세면도구", name: "선크림 (자외선 차단제)", assignee: "공통" },
-            { cat: "💄 화장품/세면도구", name: "클렌징폼 & 립밤", assignee: "공통" },
-            { cat: "💄 화장품/세면도구", name: "칫솔 & 치약 세트", assignee: "공통" },
-            { cat: "💄 화장품/세면도구", name: "샴푸 / 트리트먼트 / 바디워시", assignee: "히니" },
-            { cat: "💄 화장품/세면도구", name: "헤어 왁스 / 고데기 / 빗", assignee: "공통" },
-            { cat: "💄 화장품/세면도구", name: "향수 & 핸드크림", assignee: "히니" },
-            { cat: "🔌 전자기기/충전기", name: "스마트폰 고속 충전기 & 케이블", assignee: "공통" },
-            { cat: "🔌 전자기기/충전기", name: "대용량 보조배터리", assignee: "효니" },
-            { cat: "🔌 전자기기/충전기", name: "무선 이어폰 (에어팟/버즈)", assignee: "공통" },
-            { cat: "🔌 전자기기/충전기", name: "블루투스 삼각대 셀카봉", assignee: "효니" },
-            { cat: "🔌 전자기기/충전기", name: "멀티탭 또는 3구 어댑터", assignee: "효니" },
-            { cat: "💊 상비약/비상용품", name: "타이레놀 / 진통소화제", assignee: "공통" },
-            { cat: "💊 상비약/비상용품", name: "밴드 (방수 대일밴드)", assignee: "공통" },
-            { cat: "💊 상비약/비상용품", name: "인공눈물 & 소독티슈", assignee: "히니" },
-            { cat: "💊 상비약/비상용품", name: "모기 기피제 / 버물리", assignee: "효니" },
-            { cat: "🎀 기타/힐링용품", name: "빨래 담을 여분 비닐팩 / 지퍼백", assignee: "공통" },
-            { cat: "🎀 기타/힐링용품", name: "차량용 이동 간식 & 껌", assignee: "히니" },
-            { cat: "🎀 기타/힐링용품", name: "여행용 물티슈 & 미니 티슈", assignee: "공통" }
-        ];
-
-        function loadPackingPreset30(notify = true) {
-            let addedCount = 0;
-            packingPreset30List.forEach(item => {
-                const exists = travelPackingList.some(p => p.name === item.name && p.assignee === item.assignee);
-                if (!exists) {
-                    travelPackingList.push({
-                        id: Date.now() + Math.floor(Math.random() * 10000),
-                        category: item.cat,
-                        name: item.name,
-                        assignee: item.assignee,
-                        checked: false
-                    });
-                    addedCount++;
-                }
-            });
-            saveTravelPacking();
-            renderTravelPacking();
-            if (notify) {
-                showToast(`필수 짐 30선 중 ${addedCount}개 항목이 담겼습니다! 🧳`);
-            }
-        }
-
-        function saveTravelPacking() {
-            try {
-                localStorage.setItem('couple_travel_packing', JSON.stringify(travelPackingList));
-                localStorage.setItem('couple_packing_trip_title', packingTripTitle);
-            } catch(e) {}
-            updateHomePlannerWidget();
-        }
-
-        function filterPackingAssignee(assignee, btnEl) {
-            currentPackingAssigneeFilter = assignee;
-            document.querySelectorAll('.packing-filters .packing-filter-btn').forEach(b => b.classList.remove('active'));
-            if (btnEl) btnEl.classList.add('active');
-            renderTravelPacking();
-        }
-
-        function editPackingTripTitle() {
-            const next = prompt("여행 제목을 입력해주세요:", packingTripTitle);
-            if (next !== null && next.trim()) {
-                packingTripTitle = next.trim();
-                saveTravelPacking();
-                renderTravelPacking();
-                showToast("여행 제목이 변경되었습니다 ✨");
-            }
-        }
-
-        function renderTravelPacking() {
-            const titleEl = document.getElementById('packingTripTitleText');
-            const barEl = document.getElementById('packingProgressBar');
-            const pctEl = document.getElementById('packingPercentText');
-            const statsEl = document.getElementById('packingStatsDetailText');
-            const listEl = document.getElementById('packingCategorizedList');
-            const memoEl = document.getElementById('travelMemoInput');
-
-            if (titleEl) titleEl.innerText = packingTripTitle;
-            if (memoEl && memoEl.value !== travelMemo) memoEl.value = travelMemo;
-
-            const total = travelPackingList.length;
-            const checkedCount = travelPackingList.filter(p => p.checked).length;
-            const pct = total === 0 ? 0 : Math.round((checkedCount / total) * 100);
-
-            if (barEl) barEl.style.width = `${pct}%`;
-            if (pctEl) pctEl.innerText = `${pct}%`;
-            if (statsEl) statsEl.innerText = `${checkedCount}개 준비됨 / 총 ${total}개`;
-
-            // 담당자 필터링
-            const filtered = travelPackingList.filter(p => {
-                if (currentPackingAssigneeFilter === '전체') return true;
-                return p.assignee === currentPackingAssigneeFilter;
-            });
-
-            if (filtered.length === 0) {
-                listEl.innerHTML = `<div style="text-align:center; padding:35px; background:white; border-radius:var(--radius-sm); border:1px solid var(--border-light); color:var(--text-muted); font-weight:700;">해당 분류의 짐이 없습니다 🧳</div>`;
-                return;
-            }
-
-            // 카테고리별 그룹화
-            const categories = [
-                "📄 필수품/신분증",
-                "👕 의류/잡화",
-                "💄 화장품/세면도구",
-                "🔌 전자기기/충전기",
-                "💊 상비약/비상용품",
-                "🎀 기타/힐링용품"
-            ];
-
-            let html = '';
-            categories.forEach(cat => {
-                const groupItems = filtered.filter(item => (item.category || '').startsWith(cat.split(' ')[0]));
-                if (groupItems.length > 0) {
-                    html += `
-                        <div class="packing-cat-group">
-                            <div class="packing-cat-header">
-                                <span>${cat}</span>
-                                <span style="font-size:0.8rem; color:var(--text-muted);">${groupItems.filter(g=>g.checked).length}/${groupItems.length}</span>
-                            </div>
-                            <div class="packing-items-list">
-                                ${groupItems.map(item => `
-                                    <div class="packing-item ${item.checked ? 'checked' : ''}">
-                                        <div class="packing-item-left" onclick="togglePackingItem(${item.id})">
-                                            <div class="bucket-custom-check">
-                                                ${item.checked ? '<i class="fa-solid fa-check"></i>' : ''}
-                                            </div>
-                                            <span class="packing-item-name">${item.name}</span>
-                                            <span class="packing-assignee-badge ${item.assignee === '히니' ? 'hini' : (item.assignee === '효니' ? 'hyoni' : 'common')}">
-                                                ${item.assignee}
-                                            </span>
-                                        </div>
-                                        <button type="button" class="bucket-del-btn" onclick="deletePackingItem(${item.id})" title="물품 삭제">
-                                            <i class="fa-solid fa-xmark"></i>
-                                        </button>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-
-            listEl.innerHTML = html;
-        }
-
-        function openAddPackingItemModal() {
-            document.getElementById('packingItemNameInput').value = '';
-            showModal('addPackingItemModal');
-        }
-
-        function addPackingItem() {
-            const cat = document.getElementById('packingCatSelect').value;
-            const name = document.getElementById('packingItemNameInput').value.trim();
-            const assignee = document.getElementById('packingAssigneeSelect').value;
-
-            if (!name) return showToast("물품명을 입력해주세요!");
-
-            travelPackingList.push({
-                id: Date.now(),
-                category: cat,
-                name: name,
-                assignee: assignee,
-                checked: false
-            });
-
-            saveTravelPacking();
-            renderTravelPacking();
-            hideModal('addPackingItemModal');
-            showToast(`"${name}" 물품이 체크리스트에 추가되었습니다 🧳`);
-        }
-
-        function togglePackingItem(id) {
-            const item = travelPackingList.find(p => p.id === id);
-            if (item) {
-                item.checked = !item.checked;
-                saveTravelPacking();
-                renderTravelPacking();
-            }
-        }
-
-        function deletePackingItem(id) {
-            travelPackingList = travelPackingList.filter(p => p.id !== id);
-            saveTravelPacking();
-            renderTravelPacking();
-            showToast("삭제되었습니다.");
-        }
-
-        function toggleAllPackingItems() {
-            const allChecked = travelPackingList.every(p => p.checked);
-            travelPackingList.forEach(p => p.checked = !allChecked);
-            saveTravelPacking();
-            renderTravelPacking();
-            showToast(allChecked ? "전체 체크가 해제되었습니다." : "모든 짐을 챙겼습니다! 🥳");
-        }
-
-        let memoDebounceTimer = null;
-        function handleTravelMemoInput() {
-            const el = document.getElementById('travelMemoInput');
-            if (!el) return;
-            travelMemo = el.value;
-            if (memoDebounceTimer) clearTimeout(memoDebounceTimer);
-            memoDebounceTimer = setTimeout(() => {
-                try {
-                    localStorage.setItem('couple_travel_memo', travelMemo);
-                    const timeEl = document.getElementById('travelMemoSaveTime');
-                    if (timeEl) {
-                        const now = new Date();
-                        timeEl.innerText = `저장됨 (${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')})`;
-                    }
-                } catch(e) {}
-            }, 600);
-        }
-
-        function copyTravelMemo() {
-            if (!travelMemo) return showToast("복사할 메모 내용이 없습니다!");
-            navigator.clipboard.writeText(travelMemo).then(() => {
-                showToast("여행 메모가 클립보드에 복사되었습니다! 📋");
-            });
-        }
-
-        function updateHomePlannerWidget() {
-            const todayStr = new Date().toISOString().split('T')[0];
-            const todayPlan = dailyItineraries[todayStr];
-            const dCountEl = document.getElementById('homeDailyPlanCount');
-            const dSummaryEl = document.getElementById('homeDailyPlanSummary');
-
-            if (todayPlan && todayPlan.stops && todayPlan.stops.length > 0) {
-                const totalStops = todayPlan.stops.length;
-                const doneStops = todayPlan.stops.filter(s => s.done).length;
-                if (dCountEl) dCountEl.innerText = `${totalStops}곳`;
-                const nextStop = todayPlan.stops.find(s => !s.done) || todayPlan.stops[0];
-                if (dSummaryEl) {
-                    dSummaryEl.innerHTML = `
-                        <div style="display:flex; flex-direction:column; gap:3px;">
-                            <span>${todayPlan.title}</span>
-                            <span style="font-size:0.82rem; color:var(--text-muted);">
-                                ${doneStops}/${totalStops} 완료 · 다음: <b>${nextStop.place}</b> (${nextStop.time})
-                            </span>
-                        </div>
-                    `;
-                }
-            } else {
-                if (dCountEl) dCountEl.innerText = '0개';
-                if (dSummaryEl) dSummaryEl.innerText = '오늘 예정된 일정이 없습니다. 일정을 작성해보세요 🌿';
-            }
-
-            // 여행 짐싸기 요약
-            const totalPack = travelPackingList.length;
-            const donePack = travelPackingList.filter(p => p.checked).length;
-            const pct = totalPack === 0 ? 0 : Math.round((donePack / totalPack) * 100);
-
-            const pPctEl = document.getElementById('homePackingPercent');
-            const pBarEl = document.getElementById('homePackingProgressBar');
-            const pStatsEl = document.getElementById('homePackingStats');
-
-            if (pPctEl) pPctEl.innerText = `${pct}%`;
-            if (pBarEl) pBarEl.style.width = `${pct}%`;
-            if (pStatsEl) pStatsEl.innerText = `${donePack}개 완료 / 총 ${totalPack}개 (${packingTripTitle})`;
         }
 
     </script>
