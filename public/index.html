@@ -3019,6 +3019,200 @@
             letter-spacing: -0.2px;
         }
 
+
+        /* ==========================================================================
+           [19. 둘만의 인스타그램 감성 디자인 고도화 & 캘린더 월간/주간/피커/스와이프]
+           ========================================================================== */
+        /* 인스타그램 시그니처 그라데이션 테마 팔레트 */
+        :root {
+            --insta-gradient: linear-gradient(45deg, #F09433 0%, #E6683C 25%, #DC2743 50%, #CC2366 75%, #BC1888 100%);
+            --insta-pink-soft: rgba(220, 39, 67, 0.12);
+            --insta-glow: rgba(204, 35, 102, 0.35);
+        }
+
+        /* 인스타그램 스토리 원형 그라데이션 링 */
+        .insta-story-ring {
+            padding: 3px;
+            background: var(--insta-gradient);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px var(--insta-glow);
+            transition: transform 0.3s var(--ease-spring);
+        }
+        .insta-story-ring:hover {
+            transform: scale(1.06) rotate(3deg);
+        }
+        .insta-story-inner {
+            background: white;
+            padding: 2px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 캘린더 월간/주간 세그먼트 컨트롤 (인스타그램 탭 스타일) */
+        .cal-view-segmented-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .cal-segmented-control {
+            background: #EDF2F7;
+            padding: 4px;
+            border-radius: var(--radius-full);
+            display: inline-flex;
+            gap: 4px;
+            border: 1px solid var(--border-light);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+        .cal-seg-btn {
+            background: transparent;
+            border: none;
+            padding: 7px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.25s var(--ease-spring);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .cal-seg-btn:hover {
+            color: var(--primary);
+        }
+        .cal-seg-btn.active {
+            background: white;
+            color: var(--primary-dark);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 캘린더 상단 연월 타이틀 클릭형 피커 스타일 */
+        .cal-month-title.clickable-picker {
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: var(--radius-md);
+            transition: all 0.2s var(--ease-spring);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cal-month-title.clickable-picker:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            transform: scale(1.03);
+        }
+        .cal-picker-chevron {
+            font-size: 0.95rem;
+            transition: transform 0.2s;
+            opacity: 0.7;
+        }
+        .cal-month-title.clickable-picker:hover .cal-picker-chevron {
+            transform: translateY(2px);
+            opacity: 1;
+        }
+
+        /* 연월 선택 모달 전용 스타일 */
+        .picker-year-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #F8FAFD;
+            padding: 12px 18px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+            margin-bottom: 18px;
+        }
+        .picker-year-text {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+        .picker-year-btn {
+            background: white;
+            border: 1px solid var(--border-light);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .picker-year-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        .picker-months-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .picker-month-chip {
+            padding: 12px 6px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border-light);
+            background: white;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s var(--ease-spring);
+            text-align: center;
+        }
+        .picker-month-chip:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        .picker-month-chip.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        /* 캘린더 스와이프 제스처 시각 피드백 트랜지션 */
+        #calendar-days {
+            touch-action: pan-y; /* 수직 스크롤 허용, 수평 스와이프는 JS가 제어 */
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+        }
+        #calDaySlidePanel {
+            touch-action: pan-y;
+        }
+        .cal-swipe-left {
+            transform: translateX(-24px);
+            opacity: 0.4;
+        }
+        .cal-swipe-right {
+            transform: translateX(24px);
+            opacity: 0.4;
+        }
+
+        /* 인스타그램 감성 캘린더 주간 모드 (Week Mode) */
+        .cal-grid.week-mode {
+            padding: 18px 14px;
+        }
+        .cal-grid.week-mode .cal-cell {
+            height: 94px;
+            max-height: 94px;
+        }
+        @media (min-width: 600px) {
+            .cal-grid.week-mode .cal-cell {
+                height: 108px;
+                max-height: 108px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -3310,14 +3504,30 @@
         <!-- [VIEW 2] 캘린더 뷰 -->
         <main class="view-section" id="view-calendar">
             <div class="calendar-container">
+                <!-- 월간 / 주간 세그먼트 컨트롤 (인스타그램 탭 감성) -->
+                <div class="cal-view-segmented-wrap">
+                    <div class="cal-segmented-control">
+                        <button type="button" class="cal-seg-btn active" id="calModeMonthBtn" onclick="setCalendarMode('month')">
+                            <i class="fa-regular fa-calendar"></i> 월간
+                        </button>
+                        <button type="button" class="cal-seg-btn" id="calModeWeekBtn" onclick="setCalendarMode('week')">
+                            <i class="fa-solid fa-calendar-week"></i> 주간
+                        </button>
+                    </div>
+                </div>
+
                 <div class="cal-header-row">
-                    <button class="cal-nav-btn" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-                    <div class="cal-month-title" id="cal-month-year">2026. 10</div>
-                    <button class="cal-nav-btn" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button class="cal-nav-btn" onclick="changeCalPeriod(-1)" title="이전"><i class="fa-solid fa-chevron-left"></i></button>
+                    <!-- 연도와 월 클릭 시 인스타그램 감성 퀵 피커 오픈 -->
+                    <div class="cal-month-title clickable-picker" id="cal-month-year" onclick="openYearMonthPicker()" title="클릭하여 연도와 달 변경">
+                        <span id="calMonthYearText">2026. 10</span>
+                        <i class="fa-solid fa-chevron-down cal-picker-chevron"></i>
+                    </div>
+                    <button class="cal-nav-btn" onclick="changeCalPeriod(1)" title="다음"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
                 
                 <div class="cal-grid" id="calendar-days">
-                    <!-- 요일 및 날짜 동적 생성 -->
+                    <!-- 요일 및 날짜 동적 생성 (스와이프 제스처 탑재) -->
                 </div>
 
                 <!-- 캘린더 아래 슬라이드 인라인 패널 (팝업 대체) -->
@@ -3702,6 +3912,31 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-submit" onclick="addBucketItem()"><i class="fa-solid fa-check"></i> 버킷리스트에 담기</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- (8) 연도 및 월 변경 인스타그램 감성 피커 모달 -->
+    <div class="modal-overlay" id="yearMonthPickerModal">
+        <div class="modal-content" style="max-width: 380px;">
+            <div class="modal-header" style="padding: 18px 22px 14px;">
+                <h3 class="modal-title"><i class="fa-regular fa-calendar-days" style="color: var(--primary);"></i> 연도 및 월 이동</h3>
+                <button class="btn-close" onclick="hideModal('yearMonthPickerModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" style="padding: 20px 22px;">
+                <div class="picker-year-nav">
+                    <button type="button" class="picker-year-btn" onclick="adjustPickerYear(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span class="picker-year-text" id="pickerYearDisplay">2026년</span>
+                    <button type="button" class="picker-year-btn" onclick="adjustPickerYear(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="picker-months-grid" id="pickerMonthsGrid">
+                    <!-- JS로 12개 월 렌더링 -->
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 12px 22px calc(12px + env(safe-area-inset-bottom)); display: flex; gap: 10px;">
+                <button type="button" class="btn-submit" style="background: #F1F5F9; color: var(--text-main); flex: 1; padding: 12px; box-shadow: none;" onclick="goToTodayMonth()">이번 달</button>
+                <button type="button" class="btn-submit" style="flex: 1; padding: 12px;" onclick="hideModal('yearMonthPickerModal')">닫기</button>
             </div>
         </div>
     </div>
@@ -4355,16 +4590,85 @@
         function renderCalendar() {
             const year = currentCalDate.getFullYear();
             const month = currentCalDate.getMonth();
-            document.getElementById('cal-month-year').innerText = `${year}. ${String(month + 1).padStart(2, '0')}`;
+            const titleEl = document.getElementById('calMonthYearText');
+            if (titleEl) titleEl.innerText = `${year}. ${String(month + 1).padStart(2, '0')}`;
+            const titleWrap = document.getElementById('cal-month-year');
+            if (titleWrap && !titleEl) titleWrap.innerHTML = `<span>${year}. ${String(month + 1).padStart(2, '0')}</span> <i class="fa-solid fa-chevron-down cal-picker-chevron"></i>`;
             
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const grid = document.getElementById('calendar-days');
+            if (!grid) return;
             
+            grid.classList.toggle('week-mode', currentCalMode === 'week');
+
             const daysArr = ['일', '월', '화', '수', '목', '금', '토'];
             let html = daysArr.map((d, i) => `<div class="cal-day-name" style="${i === 0 ? 'color:#FC8181' : (i === 6 ? 'color:#63B3ED' : '')}">${d}</div>`).join('');
             const todayStr = new Date().toISOString().split('T')[0];
 
+            if (currentCalMode === 'week') {
+                // [주간 뷰]: 현재 선택일 또는 기준일이 포함된 일요일~토요일 7일 렌더링
+                const anchor = currentSelectedCalDate ? new Date(currentSelectedCalDate) : currentCalDate;
+                const dayOfWeek = anchor.getDay();
+                const sunday = new Date(anchor);
+                sunday.setDate(anchor.getDate() - dayOfWeek);
+
+                for (let i = 0; i < 7; i++) {
+                    const dObj = new Date(sunday);
+                    dObj.setDate(sunday.getDate() + i);
+
+                    const dYear = dObj.getFullYear();
+                    const dMonth = dObj.getMonth();
+                    const dDay = dObj.getDate();
+                    const dateStr = `${dYear}-${String(dMonth + 1).padStart(2, '0')}-${String(dDay).padStart(2, '0')}`;
+                    const dateMD = `${String(dMonth + 1).padStart(2, '0')}-${String(dDay).padStart(2, '0')}`;
+                    const isHoliday = krHolidays.includes(dateMD) || i === 0;
+
+                    const dayPosts = postsData.filter(p => (p.author || '').split('|')[4] === dateStr).slice().sort((a, b) => {
+                        const catA = (a.author || '').split('|')[3] || '';
+                        const catB = (b.author || '').split('|')[3] || '';
+                        if (catA === '일정' && catB !== '일정') return -1;
+                        if (catA !== '일정' && catB === '일정') return 1;
+                        return b.id - a.id;
+                    });
+                    let previews = '';
+                    const maxPreviews = 2;
+                    const visiblePosts = dayPosts.slice(0, maxPreviews);
+                    visiblePosts.forEach(p => {
+                        const prts = (p.author || '').split('|');
+                        const postTitle = prts[2] || '기록';
+                        const cat = prts[3] || '일상';
+                        if (cat === '일정') {
+                            const customColor = prts[5] || 'var(--secondary)';
+                            previews += `<span class="cal-pill" title="${postTitle}" style="color:white; background:${customColor};">📅 ${postTitle}</span>`;
+                        } else if (cat === '다이어리') {
+                            previews += `<span class="cal-pill" title="${postTitle}" style="color:var(--primary-dark); background:var(--primary-light);">📝 ${postTitle}</span>`;
+                        } else if (cat === '갤러리') {
+                            previews += `<span class="cal-pill" title="${postTitle}" style="color:#7B341E; background:#FEEBC8;">📸 ${postTitle}</span>`;
+                        } else {
+                            previews += `<span class="cal-pill" title="${postTitle}" style="color:#22543D; background:#C6F6D5;">🌿 ${postTitle}</span>`;
+                        }
+                    });
+                    if (dayPosts.length > maxPreviews) {
+                        previews += `<span class="cal-more-badge">+${dayPosts.length - maxPreviews}개</span>`;
+                    }
+                    const isTodayClass = dateStr === todayStr ? 'today' : '';
+                    const holidayClass = isHoliday ? 'holiday' : '';
+                    const isSelectedClass = dateStr === currentSelectedCalDate ? 'selected' : '';
+
+                    html += `
+                        <div class="cal-cell ${isTodayClass} ${holidayClass} ${isSelectedClass}" data-date="${dateStr}" onclick="openDayView('${dateStr}')">
+                            <span style="margin-bottom:2px;">${dDay}</span>
+                            <div class="cal-preview">${previews}</div>
+                        </div>
+                    `;
+                }
+                grid.innerHTML = html;
+                if (currentSelectedCalDate) updateCalSlideContent(currentSelectedCalDate);
+                return;
+            }
+
+            // [월간 뷰]: 1일 앞 빈 칸 채우기
             for (let i = 0; i < firstDay; i++) {
                 html += `<div class="cal-cell empty"></div>`;
             }
@@ -4430,7 +4734,212 @@
             }
         }
 
+
+        // ================= [캘린더 월간/주간 모드, 스와이프 제스처, 연월 피커 엔진] =================
+        let currentCalMode = localStorage.getItem('couple_cal_mode') || 'month';
+        let pickerSelectedYear = 2026;
+
+        function setCalendarMode(mode) {
+            currentCalMode = mode;
+            localStorage.setItem('couple_cal_mode', mode);
+            const mBtn = document.getElementById('calModeMonthBtn');
+            const wBtn = document.getElementById('calModeWeekBtn');
+            if (mBtn) mBtn.classList.toggle('active', mode === 'month');
+            if (wBtn) wBtn.classList.toggle('active', mode === 'week');
+            renderCalendar();
+            showToast(mode === 'week' ? "주간 캘린더 모드로 전환되었습니다 📅" : "월간 캘린더 모드로 전환되었습니다 🗓️");
+        }
+
+        function changeCalPeriod(offset) {
+            if (currentCalMode === 'week') {
+                // 주간 모드: 7일 이동
+                const anchor = currentSelectedCalDate ? new Date(currentSelectedCalDate) : currentCalDate;
+                anchor.setDate(anchor.getDate() + (offset * 7));
+                currentCalDate = new Date(anchor.getFullYear(), anchor.getMonth(), anchor.getDate());
+                if (currentSelectedCalDate) {
+                    const sel = new Date(currentSelectedCalDate);
+                    sel.setDate(sel.getDate() + (offset * 7));
+                    currentSelectedCalDate = `${sel.getFullYear()}-${String(sel.getMonth() + 1).padStart(2, '0')}-${String(sel.getDate()).padStart(2, '0')}`;
+                }
+            } else {
+                // 월간 모드: 1달 이동
+                currentCalDate.setMonth(currentCalDate.getMonth() + offset);
+            }
+            closeCalSlidePanel();
+            renderCalendar();
+        }
+
+        function triggerCalSwipeAnimation(dir) {
+            const grid = document.getElementById('calendar-days');
+            if (!grid) return;
+            grid.classList.add(dir === 'left' ? 'cal-swipe-left' : 'cal-swipe-right');
+            setTimeout(() => {
+                grid.classList.remove('cal-swipe-left', 'cal-swipe-right');
+            }, 280);
+        }
+
+        // (1) 달력 영역 터치 스와이프 제스처 (다음달/이전달, 다음주/이전주)
+        function initCalendarSwipe() {
+            const grid = document.getElementById('calendar-days');
+            if (!grid) return;
+
+            let startX = 0, startY = 0, startTime = 0;
+
+            grid.addEventListener('touchstart', (e) => {
+                if (!e.touches || e.touches.length === 0) return;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                startTime = Date.now();
+            }, { passive: true });
+
+            grid.addEventListener('touchend', (e) => {
+                if (!e.changedTouches || e.changedTouches.length === 0) return;
+                const endX = e.changedTouches[0].clientX;
+                const endY = e.changedTouches[0].clientY;
+                const dx = endX - startX;
+                const dy = endY - startY;
+                const dt = Date.now() - startTime;
+
+                if (Math.abs(dx) > 42 && Math.abs(dx) > Math.abs(dy) * 1.3 && dt < 650) {
+                    if (dx < 0) {
+                        // 왼쪽 스와이프 -> 다음 기간
+                        triggerCalSwipeAnimation('left');
+                        changeCalPeriod(1);
+                    } else {
+                        // 오른쪽 스와이프 -> 이전 기간
+                        triggerCalSwipeAnimation('right');
+                        changeCalPeriod(-1);
+                    }
+                }
+            }, { passive: true });
+        }
+
+        // (2) 하단 슬라이드 패널 터치 스와이프 제스처 (다음날/이전날 넘김)
+        function initCalSlideSwipe() {
+            const panel = document.getElementById('calDaySlidePanel');
+            if (!panel) return;
+
+            let startX = 0, startY = 0, startTime = 0;
+
+            panel.addEventListener('touchstart', (e) => {
+                if (!e.touches || e.touches.length === 0) return;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                startTime = Date.now();
+            }, { passive: true });
+
+            panel.addEventListener('touchend', (e) => {
+                if (!panel.classList.contains('open')) return;
+                if (!e.changedTouches || e.changedTouches.length === 0) return;
+                const endX = e.changedTouches[0].clientX;
+                const endY = e.changedTouches[0].clientY;
+                const dx = endX - startX;
+                const dy = endY - startY;
+                const dt = Date.now() - startTime;
+
+                if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4 && dt < 650) {
+                    if (dx < 0) {
+                        navigateCalSlideDay(1); // 다음 날
+                    } else {
+                        navigateCalSlideDay(-1); // 이전 날
+                    }
+                }
+            }, { passive: true });
+        }
+
+        function navigateCalSlideDay(offset) {
+            if (!currentSelectedCalDate) {
+                currentSelectedCalDate = new Date().toISOString().split('T')[0];
+            }
+            const parts = currentSelectedCalDate.split('-');
+            const curDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+            curDate.setDate(curDate.getDate() + offset);
+
+            const nextDateStr = `${curDate.getFullYear()}-${String(curDate.getMonth() + 1).padStart(2, '0')}-${String(curDate.getDate()).padStart(2, '0')}`;
+            
+            // 월이 변경되었으면 캘린더 월도 동기화
+            if (curDate.getFullYear() !== currentCalDate.getFullYear() || curDate.getMonth() !== currentCalDate.getMonth()) {
+                currentCalDate = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
+                renderCalendar();
+            } else if (currentCalMode === 'week') {
+                renderCalendar();
+            }
+
+            currentSelectedCalDate = nextDateStr;
+
+            document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
+            const targetCell = document.querySelector(`.cal-cell[data-date="${nextDateStr}"]`);
+            if (targetCell) targetCell.classList.add('selected');
+
+            const entryList = document.getElementById('calSlideEntryList');
+            if (entryList) {
+                entryList.style.opacity = '0.35';
+                entryList.style.transform = `translateX(${offset > 0 ? '-16px' : '16px'})`;
+                setTimeout(() => {
+                    updateCalSlideContent(nextDateStr);
+                    entryList.style.opacity = '1';
+                    entryList.style.transform = 'translateX(0)';
+                }, 140);
+            } else {
+                updateCalSlideContent(nextDateStr);
+            }
+        }
+
+        // (3) 연도 및 월 변경 인스타그램 감성 퀵 피커
+        function openYearMonthPicker() {
+            pickerSelectedYear = currentCalDate.getFullYear();
+            renderYearMonthPicker();
+            showModal('yearMonthPickerModal');
+        }
+
+        function adjustPickerYear(delta) {
+            pickerSelectedYear += delta;
+            renderYearMonthPicker();
+        }
+
+        function renderYearMonthPicker() {
+            const yrEl = document.getElementById('pickerYearDisplay');
+            if (yrEl) yrEl.innerText = `${pickerSelectedYear}년`;
+            const grid = document.getElementById('pickerMonthsGrid');
+            if (!grid) return;
+
+            const curYear = currentCalDate.getFullYear();
+            const curMonth = currentCalDate.getMonth();
+            
+            let html = '';
+            for (let m = 0; m < 12; m++) {
+                const isSelected = (pickerSelectedYear === curYear && m === curMonth);
+                html += `
+                    <button type="button" class="picker-month-chip ${isSelected ? 'active' : ''}" onclick="selectPickerMonth(${m})">
+                        ${m + 1}월
+                    </button>
+                `;
+            }
+            grid.innerHTML = html;
+        }
+
+        function selectPickerMonth(mIdx) {
+            currentCalDate = new Date(pickerSelectedYear, mIdx, 1);
+            closeCalSlidePanel();
+            renderCalendar();
+            hideModal('yearMonthPickerModal');
+            showToast(`${pickerSelectedYear}년 ${mIdx + 1}월로 이동했습니다 ✨`);
+        }
+
+        function goToTodayMonth() {
+            const now = new Date();
+            currentCalDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            currentSelectedCalDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            closeCalSlidePanel();
+            renderCalendar();
+            hideModal('yearMonthPickerModal');
+            showToast("이번 달로 이동했습니다 📅");
+        }
+
         function changeMonth(offset) {
+            changeCalPeriod(offset);
+        }
+        function _unused_changeMonth(offset) {
             currentCalDate.setMonth(currentCalDate.getMonth() + offset);
             closeCalSlidePanel();
             renderCalendar();
@@ -5559,13 +6068,24 @@
             badge.addEventListener('dblclick', toggleHeartMinimize);
         }
 
+        function applyHeartMinimizedState() {
+            const badge = document.getElementById('floatingHeartBadge');
+            if (!badge) return;
+            const isMin = localStorage.getItem('couple_heart_minimized') === 'true';
+            if (isMin) {
+                badge.classList.add('minimized');
+            } else {
+                badge.classList.remove('minimized');
+            }
+        }
+
         function toggleHeartMinimize() {
             const badge = document.getElementById('floatingHeartBadge');
             if (!badge) return;
-            badge.classList.toggle('minimized');
-            const isMin = badge.classList.contains('minimized');
-            localStorage.setItem('couple_heart_minimized', isMin);
-            showToast(isMin ? "하트 위젯이 미니멀하게 접혔습니다 (더블탭 시 펼침)" : "하트 위젯이 펼쳐졌습니다 💕");
+            const willMin = !badge.classList.contains('minimized');
+            localStorage.setItem('couple_heart_minimized', willMin ? 'true' : 'false');
+            applyHeartMinimizedState();
+            showToast(willMin ? "하트 위젯이 미니멀하게 접혔습니다 (더블탭 시 펼침)" : "하트 위젯이 펼쳐졌습니다 💕");
         }
 
         function resetHeartPosition() {
@@ -5600,10 +6120,11 @@
             const badge = document.getElementById('floatingHeartBadge');
             if (!badge) return;
 
+            const isMin = localStorage.getItem('couple_heart_minimized') === 'true';
             const winW = window.innerWidth;
             const winH = window.innerHeight;
-            const badgeW = badge.offsetWidth || 130;
-            const badgeH = badge.offsetHeight || 44;
+            const badgeW = isMin ? 44 : (badge.offsetWidth || 130);
+            const badgeH = isMin ? 44 : (badge.offsetHeight || 44);
 
             // 화면 경계 안전 영역 (헤더 아래, 네비게이션 위)
             const minX = 16;
@@ -5626,6 +6147,8 @@
             setTimeout(() => {
                 badge.style.transform = 'scale(1) rotate(0deg)';
                 localStorage.setItem('couple_heart_pos', JSON.stringify({ x: randX, y: randY }));
+                // [접힘 상태 영구 보존]: 터치 이동 후에도 접힌 상태가 절대 풀리지 않도록 고정!
+                applyHeartMinimizedState();
             }, 300);
         }
 
