@@ -330,226 +330,107 @@
         }
 
         /* ==========================================================================
-           [5. 화면 레이아웃 엔진: 모바일 최적화(기본) & PC 최적화 와이드 배치]
-           - 기본값: 모바일 뷰 (480px 스마트폰 프레임, 하단 탭바)
-           - PC 모드 선택 시: 좌측 사이드바 + 와이드 3열 위젯 대시보드
+           [5. PC(데스크톱) 전용 고품격 레이아웃 미디어 쿼리]
            ========================================================================== */
-
-        /* [모바일 모드 (기본)]: 데스크톱 화면에서도 모바일 앱 비율(최대 480px)로 단정하게 중앙 집중 */
-        body.layout-mobile #app-container {
-            max-width: 480px;
-            margin: 0 auto;
-            min-height: 100vh;
-            display: flex !important;
-            flex-direction: column !important;
-            position: relative;
-            background: var(--bg-base);
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.08);
-            border-left: 1px solid var(--border-light);
-            border-right: 1px solid var(--border-light);
-        }
-        body.layout-mobile .app-header {
-            position: sticky;
-            top: 0;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            width: 100% !important;
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 0 20px !important;
-            z-index: 900;
-        }
-        body.layout-mobile .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            width: 100% !important;
-            max-width: 480px !important;
-            height: calc(var(--nav-height) + env(safe-area-inset-bottom)) !important;
-            flex-direction: row !important;
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 0 0 env(safe-area-inset-bottom) 0 !important;
-            border-top: 1px solid var(--border-light) !important;
-            border-right: none !important;
-            top: auto !important;
-            background: var(--surface-glass);
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04) !important;
-            z-index: 950;
-        }
-        body.layout-mobile .nav-item {
-            width: 30% !important;
-            height: var(--nav-height) !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-            padding-left: 0 !important;
-            gap: 0 !important;
-            margin-bottom: 0 !important;
-            background: transparent !important;
-        }
-        body.layout-mobile .nav-item i {
-            font-size: 1.3rem !important;
-            margin-bottom: 4px !important;
-        }
-        body.layout-mobile .nav-item span {
-            font-size: 0.78rem !important;
-        }
-        body.layout-mobile .view-section {
-            padding-left: 0 !important;
-            padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 80px) !important;
-            width: 100% !important;
-        }
-        body.layout-mobile .sidebar-profile-card {
-            display: none !important;
-        }
-        body.layout-mobile .widgets-grid {
-            grid-template-columns: 1fr !important;
-            gap: 20px !important;
-        }
-        body.layout-mobile .grid-full-width {
-            grid-column: span 1 !important;
-        }
-        body.layout-mobile .gallery-grid-insta {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 14px !important;
-        }
-        body.layout-mobile .fab {
-            right: calc(50% - 240px + 20px) !important;
-            bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 20px) !important;
-        }
-        @media (max-width: 520px) {
-            body.layout-mobile .fab {
-                right: 20px !important;
-            }
-        }
-        body.layout-mobile .banner-wrap {
-            height: 350px !important;
-        }
-        body.layout-mobile .schedule-alert {
-            max-width: 440px !important;
-            width: 90% !important;
-        }
-
-        /* [PC 최적화 모드]: 992px 이상에서 와이드 사이드바 + 2~3열 위젯 대시보드 확장 */
         @media (min-width: 992px) {
-            body.layout-pc #app-container {
+            #app-container {
                 display: flex !important;
-                flex-direction: row !important;
-                max-width: 100% !important;
-                margin: 0 !important;
-                box-shadow: none !important;
-                border: none !important;
+                flex-direction: row;
             }
-            body.layout-pc .bottom-nav {
-                top: 0 !important;
-                left: 0 !important;
-                width: var(--sidebar-width) !important;
-                max-width: var(--sidebar-width) !important;
-                height: 100vh !important;
-                flex-direction: column !important;
-                justify-content: flex-start !important;
-                padding-top: 100px !important;
-                padding-left: 20px !important;
-                padding-right: 20px !important;
-                border-top: none !important;
-                border-right: 1px solid var(--border-light) !important;
-                align-items: stretch !important;
-                box-shadow: var(--shadow-sm) !important;
-                background: white !important;
-                transform: none !important;
+            .bottom-nav {
+                top: 0;
+                left: 0;
+                width: var(--sidebar-width);
+                height: 100vh;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 100px;
+                padding-left: 20px;
+                padding-right: 20px;
+                border-top: none;
+                border-right: 1px solid var(--border-light);
+                align-items: stretch;
+                box-shadow: var(--shadow-sm);
+                background: white;
             }
-            body.layout-pc .nav-item {
-                width: 100% !important;
-                height: 56px !important;
-                flex-direction: row !important;
-                justify-content: flex-start !important;
-                padding-left: 24px !important;
-                gap: 16px !important;
-                border-radius: var(--radius-md) !important;
-                margin-bottom: 8px !important;
+            .nav-item {
+                width: 100%;
+                height: 56px;
+                flex-direction: row;
+                justify-content: flex-start;
+                padding-left: 24px;
+                gap: 16px;
+                border-radius: var(--radius-md);
+                margin-bottom: 8px;
             }
-            body.layout-pc .nav-item i {
-                font-size: 1.25rem !important;
-                margin-bottom: 0 !important;
+            .nav-item i {
+                font-size: 1.25rem;
+                margin-bottom: 0;
             }
-            body.layout-pc .nav-item span {
-                font-size: 1.02rem !important;
+            .nav-item span {
+                font-size: 1.02rem;
             }
-            body.layout-pc .nav-item:hover {
-                background: var(--bg-base) !important;
-                color: var(--primary) !important;
+            .nav-item:hover {
+                background: var(--bg-base);
+                color: var(--primary);
             }
-            body.layout-pc .nav-item.active {
-                background: var(--primary-light) !important;
-                color: var(--primary) !important;
-                font-weight: 800 !important;
+            .nav-item.active {
+                background: var(--primary-light);
+                color: var(--primary);
+                font-weight: 800;
             }
-            body.layout-pc .app-header {
-                left: var(--sidebar-width) !important;
-                width: calc(100% - var(--sidebar-width)) !important;
-                max-width: 100% !important;
-                transform: none !important;
-                padding: 0 40px !important;
+            .nav-item.active i {
+                transform: none;
             }
-            body.layout-pc .view-section {
-                padding-left: var(--sidebar-width) !important;
-                padding-bottom: 50px !important;
-                width: calc(100% - var(--sidebar-width)) !important;
+
+            .app-header {
+                left: var(--sidebar-width);
+                width: calc(100% - var(--sidebar-width));
+                padding: 0 40px;
             }
-            body.layout-pc .sidebar-profile-card {
-                display: flex !important;
-                margin-top: auto !important;
-                margin-bottom: 30px !important;
-                padding: 16px !important;
-                background: var(--bg-base) !important;
-                border-radius: var(--radius-md) !important;
-                align-items: center !important;
-                gap: 12px !important;
-                border: 1px solid var(--border-light) !important;
+            .view-section {
+                padding-left: var(--sidebar-width);
+                padding-bottom: 50px;
             }
-            body.layout-pc .home-container,
-            body.layout-pc .calendar-container,
-            body.layout-pc .board-container {
-                max-width: 1280px !important;
-                padding: 30px 40px !important;
+
+            /* 데스크톱 사이드바 하단 프로필 미니 박스 */
+            .sidebar-profile-card {
+                margin-top: auto;
+                margin-bottom: 30px;
+                padding: 16px;
+                background: var(--bg-base);
+                border-radius: var(--radius-md);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                border: 1px solid var(--border-light);
             }
-            body.layout-pc .widgets-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 24px !important;
+            .sidebar-profile-avatar {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid var(--primary);
             }
-            body.layout-pc .grid-full-width {
-                grid-column: span 2 !important;
+            .sidebar-profile-info h4 {
+                font-size: 0.95rem;
+                font-weight: 800;
+                color: var(--text-main);
             }
-            body.layout-pc .gallery-grid-insta {
-                grid-template-columns: repeat(4, 1fr) !important;
-                gap: 22px !important;
-            }
-            body.layout-pc .fab {
-                bottom: 40px !important;
-                right: 40px !important;
-                width: 66px !important;
-                height: 66px !important;
-            }
-            body.layout-pc .banner-wrap {
-                height: 420px !important;
+            .sidebar-profile-info p {
+                font-size: 0.8rem;
+                color: var(--primary);
+                font-weight: 600;
             }
         }
-        @media (min-width: 1350px) {
-            body.layout-pc .widgets-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-            }
-            body.layout-pc .grid-full-width {
-                grid-column: span 3 !important;
-            }
-        }
+
         @media (max-width: 991px) {
             .sidebar-profile-card {
-                display: none !important;
+                display: none;
             }
         }
-        
-/* ==========================================================================
+
+        /* ==========================================================================
            [6. 시크릿 로그인 화면 (단일 비밀번호 전용)]
            ========================================================================== */
         #auth-wall {
@@ -3332,407 +3213,6 @@
             }
         }
 
-    
-        /* [신규 기능 스타일] 화면 모드 전환 선택기 */
-        .layout-toggle-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-        }
-        .layout-chip {
-            flex: 1;
-            padding: 12px 14px;
-            background: white;
-            border: 1.5px solid var(--border-light);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 0.92rem;
-            font-weight: 800;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.25s var(--ease-spring);
-        }
-        .layout-chip:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            transform: translateY(-2px);
-        }
-        .layout-chip.active {
-            background: var(--primary) !important;
-            border-color: var(--primary) !important;
-            color: white !important;
-            box-shadow: 0 4px 14px var(--primary-glow);
-        }
-
-        /* [신규 기능 스타일] 로그인 상태 유지 체크박스 */
-        .auth-keep-login-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 22px;
-            cursor: pointer;
-            user-select: none;
-        }
-        .custom-checkbox {
-            width: 22px;
-            height: 22px;
-            border-radius: 6px;
-            border: 1.5px solid var(--border-light);
-            background: #F8FAFC;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.75rem;
-            transition: all 0.2s var(--ease-spring);
-        }
-        .custom-checkbox.checked {
-            background: var(--primary) !important;
-            border-color: var(--primary) !important;
-        }
-        .custom-checkbox.checked i {
-            display: block !important;
-        }
-        .auth-keep-text {
-            font-size: 0.92rem;
-            font-weight: 700;
-            color: var(--text-sub);
-        }
-
-        /* [신규 기능 스타일] 하단 토스트(알림) 인터랙티브 상호작용 디자인 */
-        .schedule-alert {
-            cursor: pointer !important;
-            transition: all 0.3s var(--ease-spring) !important;
-            user-select: none;
-        }
-        .schedule-alert:hover {
-            transform: translateX(-50%) translateY(-4px) scale(1.02) !important;
-            box-shadow: 0 16px 36px var(--primary-glow) !important;
-            border-color: var(--primary-dark) !important;
-        }
-        .schedule-alert-icon-circle {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.15rem;
-            flex-shrink: 0;
-            animation: pulseHeart 2s infinite ease-in-out;
-        }
-        .schedule-alert-cta {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-size: 0.76rem;
-            font-weight: 800;
-            padding: 5px 11px;
-            border-radius: var(--radius-full);
-            white-space: nowrap;
-            transition: all 0.2s;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .schedule-alert:hover .schedule-alert-cta {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* [캘린더 높이 고정 & 스크롤 점프 완전 방지] */
-        .cal-slide-entries {
-            height: 290px !important;
-            min-height: 290px !important;
-            max-height: 290px !important;
-            overflow-y: auto !important;
-            box-sizing: border-box !important;
-        }
-        .cal-slide-empty-wrap {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--text-muted);
-            padding: 20px;
-        }
-
-        /* [신규 홈 콘텐츠 1] 오늘 우리의 기분 & 한마디 위젯 */
-        .mood-cards-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        .mood-card {
-            background: #F9FAFD;
-            border-radius: var(--radius-sm);
-            padding: 16px 18px;
-            border: 1.5px solid var(--border-light);
-            transition: all 0.25s var(--ease-spring);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            position: relative;
-        }
-        .mood-card:hover {
-            border-color: var(--primary);
-            background: white;
-            box-shadow: var(--shadow-xs);
-            transform: translateY(-2px);
-        }
-        .mood-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .mood-role-chip {
-            font-size: 0.76rem;
-            font-weight: 800;
-            padding: 2px 8px;
-            border-radius: var(--radius-full);
-        }
-        .mood-role-chip.girl {
-            background: #FFF0F2;
-            color: var(--primary);
-        }
-        .mood-role-chip.boy {
-            background: #EEF5FC;
-            color: var(--secondary);
-        }
-        .mood-emoji {
-            font-size: 1.8rem;
-            line-height: 1;
-        }
-        .mood-status-label {
-            font-size: 1.05rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-        .mood-quote-bubble {
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            line-height: 1.45;
-            background: white;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid var(--border-light);
-            font-style: italic;
-            word-break: break-all;
-        }
-
-        /* [신규 홈 콘텐츠 2] 커플 1문 1답 Q&A 위젯 */
-        .qa-box {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-        .qa-question-bar {
-            background: linear-gradient(135deg, var(--primary-light) 0%, #FFF5F0 100%);
-            border: 1.5px solid rgba(255, 117, 130, 0.25);
-            border-radius: var(--radius-sm);
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .qa-badge {
-            background: var(--primary);
-            color: white;
-            font-size: 0.74rem;
-            font-weight: 800;
-            padding: 4px 8px;
-            border-radius: var(--radius-full);
-            white-space: nowrap;
-        }
-        .qa-question-text {
-            font-size: 0.98rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.4;
-        }
-        .qa-answers-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .qa-answer-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        .qa-author-tag {
-            font-size: 0.76rem;
-            font-weight: 800;
-            padding: 3px 8px;
-            border-radius: var(--radius-full);
-            margin-top: 5px;
-            white-space: nowrap;
-        }
-        .qa-author-tag.girl { background: #FFF0F2; color: var(--primary); }
-        .qa-author-tag.boy { background: #EEF5FC; color: var(--secondary); }
-        .qa-answer-bubble {
-            flex-grow: 1;
-            background: #F9FAFD;
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border-light);
-            font-size: 0.92rem;
-            color: var(--text-main);
-            line-height: 1.45;
-        }
-        .qa-input-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 4px;
-        }
-        .qa-input-row input {
-            flex-grow: 1;
-            min-width: 0;
-            padding: 10px 14px;
-            border: 1.5px solid var(--border-light);
-            border-radius: var(--radius-sm);
-            font-size: 0.92rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .qa-input-row input:focus {
-            border-color: var(--primary);
-        }
-
-        /* [신규 홈 콘텐츠 3] 가고 싶은 데이트 & 맛집 위시리스트 */
-        .date-wish-filters {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 12px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-        .wish-filter-chip {
-            padding: 6px 12px;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--border-light);
-            background: white;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .wish-filter-chip:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-        .wish-filter-chip.active {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            border-color: var(--primary);
-            font-weight: 800;
-        }
-        .date-wish-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 260px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-        .date-wish-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 14px;
-            background: #F9FAFD;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-light);
-            transition: all 0.2s;
-        }
-        .date-wish-item:hover {
-            background: white;
-            border-color: var(--primary);
-            transform: translateX(2px);
-        }
-        .date-wish-item.done {
-            opacity: 0.55;
-            background: #FAFAFB;
-        }
-        .date-wish-item.done .wish-item-title {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
-        .wish-item-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-grow: 1;
-            cursor: pointer;
-        }
-        .wish-cat-tag {
-            font-size: 0.72rem;
-            font-weight: 800;
-            padding: 2px 7px;
-            border-radius: var(--radius-full);
-            background: #FFF5F0;
-            color: #DD6B20;
-            white-space: nowrap;
-        }
-        .wish-item-title {
-            font-size: 0.94rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-        .wish-item-memo {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        /* 무드 피커 모달 그리드 */
-        .mood-picker-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .mood-picker-btn {
-            background: #F8FAFD;
-            border: 1.5px solid var(--border-light);
-            border-radius: var(--radius-sm);
-            padding: 10px 4px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            transition: all 0.2s var(--ease-spring);
-        }
-        .mood-picker-btn:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            transform: translateY(-2px);
-        }
-        .mood-picker-btn.active {
-            background: var(--primary-light) !important;
-            border-color: var(--primary) !important;
-            box-shadow: 0 4px 10px var(--primary-glow);
-        }
-        .mood-picker-btn span.emoji {
-            font-size: 1.6rem;
-        }
-        .mood-picker-btn span.label {
-            font-size: 0.74rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
     </style>
 </head>
 <body>
@@ -3829,13 +3309,6 @@
             <div class="auth-input-wrap">
                 <i class="fa-solid fa-lock"></i>
                 <input type="password" class="auth-input" id="l_pw" placeholder="암호 입력" onkeydown="if(event.key==='Enter') submitLogin()" autofocus>
-            </div>
-            <div class="auth-keep-login-wrap" onclick="toggleAuthKeepLogin()">
-                <div class="custom-checkbox" id="authKeepLoginBox">
-                    <i class="fa-solid fa-check" id="authKeepLoginCheckIcon" style="display: none;"></i>
-                </div>
-                <input type="checkbox" id="authKeepLoginCheckbox" style="display: none;">
-                <span class="auth-keep-text">로그인 상태 유지 (브라우저 닫아도 유지)</span>
             </div>
             <button class="btn-auth" onclick="submitLogin()">
                 <span>함께 입장하기</span>
@@ -4016,92 +3489,6 @@
                         </div>
                     </div>
 
-                    <!-- [신규 커플 위젯 1] 오늘 우리의 기분 & 한마디 위젯 -->
-                    <div class="widget-card grid-full-width" id="coupleMoodWidget">
-                        <div class="widget-title">
-                            <div class="widget-title-left">
-                                <i class="fa-solid fa-heart-pulse" style="color: var(--primary);"></i>
-                                <span>오늘 우리의 기분 & 한마디</span>
-                            </div>
-                            <button class="icon-btn" onclick="openMoodModal()" title="내 오늘 기분 변경" style="width: 34px; height: 34px;">
-                                <i class="fa-solid fa-face-smile"></i>
-                            </button>
-                        </div>
-                        <div class="mood-cards-container">
-                            <div class="mood-card" id="hiniMoodCard">
-                                <div class="mood-card-header">
-                                    <span class="mood-role-chip girl">히니 💕</span>
-                                    <span class="mood-emoji" id="hiniMoodEmoji">🥰</span>
-                                </div>
-                                <div class="mood-status-label" id="hiniMoodLabel">사랑충전 100%</div>
-                                <div class="mood-quote-bubble" id="hiniMoodQuote">"오늘 하루도 힘내고 저녁에 맛있는거 먹자!"</div>
-                            </div>
-                            <div class="mood-card" id="hyoniMoodCard">
-                                <div class="mood-card-header">
-                                    <span class="mood-role-chip boy">효니 💖</span>
-                                    <span class="mood-emoji" id="hyoniMoodEmoji">💖</span>
-                                </div>
-                                <div class="mood-status-label" id="hyoniMoodLabel">보고싶음</div>
-                                <div class="mood-quote-bubble" id="hyoniMoodQuote">"퇴근하고 얼른 달려갈게, 언제나 사랑해!"</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- [신규 커플 위젯 2] 커플 1문 1답 Q&A 위젯 -->
-                    <div class="widget-card" id="coupleQaWidget">
-                        <div class="widget-title">
-                            <div class="widget-title-left">
-                                <i class="fa-solid fa-comments" style="color: var(--primary);"></i>
-                                <span>둘만의 1문 1답 Q&A</span>
-                            </div>
-                            <button class="icon-btn" onclick="nextRandomQuestion()" title="다른 질문 뽑기" style="width: 34px; height: 34px;">
-                                <i class="fa-solid fa-shuffle"></i>
-                            </button>
-                        </div>
-                        <div class="qa-box">
-                            <div class="qa-question-bar">
-                                <span class="qa-badge">Today's Q</span>
-                                <span class="qa-question-text" id="qaQuestionText">서로에게 가장 심쿵했던 순간은 언제인가요?</span>
-                            </div>
-                            <div class="qa-answers-list">
-                                <div class="qa-answer-item">
-                                    <span class="qa-author-tag girl">히니</span>
-                                    <div class="qa-answer-bubble" id="qaHiniAnswer">아직 답변을 작성하지 않았어요 💕</div>
-                                </div>
-                                <div class="qa-answer-item">
-                                    <span class="qa-author-tag boy">효니</span>
-                                    <div class="qa-answer-bubble" id="qaHyoniAnswer">아직 답변을 작성하지 않았어요 💖</div>
-                                </div>
-                            </div>
-                            <div class="qa-input-row">
-                                <input type="text" id="qaInputText" placeholder="내 답변을 남겨보세요..." onkeydown="if(event.key==='Enter') submitQaAnswer()">
-                                <button type="button" class="btn-submit" style="width: auto; padding: 10px 16px; font-size: 0.88rem;" onclick="submitQaAnswer()">답변</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- [신규 커플 위젯 3] 가고 싶은 데이트 & 맛집 위시리스트 -->
-                    <div class="widget-card" id="dateWishWidget">
-                        <div class="widget-title">
-                            <div class="widget-title-left">
-                                <i class="fa-solid fa-utensils" style="color: var(--primary);"></i>
-                                <span>데이트 맛집 & 위시리스트</span>
-                                <span class="upcoming-count-badge" id="dateWishCount">0곳</span>
-                            </div>
-                            <button class="icon-btn" onclick="showModal('addDateWishModal')" title="데이트 장소 추가" style="width: 34px; height: 34px;">
-                                <i class="fa-solid fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="date-wish-filters">
-                            <button type="button" class="wish-filter-chip active" onclick="filterDateWish('전체', this)">전체</button>
-                            <button type="button" class="wish-filter-chip" onclick="filterDateWish('맛집', this)">🍽️ 맛집</button>
-                            <button type="button" class="wish-filter-chip" onclick="filterDateWish('카페', this)">☕ 카페</button>
-                            <button type="button" class="wish-filter-chip" onclick="filterDateWish('여행', this)">🚗 여행</button>
-                            <button type="button" class="wish-filter-chip" onclick="filterDateWish('문화', this)">🎬 문화</button>
-                        </div>
-                        <div class="date-wish-list" id="dateWishListWrap"></div>
-                    </div>
-
                     <!-- 위젯 3: 둘만의 역사 / 마일스톤 (타임라인) -->
                     <div class="widget-card grid-full-width">
                         <div class="widget-title">
@@ -4181,8 +3568,6 @@
                     <button class="board-tab active" onclick="setBoardCategory('전체', this)">전체보기</button>
                     <button class="board-tab" onclick="setBoardCategory('갤러리', this)"><i class="fa-regular fa-image" style="margin-right:6px;"></i>사진 갤러리</button>
                     <button class="board-tab" onclick="setBoardCategory('일상', this)"><i class="fa-solid fa-seedling" style="margin-right:6px;"></i>자유 일상</button>
-                    <button class="board-tab" onclick="setBoardCategory('데이트', this)"><i class="fa-solid fa-car-side" style="margin-right:6px;"></i>데이트 코스</button>
-                    <button class="board-tab" onclick="setBoardCategory('선물', this)"><i class="fa-solid fa-gift" style="margin-right:6px;"></i>선물/마음</button>
                 </div>
                 <div id="boardList"></div>
             </div>
@@ -4192,21 +3577,14 @@
         <button class="fab" onclick="handleFabClick()" title="새 기록 남기기"><i class="fa-solid fa-pen"></i></button>
     </div>
 
-    <!-- 다가오는 일정 알림 토스트 (인터랙티브 클릭 상호작용 지원) -->
-    <div id="scheduleAlert" class="schedule-alert" title="클릭하여 해당 일정 바로 확인하기">
-        <div class="schedule-alert-icon-circle">
-            <i class="fa-solid fa-bell"></i>
+    <!-- 다가오는 일정 알림 토스트 -->
+    <div id="scheduleAlert" class="schedule-alert">
+        <i class="fa-solid fa-bell" style="color: var(--primary); font-size: 1.4rem;"></i>
+        <div style="flex-grow: 1;">
+            <div style="font-size: 0.82rem; color: var(--primary); font-weight: 800;">다가오는 기념일/약속</div>
+            <div id="scheduleAlertMsg" style="font-weight: 800;">기념일 여행</div>
         </div>
-        <div style="flex-grow: 1; overflow: hidden;">
-            <div style="font-size: 0.78rem; color: var(--primary); font-weight: 800; display: flex; align-items: center; gap: 4px;">
-                <i class="fa-solid fa-heart" style="font-size: 0.7rem;"></i> 다가오는 기념일/약속
-            </div>
-            <div id="scheduleAlertMsg" style="font-weight: 800; font-size: 0.98rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">기념일 일정</div>
-        </div>
-        <div class="schedule-alert-cta">
-            <span>일정 확인 ❯</span>
-        </div>
-        <button class="close-btn" onclick="event.stopPropagation(); this.closest('.schedule-alert').classList.remove('show')" title="닫기"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="this.parentElement.classList.remove('show')"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
     <!-- 이미지 업로드 히든 인풋 -->
@@ -4243,14 +3621,6 @@
                         <div class="cat-chip-item" data-cat="일정" onclick="selectWriteCategory('일정')">
                             <span class="chip-icon">📅</span>
                             <span class="chip-text">기념일/약속</span>
-                        </div>
-                        <div class="cat-chip-item" data-cat="데이트" onclick="selectWriteCategory('데이트')">
-                            <span class="chip-icon">🚗</span>
-                            <span class="chip-text">데이트 코스</span>
-                        </div>
-                        <div class="cat-chip-item" data-cat="선물" onclick="selectWriteCategory('선물')">
-                            <span class="chip-icon">🎁</span>
-                            <span class="chip-text">선물/마음</span>
                         </div>
                     </div>
                     <input type="hidden" id="postCategory" value="일상">
@@ -4374,14 +3744,6 @@
                             <span class="chip-icon">📅</span>
                             <span class="chip-text">기념일/약속</span>
                         </div>
-                        <div class="cat-chip-item" data-cat="데이트" onclick="selectEditCategory('데이트')">
-                            <span class="chip-icon">🚗</span>
-                            <span class="chip-text">데이트 코스</span>
-                        </div>
-                        <div class="cat-chip-item" data-cat="선물" onclick="selectEditCategory('선물')">
-                            <span class="chip-icon">🎁</span>
-                            <span class="chip-text">선물/마음</span>
-                        </div>
                     </div>
                     <input type="hidden" id="editCategory" value="일상">
                 </div>
@@ -4424,38 +3786,7 @@
             </div>
             <div class="modal-body">
                 <div class="settings-grid">
-                    <!-- 0-1. 화면 디스플레이 모드 전환 (모바일 기본 vs PC 최적화 와이드) -->
-                    <div style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1.5px solid var(--border-light);">
-                        <h4 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">
-                            <i class="fa-solid fa-display" style="color: var(--primary);"></i> 화면 디스플레이 모드 설정
-                        </h4>
-                        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">선택한 레이아웃 설정이 자동으로 저장됩니다. (기본: 모바일 설정)</p>
-                        <div class="layout-toggle-group">
-                            <button type="button" class="layout-chip active" id="layoutModeMobileBtn" onclick="setLayoutMode('mobile')">
-                                <i class="fa-solid fa-mobile-screen-button"></i>
-                                <span>📱 모바일 뷰 (기본)</span>
-                            </button>
-                            <button type="button" class="layout-chip" id="layoutModePcBtn" onclick="setLayoutMode('pc')">
-                                <i class="fa-solid fa-desktop"></i>
-                                <span>💻 PC 최적화 뷰</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 0-2. 로그인 상태 유지 설정 -->
-                    <div style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1.5px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; gap: 14px;">
-                        <div>
-                            <h4 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 3px;">
-                                <i class="fa-solid fa-key" style="color: var(--primary);"></i> 로그인 상태 유지 설정
-                            </h4>
-                            <p style="font-size: 0.82rem; color: var(--text-muted);" id="keepLoginStatusDesc">비활성화 시 브라우저나 탭을 닫으면 재로그인해야 합니다.</p>
-                        </div>
-                        <button type="button" class="btn-submit" id="settingKeepLoginBtn" style="width: auto; padding: 8px 16px; font-size: 0.85rem; background: var(--secondary);" onclick="toggleKeepLoginSetting()">
-                            유지 켜기
-                        </button>
-                    </div>
-
-                    <!-- 0-3. 빠른 화면 제어 (편집 모드) -->
+                    <!-- 0. 빠른 화면 제어 (편집 모드 & 로그아웃 통합) -->
                     <div style="background: #F9FAFD; padding: 18px; border-radius: var(--radius-sm); border: 1.5px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; gap: 12px;">
                         <div>
                             <h4 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 3px;">
@@ -4610,95 +3941,6 @@
         </div>
     </div>
 
-    
-    <!-- (9) 커플 오늘 기분 & 한마디 변경 모달 -->
-    <div class="modal-overlay" id="coupleMoodModal">
-        <div class="modal-content" style="max-width: 440px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fa-solid fa-heart-pulse" style="color: var(--primary);"></i> 오늘 내 기분 & 한마디 남기기</h3>
-                <button class="btn-close" onclick="hideModal('coupleMoodModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">오늘 내 기분 이모지 선택</label>
-                    <div class="mood-picker-grid" id="moodPickerGrid">
-                        <button type="button" class="mood-picker-btn active" data-emoji="🥰" data-label="사랑충전" onclick="selectMoodEmoji('🥰', '사랑충전 100%', this)">
-                            <span class="emoji">🥰</span>
-                            <span class="label">사랑충전</span>
-                        </button>
-                        <button type="button" class="mood-picker-btn" data-emoji="💖" data-label="보고싶음" onclick="selectMoodEmoji('💖', '보고싶음 💕', this)">
-                            <span class="emoji">💖</span>
-                            <span class="label">보고싶음</span>
-                        </button>
-                        <button type="button" class="mood-picker-btn" data-emoji="☕" data-label="힐링필요" onclick="selectMoodEmoji('☕', '힐링 필요 ☕', this)">
-                            <span class="emoji">☕</span>
-                            <span class="label">힐링필요</span>
-                        </button>
-                        <button type="button" class="mood-picker-btn" data-emoji="😋" data-label="맛집가자" onclick="selectMoodEmoji('😋', '맛있는거 먹자!', this)">
-                            <span class="emoji">😋</span>
-                            <span class="label">맛집가자</span>
-                        </button>
-                        <button type="button" class="mood-picker-btn" data-emoji="🥱" data-label="피곤/졸림" onclick="selectMoodEmoji('🥱', '피곤하고 졸려요', this)">
-                            <span class="emoji">🥱</span>
-                            <span class="label">피곤졸림</span>
-                        </button>
-                        <button type="button" class="mood-picker-btn" data-emoji="🥳" data-label="텐션업" onclick="selectMoodEmoji('🥳', '기분 최고! 신나요', this)">
-                            <span class="emoji">🥳</span>
-                            <span class="label">텐션최고</span>
-                        </button>
-                        <button type="button" class="mood-picker-btn" data-emoji="🥺" data-label="토닥토닥" onclick="selectMoodEmoji('🥺', '위로가 필요해', this)">
-                            <span class="emoji">🥺</span>
-                            <span class="label">토닥토닥</span>
-                        </button>
-                        <button type="button" class="mood-picker-btn" data-emoji="✨" data-label="행복가득" onclick="selectMoodEmoji('✨', '오늘 하루도 행복', this)">
-                            <span class="emoji">✨</span>
-                            <span class="label">행복가득</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="form-group" style="margin-top: 14px;">
-                    <label class="form-label">상대방에게 전하는 사랑의 한마디</label>
-                    <input type="text" id="inputMoodQuote" class="form-input" placeholder="오늘 하루도 힘내! 저녁에 데이트하자 💕" maxlength="50">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-submit" onclick="saveMyMood()"><i class="fa-solid fa-check"></i> 기분 저장하기</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- (10) 데이트 맛집/위시리스트 추가 모달 -->
-    <div class="modal-overlay" id="addDateWishModal">
-        <div class="modal-content" style="max-width: 440px;">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fa-solid fa-utensils" style="color: var(--primary);"></i> 가고 싶은 곳 / 맛집 추가</h3>
-                <button class="btn-close" onclick="hideModal('addDateWishModal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">카테고리</label>
-                    <select id="wishCategoryInput" class="form-select">
-                        <option value="맛집">🍽️ 맛집</option>
-                        <option value="카페">☕ 감성카페</option>
-                        <option value="여행">🚗 여행/드라이브</option>
-                        <option value="문화">🎬 문화/힐링</option>
-                    </select>
-                </div>
-                <div class="form-group input-with-icon">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <input type="text" id="wishTitleInput" class="form-input" placeholder="장소명 (예: 성수동 카페 00, 한남동 파스타)">
-                </div>
-                <div class="form-group input-with-icon">
-                    <i class="fa-solid fa-comment-dots"></i>
-                    <input type="text" id="wishMemoInput" class="form-input" placeholder="메모 (예: 크림라떼 맛집, 일몰 데이트 추천)">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-submit" onclick="addDateWishItem()"><i class="fa-solid fa-check"></i> 위시리스트에 담기</button>
-            </div>
-        </div>
-    </div>
-
     <!-- (7) 라이트박스 (이미지 확대 뷰어 - 유효한 SVG와 alt 속성으로 HTML 경고 0개) -->
     <div id="lightbox" class="modal-overlay" onclick="closeLightbox()">
         <span style="position: absolute; top: 30px; right: 30px; color: white; font-size: 2.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></span>
@@ -4716,150 +3958,15 @@
         let siteSettings = {};
         let timelineData = [];
         let bucketData = [];
-        let coupleMoods = {
-            hini: { emoji: '🥰', label: '사랑충전 100%', quote: '오늘 하루도 힘내고 저녁에 맛있는거 먹자!' },
-            hyoni: { emoji: '💖', label: '보고싶음', quote: '퇴근하고 얼른 달려갈게, 언제나 사랑해!' }
-        };
-        let coupleQa = {
-            question: '서로에게 가장 심쿵했던 순간은 언제인가요?',
-            hini: '처음 손잡았을 때 따뜻하게 꼭 쥐어주던 순간 💕',
-            hyoni: '처음 만난 날 수줍게 웃으며 인사하던 모습 💖'
-        };
-        let dateWishlist = [
-            { id: 1, category: '맛집', title: '한남동 감성 파스타', memo: '기념일 디너 예약하기', done: false },
-            { id: 2, category: '카페', title: '성수동 통창 베이커리 카페', memo: '주말 오후 햇살 데이트', done: false },
-            { id: 3, category: '여행', title: '강릉 안목해변 바다 드라이브', memo: '일출 보면서 커피 한잔', done: true }
-        ];
-        let currentLayoutMode = 'mobile';
-        let currentWishFilter = '전체';
-        let selectedMoodEmoji = '🥰';
-        let selectedMoodLabel = '사랑충전 100%';
         
-        const qaQuestionsPool = [
-            '서로에게 가장 심쿵했던 순간은 언제인가요?',
-            '이번 주말에 둘이서 꼭 하고 싶은 한 가지는?',
-            '서로가 가장 사랑스러워 보일 때는 언제인가요?',
-            '우리가 함께 갔던 곳 중 가장 기억에 남는 데이트 장소는?',
-            '상대방의 음식 취향 중 내가 제일 좋아하는 것은?',
-            '우리의 1년 뒤, 3년 뒤 모습은 어떨까요?',
-            '내가 생각하는 상대방의 가장 큰 매력 포인트는?',
-            '피곤할 때 상대방이 해주면 가장 힘이 나는 말은?',
-            '둘만의 특별한 기념일에 가보고 싶은 여행지는?',
-            '우리가 처음 만났던 날 첫인상은 어땠나요?',
-            '힘든 하루 끝에 둘이서 함께 나누고 싶은 힐링 루틴은?',
-            '상대방에게 최근 가장 고마웠던 순간은?'
-        ];
-
         let currentView = 'home';
         let currentBoardTab = '전체';
         let boardCurrentPage = 1;
         const postsPerPage = 10;
         let isEditMode = false;
-        let activePost = null;
+                let activePost = null;
         let currentCalDate = new Date();
         let currentSelectedCalDate = '';
-
-        // [날짜 표준화 및 정확한 일수 차이 계산 엔진]
-        // ISO 8601 YYYY-MM-DD 문자열을 로컬 자정(00:00:00) 기준 Date 객체로 변환하여 시차/타임존으로 인한 +1일 오차 원천 차단
-        function parseLocalDate(dateStr) {
-            if (!dateStr) return null;
-            if (dateStr instanceof Date) {
-                const d = new Date(dateStr.getTime());
-                d.setHours(0, 0, 0, 0);
-                return d;
-            }
-            const cleanStr = String(dateStr).trim().split('T')[0];
-            const parts = cleanStr.split('-');
-            if (parts.length === 3) {
-                const y = parseInt(parts[0], 10);
-                const m = parseInt(parts[1], 10) - 1;
-                const d = parseInt(parts[2], 10);
-                return new Date(y, m, d, 0, 0, 0, 0);
-            }
-            const dt = new Date(cleanStr);
-            dt.setHours(0, 0, 0, 0);
-            return dt;
-        }
-
-        // 오늘(로컬 자정)과 대상 날짜 간의 정확한 날짜 차이 반환 (오늘: 0, 내일: 1, 2일 뒤: 2, 3일 뒤: 3)
-        function getDaysDiff(targetDateStr) {
-            const target = parseLocalDate(targetDateStr);
-            if (!target) return 0;
-            const now = new Date();
-            now.setHours(0, 0, 0, 0);
-            return Math.round((target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-        }
-
-        // 화면 레이아웃 모드 설정 (모바일 뷰 vs PC 와이드 최적화 뷰)
-        function setLayoutMode(mode, showFeedback = true) {
-            currentLayoutMode = mode === 'pc' ? 'pc' : 'mobile';
-            localStorage.setItem('couple_layout_mode', currentLayoutMode);
-
-            if (currentLayoutMode === 'pc') {
-                document.body.classList.remove('layout-mobile');
-                document.body.classList.add('layout-pc');
-            } else {
-                document.body.classList.remove('layout-pc');
-                document.body.classList.add('layout-mobile');
-            }
-
-            const mBtn = document.getElementById('layoutModeMobileBtn');
-            const pBtn = document.getElementById('layoutModePcBtn');
-            if (mBtn) mBtn.classList.toggle('active', currentLayoutMode === 'mobile');
-            if (pBtn) pBtn.classList.toggle('active', currentLayoutMode === 'pc');
-
-            if (showFeedback) {
-                showToast(currentLayoutMode === 'pc' ? 'PC 최적화 와이드 화면으로 전환되었습니다 💻' : '모바일 앱 화면으로 전환되었습니다 📱');
-            }
-        }
-
-        function toggleAuthKeepLogin() {
-            const cb = document.getElementById('authKeepLoginCheckbox');
-            const box = document.getElementById('authKeepLoginBox');
-            if (!cb) return;
-            cb.checked = !cb.checked;
-            if (box) box.classList.toggle('checked', cb.checked);
-        }
-
-        function updateKeepLoginUI() {
-            const isKeep = localStorage.getItem('couple_keep_login') === 'true';
-            const btn = document.getElementById('settingKeepLoginBtn');
-            const desc = document.getElementById('keepLoginStatusDesc');
-            const authBox = document.getElementById('authKeepLoginBox');
-            const authCb = document.getElementById('authKeepLoginCheckbox');
-            if (btn) {
-                btn.innerText = isKeep ? "유지 활성 (클릭 시 해제)" : "유지 켜기";
-                btn.style.background = isKeep ? "var(--primary)" : "var(--secondary)";
-            }
-            if (desc) {
-                desc.innerText = isKeep 
-                    ? "현재 로그인 유지가 켜져 있어 브라우저나 탭을 닫아도 로그인 상태가 유지됩니다." 
-                    : "현재 비활성 상태입니다. 브라우저나 탭을 닫으면 자동으로 로그아웃되어 재로그인해야 합니다.";
-            }
-            if (authCb) authCb.checked = isKeep;
-            if (authBox) authBox.classList.toggle('checked', isKeep);
-        }
-
-        function toggleKeepLoginSetting() {
-            const isKeep = localStorage.getItem('couple_keep_login') === 'true';
-            const nextState = !isKeep;
-            if (nextState) {
-                localStorage.setItem('couple_keep_login', 'true');
-                if (user) {
-                    localStorage.setItem('couple_user', JSON.stringify(user));
-                    sessionStorage.removeItem('couple_user');
-                }
-                showToast("로그인 유지가 활성화되었습니다 (브라우저 닫아도 유지) 🔒");
-            } else {
-                localStorage.removeItem('couple_keep_login');
-                localStorage.removeItem('couple_user');
-                if (user) {
-                    sessionStorage.setItem('couple_user', JSON.stringify(user));
-                }
-                showToast("로그인 유지가 해제되었습니다 (창 닫으면 재로그인 필요) 🔑");
-            }
-            updateKeepLoginUI();
-        }
 
         // 양력 주요 공휴일 (월-일)
         const krHolidays = ["01-01", "03-01", "05-05", "06-06", "08-15", "10-03", "10-09", "12-25"];
@@ -4877,23 +3984,8 @@
 
         // 초기화 진입점
         document.addEventListener('DOMContentLoaded', () => {
-            // 레이아웃 모드 복원 (기본값: 모바일 설정)
-            const savedLayout = localStorage.getItem('couple_layout_mode') || 'mobile';
-            setLayoutMode(savedLayout, false);
-
-            // 로그인 상태 복원 (keep_login 여부에 따라 분기)
-            const keepLogin = localStorage.getItem('couple_keep_login') === 'true';
-            let savedUserStr = null;
-            if (keepLogin) {
-                savedUserStr = localStorage.getItem('couple_user');
-            } else {
-                savedUserStr = sessionStorage.getItem('couple_user');
-                // 혹시 남아있을 수 있는 localStorage couple_user 정리
-                localStorage.removeItem('couple_user');
-            }
-
             try { 
-                user = JSON.parse(savedUserStr || 'null'); 
+                user = JSON.parse(localStorage.getItem('couple_user') || 'null'); 
             } catch(e) { 
                 user = null; 
             }
@@ -4901,18 +3993,6 @@
             // 테마 복원
             const savedTheme = localStorage.getItem('couple_theme') || 'default';
             if (savedTheme !== 'default') document.body.classList.add(`theme-${savedTheme}`);
-
-            updateKeepLoginUI();
-
-            // 상단 토스트 알림 클릭 시 닫기 인터랙션
-            const topToast = document.getElementById('toast');
-            if (topToast) {
-                topToast.style.cursor = 'pointer';
-                topToast.onclick = function() {
-                    this.classList.remove('show');
-                    spawnHeartParticles();
-                };
-            }
 
             if (user && user.fullName && user.fullName !== "우리") {
                 document.getElementById('auth-wall').style.display = 'none';
@@ -4954,18 +4034,6 @@
                 
                 if (res.ok) {
                     user = await res.json(); 
-                    const authCb = document.getElementById('authKeepLoginCheckbox');
-                    const keepChecked = authCb ? authCb.checked : false;
-                    if (keepChecked) {
-                        localStorage.setItem('couple_keep_login', 'true');
-                        localStorage.setItem('couple_user', JSON.stringify(user));
-                        sessionStorage.removeItem('couple_user');
-                    } else {
-                        localStorage.removeItem('couple_keep_login');
-                        localStorage.removeItem('couple_user');
-                        sessionStorage.setItem('couple_user', JSON.stringify(user));
-                    }
-                    updateKeepLoginUI();
                     document.getElementById('auth-wall').style.opacity = '0';
                     setTimeout(() => { 
                         document.getElementById('auth-wall').style.display = 'none'; 
@@ -4983,18 +4051,6 @@
                 // 오프라인이거나 로컬 file:/// 실행 시 0709 통과 폴백
                 if (pw === "0709") {
                     user = { success: true, username: "ourlove", fullName: "우리", isAdmin: true, status: "approved" };
-                    const authCb = document.getElementById('authKeepLoginCheckbox');
-                    const keepChecked = authCb ? authCb.checked : false;
-                    if (keepChecked) {
-                        localStorage.setItem('couple_keep_login', 'true');
-                        localStorage.setItem('couple_user', JSON.stringify(user));
-                        sessionStorage.removeItem('couple_user');
-                    } else {
-                        localStorage.removeItem('couple_keep_login');
-                        localStorage.removeItem('couple_user');
-                        sessionStorage.setItem('couple_user', JSON.stringify(user));
-                    }
-                    updateKeepLoginUI();
                     document.getElementById('auth-wall').style.opacity = '0';
                     setTimeout(() => { 
                         document.getElementById('auth-wall').style.display = 'none'; 
@@ -5008,39 +4064,30 @@
 
         function setAuthorName(name) {
             user.fullName = name;
-            const keepLogin = localStorage.getItem('couple_keep_login') === 'true';
-            if (keepLogin) {
-                localStorage.setItem('couple_user', JSON.stringify(user));
-                sessionStorage.removeItem('couple_user');
-            } else {
-                localStorage.removeItem('couple_user');
-                sessionStorage.setItem('couple_user', JSON.stringify(user));
-            }
+            localStorage.setItem('couple_user', JSON.stringify(user));
             hideModal('authorSelectModal');
             document.getElementById('app-container').style.display = 'flex';
             initApp();
             updateSidebarProfile();
             initFloatingHeartDrag();
-            if (siteSettings.floating_heart_emoji) {
-                currentHeartEmoji = siteSettings.floating_heart_emoji;
-                const hIcon = document.getElementById('floatingHeartIcon');
-                if (hIcon) hIcon.innerText = currentHeartEmoji;
-            }
-            if (siteSettings.floating_heart_text) {
-                currentHeartText = siteSettings.floating_heart_text;
-                const hText = document.getElementById('floatingHeartText');
-                const hInput = document.getElementById('settingHeartText');
-                if (hText) hText.innerText = currentHeartText;
-                if (hInput) hInput.value = currentHeartText;
-            }
+                if (siteSettings.floating_heart_emoji) {
+                    currentHeartEmoji = siteSettings.floating_heart_emoji;
+                    const hIcon = document.getElementById('floatingHeartIcon');
+                    if (hIcon) hIcon.innerText = currentHeartEmoji;
+                }
+                if (siteSettings.floating_heart_text) {
+                    currentHeartText = siteSettings.floating_heart_text;
+                    const hText = document.getElementById('floatingHeartText');
+                    const hInput = document.getElementById('settingHeartText');
+                    if (hText) hText.innerText = currentHeartText;
+                    if (hInput) hInput.value = currentHeartText;
+                }
 
             showToast(`${name}님 환영합니다! 💖`);
         }
 
         function handleLogout() {
             localStorage.removeItem('couple_user');
-            sessionStorage.removeItem('couple_user');
-            localStorage.removeItem('couple_keep_login');
             location.reload();
         }
 
@@ -5086,10 +4133,11 @@
             if (sideAvatar && partnerPhoto) sideAvatar.src = partnerPhoto;
 
             if (sideDday && siteSettings.dday_date) {
-                const start = parseLocalDate(siteSettings.dday_date);
+                const start = new Date(siteSettings.dday_date);
                 const now = new Date();
+                start.setHours(0,0,0,0);
                 now.setHours(0,0,0,0);
-                const diffDays = Math.round((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+                const diffDays = Math.ceil((now - start) / (1000 * 60 * 60 * 24)) + 1;
                 const ddayStr = diffDays > 0 ? `D+${diffDays}` : `D${diffDays}`;
                 sideDday.innerText = `${ddayStr}일 · ${partnerDesc}`;
             }
@@ -5106,7 +4154,6 @@
             loadSettings();
             loadPosts();
             renderHomeUpcomingSchedule();
-            loadCoupleFeatures();
             startBannerSlider();
             requestNotificationPermission();
             startNotificationPolling();
@@ -5332,25 +4379,24 @@
         }
 
         function calculateDday(dateStr) {
-            const start = parseLocalDate(dateStr);
-            if (!start) return;
+            const start = new Date(dateStr);
             const now = new Date();
+            start.setHours(0,0,0,0);
             now.setHours(0,0,0,0);
-            const diffDays = Math.round((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+            const diffDays = Math.ceil((now - start) / (1000 * 60 * 60 * 24)) + 1;
             const text = diffDays > 0 ? `D+${diffDays}` : `D${diffDays}`;
-            const ddayEl = document.getElementById('ddayText');
-            if (ddayEl) ddayEl.innerText = text;
+            document.getElementById('ddayText').innerText = text;
             const sideDday = document.getElementById('sidebarDdayText');
             if (sideDday) sideDday.innerText = `${text} 만나는 중`;
         }
 
-        // 다가오는 기념일 자동 계산 함수 (로컬 자정 기준 정확한 D-day 계산)
+        // 다가오는 기념일 자동 계산 함수
         function previewAnniversaries() {
             const dateStr = document.getElementById('settingDday').value;
             if (!dateStr) return;
-            const start = parseLocalDate(dateStr);
-            if (!start) return;
+            const start = new Date(dateStr);
             const now = new Date();
+            start.setHours(0,0,0,0);
             now.setHours(0,0,0,0);
 
             const targets = [
@@ -5367,8 +4413,8 @@
             if (!wrap) return;
 
             wrap.innerHTML = targets.map(item => {
-                const targetDate = new Date(start.getFullYear(), start.getMonth(), start.getDate() + (item.days - 1), 0, 0, 0, 0);
-                const diff = Math.round((targetDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                const targetDate = new Date(start.getTime() + (item.days - 1) * 24 * 60 * 60 * 1000);
+                const diff = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
                 const dateFmt = `${targetDate.getFullYear()}.${String(targetDate.getMonth()+1).padStart(2,'0')}.${String(targetDate.getDate()).padStart(2,'0')}`;
                 const diffTxt = diff === 0 ? '오늘!' : (diff > 0 ? `D-${diff}` : `D+${Math.abs(diff)}`);
                 const color = diff >= 0 && diff <= 30 ? 'var(--primary)' : 'var(--text-muted)';
@@ -5599,10 +4645,6 @@
                             previews += `<span class="cal-pill" title="${postTitle}" style="color:var(--primary-dark); background:var(--primary-light);">📝 ${postTitle}</span>`;
                         } else if (cat === '갤러리') {
                             previews += `<span class="cal-pill" title="${postTitle}" style="color:#7B341E; background:#FEEBC8;">📸 ${postTitle}</span>`;
-                        } else if (cat === '데이트') {
-                            previews += `<span class="cal-pill" title="${postTitle}" style="color:#C05621; background:#FEEBC8;">🚗 ${postTitle}</span>`;
-                        } else if (cat === '선물' || cat === '선물/마음') {
-                            previews += `<span class="cal-pill" title="${postTitle}" style="color:#6B46C1; background:#E9D8FD;">🎁 ${postTitle}</span>`;
                         } else {
                             previews += `<span class="cal-pill" title="${postTitle}" style="color:#22543D; background:#C6F6D5;">🌿 ${postTitle}</span>`;
                         }
@@ -5903,7 +4945,7 @@
             renderCalendar();
         }
 
-        // 캘린더 날짜 클릭 시 슬라이드 다운 토글 (스크롤 흔들림 없이 현재 위치 완벽 고정)
+        // 캘린더 날짜 클릭 시 슬라이드 다운 토글 (팝업 완벽 대체)
         function openDayView(dateStr) {
             const panel = document.getElementById('calDaySlidePanel');
             
@@ -5920,16 +4962,14 @@
             const targetCell = document.querySelector(`.cal-cell[data-date="${dateStr}"]`);
             if (targetCell) targetCell.classList.add('selected');
 
-            // [사용자 요청]: 날짜를 바꿀 때 그 길이만큼 스크롤이 내려가지 않도록 현재 스크롤 위치 보존
-            const prevScrollY = window.scrollY;
-
             updateCalSlideContent(dateStr);
 
             // 슬라이드 열기
             panel.classList.add('open');
 
-            // 스크롤 점프를 완벽히 차단하고 제자리 유지
-            window.scrollTo({ top: prevScrollY, behavior: 'instant' });
+            setTimeout(() => {
+                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
         }
 
         function updateCalSlideContent(dateStr) {
@@ -5955,7 +4995,7 @@
             if (dayPosts.length === 0) {
                 subtitleEl.innerText = '등록된 기록 없음';
                 listEl.innerHTML = `
-                    <div class="cal-slide-empty-wrap">
+                    <div style="text-align:center; padding:35px 20px; color:var(--text-muted);">
                         <i class="fa-regular fa-calendar-xmark" style="font-size:2.4rem; margin-bottom:10px; opacity:0.4;"></i>
                         <p style="font-size:1rem; font-weight:700;">등록된 일정이나 다이어리가 없습니다.</p>
                         <p style="font-size:0.85rem; margin-top:5px;">아래 버튼을 눌러 오늘을 특별하게 기록해보세요!</p>
@@ -5988,16 +5028,6 @@
                         badgeBg = '#FEEBC8';
                         badgeColor = '#7B341E';
                         icon = 'fa-camera-retro';
-                    } else if (cat === '데이트') {
-                        color = '#FF9F43';
-                        badgeBg = '#FFF0E0';
-                        badgeColor = '#C05621';
-                        icon = 'fa-car-side';
-                    } else if (cat === '선물' || cat === '선물/마음') {
-                        color = '#9B59B6';
-                        badgeBg = '#F4ECF7';
-                        badgeColor = '#6B46C1';
-                        icon = 'fa-gift';
                     } else {
                         color = '#38A169';
                         badgeBg = '#C6F6D5';
@@ -6391,7 +5421,7 @@
             const now = new Date();
             now.setHours(0, 0, 0, 0);
 
-            // 카테고리가 '일정'이고 날짜가 있는 게시글 필터링 (로컬 날짜 파싱 기반 정확한 일수 계산)
+            // 카테고리가 '일정'이고 날짜가 있는 게시글 필터링
             const upcomingList = postsData.map(p => {
                 const prts = (p.author || '').split('|');
                 return {
@@ -6406,15 +5436,21 @@
                 };
             }).filter(item => {
                 if (item.category === '일정' && item.dateStr) {
-                    const targetDate = parseLocalDate(item.dateStr);
-                    if (targetDate) {
-                        const diffDays = getDaysDiff(item.dateStr);
+                    const parts = item.dateStr.split('-');
+                    if (parts.length === 3) {
+                        const targetDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                        targetDate.setHours(0, 0, 0, 0);
+                        const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
                         // 오늘부터 30일 이내의 다가오는 일정 표시
                         return diffDays >= 0 && diffDays <= 30;
                     }
                 }
                 return false;
-            }).sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
+            }).sort((a, b) => {
+                const da = new Date(a.dateStr);
+                const db = new Date(b.dateStr);
+                return da - db;
+            });
 
             if (countEl) countEl.innerText = `${upcomingList.length}개`;
 
@@ -6430,8 +5466,10 @@
             }
 
             listEl.innerHTML = upcomingList.map(item => {
-                const targetDate = parseLocalDate(item.dateStr);
-                const diffDays = getDaysDiff(item.dateStr);
+                const parts = item.dateStr.split('-');
+                const targetDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                targetDate.setHours(0, 0, 0, 0);
+                const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
                 
                 let chipClass = 'd-soon';
                 let chipText = `D-${diffDays}`;
@@ -6445,7 +5483,6 @@
 
                 const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
                 const dayOfWeek = dayNames[targetDate.getDay()];
-                const parts = item.dateStr.split('-');
                 const dateDisplay = `${parts[0]}.${parts[1]}.${parts[2]} (${dayOfWeek})`;
 
                 return `
@@ -6477,55 +5514,31 @@
                 
                 if (document.getElementById('view-calendar').classList.contains('active')) renderCalendar();
                 if (document.getElementById('view-board').classList.contains('active')) renderBoardList();
-                renderHomeUpcomingSchedule();
+                renderHomeUpcomingSchedule(); // [요구사항 5] 홈 화면 임박 일정 상시 렌더링
                 if (postsData.length > 0) localStorage.setItem('last_post_id', postsData[0].id);
                 
                 checkUpcomingSchedule();
             } catch(err) {}
         }
 
-        // [실제 날짜 2일 뒤/3일 뒤 오차 해결 & 하단 토스트 클릭 상호작용 지원]
         function checkUpcomingSchedule() {
             const now = new Date();
             now.setHours(0,0,0,0);
             const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
             
-            const upcomingList = postsData.map(p => {
-                const prts = (p.author||'').split('|');
-                return {
-                    id: p.id,
-                    author: prts[0] || '익명',
-                    title: prts[2] || '일정',
-                    category: prts[3] || '일정',
-                    dateStr: prts[4] || '',
-                    post: p
-                };
-            }).filter(item => {
-                if (item.category === '일정' && item.dateStr) {
-                    const eDate = parseLocalDate(item.dateStr);
+            const upcoming = postsData.map(p => (p.author||'').split('|')).filter(prts => {
+                if (prts[3] === '일정' && prts[4]) {
+                    const eDate = new Date(prts[4]);
                     return eDate >= now && eDate <= nextWeek;
                 }
                 return false;
-            }).sort((a,b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
+            }).sort((a,b) => new Date(a[4]) - new Date(b[4]))[0];
 
-            const upcoming = upcomingList[0];
             if (upcoming) {
-                const diff = getDaysDiff(upcoming.dateStr);
-                const diffTxt = diff === 0 ? "오늘 D-Day!" : (diff === 1 ? "내일 (1일 뒤)" : `${diff}일 뒤`);
-                const alertMsg = document.getElementById('scheduleAlertMsg');
-                if (alertMsg) alertMsg.innerText = `[${diffTxt}] ${upcoming.title}`;
-                const alertEl = document.getElementById('scheduleAlert');
-                if (alertEl) {
-                    alertEl.classList.add('show');
-                    // [인터랙티브 클릭 상호작용]: 토스트를 누르면 해당 일정 상세로 이동 & 하트 파티클 분출
-                    alertEl.onclick = (e) => {
-                        if (e.target.closest('.close-btn')) return;
-                        alertEl.classList.remove('show');
-                        spawnHeartParticles(e.clientX, e.clientY);
-                        openDetail(upcoming.id);
-                        showToast(`"${upcoming.title}" 일정 상세로 이동했습니다 💖`);
-                    };
-                }
+                const diff = Math.ceil((new Date(upcoming[4]) - now) / (1000*60*60*24));
+                const diffTxt = diff === 0 ? "오늘!" : `${diff}일 뒤`;
+                document.getElementById('scheduleAlertMsg').innerText = `[${diffTxt}] ${upcoming[2]}`;
+                document.getElementById('scheduleAlert').classList.add('show');
             }
         }
 
@@ -6538,7 +5551,6 @@
             let filtered = postsData.filter(p => {
                 const cat = (p.author||'').split('|')[3] || '일상';
                 if (currentBoardTab === '전체') return cat !== '다이어리' && cat !== '일정';
-                if (currentBoardTab === '선물') return cat === '선물' || cat === '선물/마음';
                 return cat === currentBoardTab;
             });
             
@@ -7393,217 +6405,6 @@
                 } catch(e) {}
             }, 8000); // 8초 주기 실시간 스마트 동기화
         }
-
-        // ================= [신규 커플 기능 1: 오늘의 기분 & 사랑의 한마디] =================
-        function loadCoupleFeatures() {
-            try {
-                const savedMood = localStorage.getItem('couple_moods');
-                if (savedMood) coupleMoods = JSON.parse(savedMood);
-                const savedQa = localStorage.getItem('couple_qa');
-                if (savedQa) coupleQa = JSON.parse(savedQa);
-                const savedWish = localStorage.getItem('couple_date_wishlist');
-                if (savedWish) dateWishlist = JSON.parse(savedWish);
-            } catch(e) {}
-            renderCoupleMood();
-            renderCoupleQa();
-            renderDateWishlist(currentWishFilter);
-        }
-
-        function saveCoupleFeatures() {
-            try {
-                localStorage.setItem('couple_moods', JSON.stringify(coupleMoods));
-                localStorage.setItem('couple_qa', JSON.stringify(coupleQa));
-                localStorage.setItem('couple_date_wishlist', JSON.stringify(dateWishlist));
-            } catch(e) {}
-        }
-
-        function renderCoupleMood() {
-            const hiniEmoji = document.getElementById('hiniMoodEmoji');
-            const hiniLabel = document.getElementById('hiniMoodLabel');
-            const hiniQuote = document.getElementById('hiniMoodQuote');
-            const hyoniEmoji = document.getElementById('hyoniMoodEmoji');
-            const hyoniLabel = document.getElementById('hyoniMoodLabel');
-            const hyoniQuote = document.getElementById('hyoniMoodQuote');
-
-            if (coupleMoods.hini) {
-                if (hiniEmoji) hiniEmoji.innerText = coupleMoods.hini.emoji || '🥰';
-                if (hiniLabel) hiniLabel.innerText = coupleMoods.hini.label || '사랑충전 100%';
-                if (hiniQuote) hiniQuote.innerText = `"${coupleMoods.hini.quote || '오늘도 행복하자 💕'}"`;
-            }
-            if (coupleMoods.hyoni) {
-                if (hyoniEmoji) hyoniEmoji.innerText = coupleMoods.hyoni.emoji || '💖';
-                if (hyoniLabel) hyoniLabel.innerText = coupleMoods.hyoni.label || '보고싶음';
-                if (hyoniQuote) hyoniQuote.innerText = `"${coupleMoods.hyoni.quote || '언제나 사랑해!'}"`;
-            }
-        }
-
-        function openMoodModal() {
-            const isGirl = (user && user.fullName && (user.fullName === '히니' || user.fullName.includes('히')));
-            const roleKey = isGirl ? 'hini' : 'hyoni';
-            const cur = coupleMoods[roleKey] || {};
-            selectedMoodEmoji = cur.emoji || '🥰';
-            selectedMoodLabel = cur.label || '사랑충전 100%';
-
-            document.querySelectorAll('#moodPickerGrid .mood-picker-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-emoji') === selectedMoodEmoji);
-            });
-            const input = document.getElementById('inputMoodQuote');
-            if (input) input.value = cur.quote || '';
-            showModal('coupleMoodModal');
-        }
-
-        function selectMoodEmoji(emoji, label, el) {
-            selectedMoodEmoji = emoji;
-            selectedMoodLabel = label;
-            document.querySelectorAll('#moodPickerGrid .mood-picker-btn').forEach(btn => btn.classList.remove('active'));
-            if (el) el.classList.add('active');
-        }
-
-        function saveMyMood() {
-            const isGirl = (user && user.fullName && (user.fullName === '히니' || user.fullName.includes('히')));
-            const roleKey = isGirl ? 'hini' : 'hyoni';
-            const quoteInput = document.getElementById('inputMoodQuote');
-            const quote = quoteInput ? quoteInput.value.trim() : '';
-
-            coupleMoods[roleKey] = {
-                emoji: selectedMoodEmoji,
-                label: selectedMoodLabel,
-                quote: quote || (isGirl ? '오늘도 행복한 하루 보내자 💕' : '언제나 곁에 있을게 💖')
-            };
-
-            saveCoupleFeatures();
-            renderCoupleMood();
-            hideModal('coupleMoodModal');
-            showToast("오늘의 기분과 한마디가 업데이트되었습니다! 💕");
-        }
-
-        // ================= [신규 커플 기능 2: 둘만의 1문 1답 Q&A] =================
-        function renderCoupleQa() {
-            const qEl = document.getElementById('qaQuestionText');
-            const hiniAns = document.getElementById('qaHiniAnswer');
-            const hyoniAns = document.getElementById('qaHyoniAnswer');
-
-            if (qEl) qEl.innerText = coupleQa.question || '서로에게 가장 심쿵했던 순간은 언제인가요?';
-            if (hiniAns) hiniAns.innerText = coupleQa.hini || '아직 답변을 작성하지 않았어요 💕';
-            if (hyoniAns) hyoniAns.innerText = coupleQa.hyoni || '아직 답변을 작성하지 않았어요 💖';
-        }
-
-        function nextRandomQuestion() {
-            const otherQuestions = qaQuestionsPool.filter(q => q !== coupleQa.question);
-            const randQ = otherQuestions[Math.floor(Math.random() * otherQuestions.length)];
-            coupleQa = {
-                question: randQ,
-                hini: '',
-                hyoni: ''
-            };
-            saveCoupleFeatures();
-            renderCoupleQa();
-            showToast("새로운 질문이 도착했습니다! 🎲");
-        }
-
-        function submitQaAnswer() {
-            const input = document.getElementById('qaInputText');
-            const text = input ? input.value.trim() : '';
-            if (!text) return showToast("답변을 입력해 주세요.");
-
-            const isGirl = (user && user.fullName && (user.fullName === '히니' || user.fullName.includes('히')));
-            if (isGirl) {
-                coupleQa.hini = text;
-            } else {
-                coupleQa.hyoni = text;
-            }
-
-            saveCoupleFeatures();
-            renderCoupleQa();
-            if (input) input.value = '';
-            showToast("질문에 대한 답변이 등록되었습니다! 💌");
-        }
-
-        // ================= [신규 커플 기능 3: 데이트 맛집 & 위시리스트] =================
-        function filterDateWish(cat, btnEl) {
-            currentWishFilter = cat;
-            document.querySelectorAll('.wish-filter-chip').forEach(b => b.classList.remove('active'));
-            if (btnEl) btnEl.classList.add('active');
-            renderDateWishlist(cat);
-        }
-
-        function renderDateWishlist(filterCat = '전체') {
-            const wrap = document.getElementById('dateWishListWrap');
-            const countEl = document.getElementById('dateWishCount');
-            if (!wrap) return;
-
-            const filtered = dateWishlist.filter(item => {
-                if (filterCat === '전체') return true;
-                return item.category === filterCat;
-            });
-
-            if (countEl) countEl.innerText = `${dateWishlist.length}곳`;
-
-            if (filtered.length === 0) {
-                wrap.innerHTML = `<div style="text-align:center; padding:18px 0; color:var(--text-muted); font-size:0.88rem; font-weight:600;">등록된 데이트 장소가 없습니다. + 버튼을 눌러 추가해보세요! 🚗</div>`;
-                return;
-            }
-
-            wrap.innerHTML = filtered.map(item => `
-                <div class="date-wish-item ${item.done ? 'done' : ''}">
-                    <div class="wish-item-left" onclick="toggleDateWishDone(${item.id})">
-                        <div class="bucket-custom-check">
-                            ${item.done ? '<i class="fa-solid fa-check"></i>' : ''}
-                        </div>
-                        <div>
-                            <div style="display:flex; align-items:center; gap:6px;">
-                                <span class="wish-cat-tag">${item.category}</span>
-                                <span class="wish-item-title">${item.title}</span>
-                            </div>
-                            ${item.memo ? `<div class="wish-item-memo">${item.memo}</div>` : ''}
-                        </div>
-                    </div>
-                    <button class="bucket-del-btn" onclick="deleteDateWishItem(${item.id})" title="삭제"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-            `).join('');
-        }
-
-        function addDateWishItem() {
-            const cat = document.getElementById('wishCategoryInput').value;
-            const title = document.getElementById('wishTitleInput').value.trim();
-            const memo = document.getElementById('wishMemoInput').value.trim();
-            if (!title) return showToast("장소명을 입력해주세요.");
-
-            const newItem = {
-                id: Date.now(),
-                category: cat,
-                title: title,
-                memo: memo,
-                done: false
-            };
-            dateWishlist.unshift(newItem);
-            saveCoupleFeatures();
-            renderDateWishlist(currentWishFilter);
-            hideModal('addDateWishModal');
-            document.getElementById('wishTitleInput').value = '';
-            document.getElementById('wishMemoInput').value = '';
-            showToast("가고 싶은 데이트 장소가 위시리스트에 담겼습니다! 🚗");
-        }
-
-        function toggleDateWishDone(id) {
-            const item = dateWishlist.find(w => w.id === id);
-            if (item) {
-                item.done = !item.done;
-                saveCoupleFeatures();
-                renderDateWishlist(currentWishFilter);
-                if (item.done) showToast("소중한 데이트를 다녀왔어요! 🌟");
-            }
-        }
-
-        function deleteDateWishItem(id) {
-            showConfirm(() => {
-                dateWishlist = dateWishlist.filter(w => w.id !== id);
-                saveCoupleFeatures();
-                renderDateWishlist(currentWishFilter);
-                showToast("삭제되었습니다.");
-            });
-        }
-
     </script>
 </body>
 </html>
