@@ -9145,29 +9145,39 @@
             showToast("사랑의 쿠폰이 성공적으로 발행되었습니다! 🎟️");
         }
 
-        async function useCoupon(cId) {
-            showConfirm(async () => {
-                const c = couponsData.find(item => item.id === cId);
-                if (!c) return;
+       async function useCoupon(cId) {
+    // 1. 클릭한 쿠폰의 이름을 찾아옴
+    const targetCoupon = couponsData.find(item => item.id === cId);
+    const couponName = targetCoupon ? `[${targetCoupon.title}]` : '이 쿠폰';
 
-                c.status = 'used';
-                c.used_at = new Date().toISOString();
-                saveCouponsLocal();
-                renderCouponsList();
-                renderHomeCouponSummary();
-
-                try {
-                    await fetch('/api/coupons', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'use', id: cId })
-                    });
-                } catch(e) {}
-
-                showToast("쿠폰이 사용되었습니다! 행복한 시간 보내세요 💖");
-                spawnHeartParticles();
-            });
-        }
+    // 2. 실행 함수 뒤에 '제목', '설명', '버튼명' 등을 함께 전달
+    showConfirm(
+        async () => {
+            // [기존과 동일] 쿠폰 상태 변경, 저장, 서버 API 호출, 하트 파티클
+            const c = couponsData.find(item => item.id === cId);
+            if (!c) return;
+            c.status = 'used';
+            c.used_at = new Date().toISOString();
+            saveCouponsLocal();
+            renderCouponsList();
+            renderHomeCouponSummary();
+            try {
+                await fetch('/api/coupons', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'use', id: cId })
+                });
+            } catch(e) {}
+            showToast("쿠폰이 사용되었습니다! 행복한 시간 보내세요 💖");
+            spawnHeartParticles();
+        },
+        `${couponName}을(를) 사용하시겠습니까? 🎟️`, // 👈 팝업 제목
+        '쿠폰을 사용하면 사용 완료 상태로 변경되며 기록에 남습니다.', // 👈 팝업 설명
+        '쿠폰 사용하기', // 👈 버튼 문구
+        'var(--primary)', // 👈 핑크색 버튼
+        'fa-ticket'       // 👈 티켓 아이콘
+    );
+}
 
         function deleteCoupon(cId) {
             showConfirm(async () => {
