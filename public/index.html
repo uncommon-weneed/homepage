@@ -4634,7 +4634,7 @@
                 <div class="places-search-bar">
                     <div class="input-with-icon" style="flex-grow: 1;">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="naverSearchQuery" class="form-input" placeholder="장소명, 맛집, 카페 이름을 입력하세요 (예: 성수동 브런치, 강릉 오션뷰)" onkeydown="if(event.key==='Enter') searchNaverDirectly()">
+                        <input type="text" id="naverSearchQuery" class="form-input" placeholder="장소명, 맛집, 카페 이름을 입력하세요 " onkeydown="if(event.key==='Enter') searchNaverDirectly()">
                     </div>
                     <button type="button" class="naver-quick-search-btn" onclick="searchNaverDirectly()" title="지도에서 바로 검색" style="background: var(--secondary); box-shadow: 0 4px 14px rgba(127, 169, 198, 0.3);">
                         <i class="fa-solid fa-map-location-dot"></i>
@@ -5092,7 +5092,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">기록할 추억</label>
-                    <input type="text" id="tlDesc" class="form-input" placeholder="예: 첫 제주도 여행, 100일 기념 데이트">
+                    <input type="text" id="tlDesc" class="form-input" placeholder="예: 첫 순천 여행, 100일 기념 데이트">
                 </div>
             </div>
             <div class="modal-footer">
@@ -5134,12 +5134,12 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label"><i class="fa-solid fa-heading" style="color: var(--primary);"></i> 일정명 / 활동</label>
-                    <input type="text" id="slotTitle" class="form-input" placeholder="예: 맛있는 브런치 & 수다">
+                    <input type="text" id="slotTitle" class="form-input" placeholder="예: 피크닉">
                 </div>
                 <div class="form-group">
                     <label class="form-label"><i class="fa-solid fa-map-location-dot" style="color: var(--secondary);"></i> 장소명 (지도 연동)</label>
                     <div style="display: flex; gap: 8px;">
-                        <input type="text" id="slotPlace" class="form-input" placeholder="예: 성수동 대림창고">
+                        <input type="text" id="slotPlace" class="form-input" placeholder="예: 순천 여행">
                         <button type="button" class="btn-submit" style="width: auto; padding: 10px 14px; font-size: 0.82rem; background: var(--secondary); white-space: nowrap;" onclick="previewNaverSearchFromSlot()" title="지도에서 확인">
                             <i class="fa-solid fa-magnifying-glass"></i> 지도 확인
                         </button>
@@ -5214,7 +5214,7 @@
                 <div class="form-group">
                     <label class="form-label">장소 또는 하고 싶은 일 이름 *</label>
                     <div style="display: flex; gap: 8px;">
-                        <input type="text" id="placeNameInput" class="form-input" placeholder="예: 난포 한식 성수점, 남산타워 케이블카">
+                        <input type="text" id="placeNameInput" class="form-input" placeholder="예: 함께 피크닉">
                         <button type="button" class="btn-submit" style="width: auto; padding: 10px 14px; font-size: 0.84rem; background: var(--secondary); white-space: nowrap;" onclick="previewNaverSearchFromPlaceModal()" title="지도에서 확인">
                             <i class="fa-solid fa-magnifying-glass"></i> 지도 확인
                         </button>
@@ -5233,7 +5233,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">위치 / 주소 (선택)</label>
-                    <input type="text" id="placeAddressInput" class="form-input" placeholder="예: 서울 성동구 서울숲길 44">
+                    <input type="text" id="placeAddressInput" class="form-input" placeholder="예: 작천정">
                 </div>
                 <div class="form-group">
                     <label class="form-label">지도 링크 (선택 - 비워두면 자동 검색 연동)</label>
@@ -5241,7 +5241,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">우리의 메모 & 하고 싶은 일</label>
-                    <textarea id="placeNotesInput" class="form-textarea" rows="3" placeholder="예: 강된장 쌈밥 꼭 먹어보기! 일몰 타임에 맞춰서 방문하면 예쁨"></textarea>
+                    <textarea id="placeNotesInput" class="form-textarea" rows="3" placeholder="예: 헤어지기 전에는 항상 안아주기!"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -5270,7 +5270,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">질문 내용 *</label>
-                    <textarea id="newQuestionTextInput" class="form-textarea" rows="4" placeholder="상대방에게 묻고 싶은 소중한 질문을 적어보세요. (예: 내가 가장 사랑스러워 보였던 순간은 언제야?)"></textarea>
+                    <textarea id="newQuestionTextInput" class="form-textarea" rows="4" placeholder="상대방에게 묻고 싶은 소중한 질문을 적어보세요."></textarea>
                 </div>
                 <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.45;">
                     💡 등록된 질문은 효니와 히니가 각각 답변을 남길 수 있으며, 둘만의 소중한 기록으로 보관됩니다.
@@ -5316,7 +5316,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label">쿠폰 이름 *</label>
-                    <input type="text" id="couponTitleInput" class="form-input" placeholder="예: 평생 유효 소원권, 토닥토닥 30분 안마권">
+                    <input type="text" id="couponTitleInput" class="form-input" placeholder="예: 평생 유효 소원권 ">
                 </div>
                 <div class="form-group">
                     <label class="form-label">혜택 설명</label>
